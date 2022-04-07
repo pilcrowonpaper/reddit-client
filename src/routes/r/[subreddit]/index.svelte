@@ -130,7 +130,6 @@
 <svelte:head>
 	<title>/r/{subreddit}</title>
 </svelte:head>
-<svelte:window on:popstate={handlePopState}/>
 {#if selected_post}
 	<PostPage post={selected_post} {about} on:close={closePost} />
 {:else}
