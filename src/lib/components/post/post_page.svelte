@@ -28,6 +28,7 @@
 	};
 
 	const getNewComments = async (subreddit: string, post_id: string, comment_id?: string) => {
+		console.log("getNewComments()")
 		comments = [];
 		const initial_sort = filter.sort.valueOf();
 		let result = await getCommentsListing(subreddit, post_id, filter, comment_id);
@@ -86,18 +87,23 @@
 	}
 
 	const handlePopState = () => {
-		// TODO: check if goto URL is the comment page
-		const test = new RegExp(/\/r\/(?!\?)[a-zA-Z0-9]/);
-		console.log(window.location.pathname, 'handle');
-		if (!test.test(window.location.pathname)) return;
-		console.log('push state');
+		console.log("handlePopState()")
+		const subreddit = post.data.subreddit;
+		if (!window.location.href.includes(`/r/${subreddit}`)) return;
+		console.log("start")
+		const test = /^\/r\/+[a-zA-Z0-9]+[\/]?(\?+[a-zA-Z0-9]*)?$/;
+		if (test.test(window.location.pathname)) {
+			console.log("close")
+			dispatch('close');
+			return;
+		}
 		const comment_id = new URLSearchParams(window.location.search).get('comment');
 		getNewComments(post.data.subreddit, post.data.id, comment_id);
 	};
 </script>
 
 <Header {about} show={false} />
-<svelte:window bind:innerWidth />
+<svelte:window bind:innerWidth on:popstate={handlePopState} />
 <div class="mt-8 w-full">
 	<div class="h-full w-full">
 		<div class="mb-1">

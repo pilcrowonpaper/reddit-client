@@ -59,6 +59,7 @@
 	} from '$lib/utils/posts';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
+	import PostPage from '$lib/components/post/Post_Page.svelte';
 
 	let posts = initial_listing.data.children;
 	let latest_post_in_view: number = 0;
@@ -111,27 +112,41 @@
 		batch_count = listing.data.dist;
 	};
 
+	let selected_post: Post = null;
+
 	const openPost = (e: CustomEvent) => {
-		const selected_post = e.detail.post as Post;
-		const new_url = $page.url.origin + $page.url.pathname + '/' + selected_post.data.id;
-		goto(new_url);
+		selected_post = e.detail.post as Post;
+		const new_url = `${window.location.origin}/r/${subreddit}/${selected_post.data.id}`;
+		window.history.pushState({}, selected_post.data.title, new_url);
+	};
+
+	const closePost = () => {
+		window.history.pushState({}, `/r/${subreddit}`, `${window.location.origin}/r/${subreddit}`)
+		selected_post = null;
 	};
 
 	$: getNextPostBatch(latest_post_in_view);
 </script>
-
-<Header {about} />
-<div class="mt-8">
-	<Filter {filter} on:select={handleFilter} />
-</div>
-<div class="flex flex-col divide-y">
-	{#each posts as post, i}
-		<Compact
-			{post}
-			on:view={() => {
-				updateLatestPostInView(i);
-			}}
-			on:open={openPost}
-		/>
-	{/each}
-</div>
+<svelte:head>
+	<title>/r/{subreddit}</title>
+</svelte:head>
+<svelte:window on:popstate={handlePopState}/>
+{#if selected_post}
+	<PostPage post={selected_post} {about} on:close={closePost} />
+{:else}
+	<Header {about} />
+	<div class="mt-8">
+		<Filter {filter} on:select={handleFilter} />
+	</div>
+	<div class="flex flex-col divide-y">
+		{#each posts as post, i}
+			<Compact
+				{post}
+				on:view={() => {
+					updateLatestPostInView(i);
+				}}
+				on:open={openPost}
+			/>
+		{/each}
+	</div>
+{/if}
