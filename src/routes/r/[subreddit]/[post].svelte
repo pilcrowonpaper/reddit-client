@@ -10,6 +10,7 @@
 	export const load: Load = async ({ params, fetch, url }) => {
 		const subreddit = params.subreddit;
 		const post_id = params.post;
+		const id = url.searchParams.get("comment") || null
 		if (!subreddit) {
 			return {
 				status: 404
@@ -19,7 +20,7 @@
 		const filter: Comment_Filter = {
 			sort
 		};
-		const request_url = getCommentsRequestUrl(subreddit, post_id, filter);
+		const request_url = getCommentsRequestUrl(subreddit, post_id, filter, id);
 		const data_promise = fetch(request_url);
 		const about_promise = fetch(`https://www.reddit.com/r/${subreddit}/about.json?raw_json=1`);
 		const response = (await Promise.allSettled([data_promise, about_promise])) as {
@@ -42,7 +43,8 @@
 				post_listing,
 				comment_listing,
 				about: about as About,
-				filter
+				filter,
+				id
 			}
 		};
 	};
@@ -59,6 +61,7 @@
 	export let filter: Comment_Filter = {
 		sort: 'best'
 	};
+	export let id : string = null
 
 	const post = post_listing.data.children[0];
 	const comments = comment_listing.data.children;
@@ -68,4 +71,4 @@
 	};
 </script>
 
-<Post_Page {post} {comments} {about} {filter} on:close={returnHome}/>
+<Post_Page {post} {comments} {about} {filter} {id} on:close={returnHome}/>

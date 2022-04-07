@@ -98,7 +98,7 @@
 		posts = [];
 		const new_url = $page.url.origin + getPostPathname(subreddit, null, filter);
 		if (update_history) {
-			window.history.pushState({}, document.title, new_url);
+			window.history.replaceState({}, document.title, new_url);
 		}
 		const initial_sort = filter.sort.valueOf();
 		const initial_time = filter.time.valueOf();
@@ -117,11 +117,11 @@
 	const openPost = (e: CustomEvent) => {
 		selected_post = e.detail.post as Post;
 		const new_url = `${window.location.origin}/r/${subreddit}/${selected_post.data.id}`;
-		window.history.pushState({}, selected_post.data.title, new_url);
+		window.history.replaceState({}, selected_post.data.title, new_url);
 	};
 
 	const closePost = () => {
-		window.history.pushState({}, `/r/${subreddit}`, `${window.location.origin}/r/${subreddit}`)
+		window.history.replaceState({}, `/r/${subreddit}`, `${window.location.origin}/r/${subreddit}`)
 		selected_post = null;
 	};
 

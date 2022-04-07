@@ -10,6 +10,8 @@
 
 	import { getCommentContents, getCommentsListing } from '$lib/utils/comments';
 	import { createEventDispatcher } from 'svelte';
+	import { browser } from '$app/env';
+	import { page } from '$app/stores';
 	const dispatch = createEventDispatcher();
 
 	export let post: Post;
@@ -18,6 +20,7 @@
 	export let filter: Comment_Filter = {
 		sort: 'best'
 	};
+	export let id : string = null
 	let next_comments: Comment[] = [];
 
 	const batch_count = 50;
@@ -28,7 +31,6 @@
 	};
 
 	const getNewComments = async (subreddit: string, post_id: string, comment_id?: string) => {
-		console.log("getNewComments()")
 		comments = [];
 		const initial_sort = filter.sort.valueOf();
 		let result = await getCommentsListing(subreddit, post_id, filter, comment_id);
@@ -39,10 +41,11 @@
 	};
 
 	const handleContinueThread = async (e: CustomEvent) => {
-		const id = e.detail.id;
-		await getNewComments(post.data.subreddit, post.data.id, id);
-		const new_url = window.location.origin + window.location.pathname + '?comment=' + id;
-		window.history.pushState({}, post.data.title, new_url);
+		const comment_id = e.detail.id;
+		await getNewComments(post.data.subreddit, post.data.id, comment_id);
+		id = comment_id
+		const new_url = window.location.origin + window.location.pathname + '?comment=' + comment_id;
+		window.history.replaceState({}, '', new_url);
 	};
 
 	let innerWidth: number;
@@ -75,7 +78,7 @@
 	$: depth_limit = handleCommentDepth(innerWidth);
 
 	if (comments.length === 0) {
-		getNewComments(post.data.subreddit, post.data.id);
+		getNewComments(post.data.subreddit, post.data.id, id);
 	}
 
 	let more_children: string[] = [];
@@ -86,24 +89,14 @@
 				: [];
 	}
 
-	const handlePopState = () => {
-		console.log("handlePopState()")
-		const subreddit = post.data.subreddit;
-		if (!window.location.href.includes(`/r/${subreddit}`)) return;
-		console.log("start")
-		const test = /^\/r\/+[a-zA-Z0-9]+[\/]?(\?+[a-zA-Z0-9]*)?$/;
-		if (test.test(window.location.pathname)) {
-			console.log("close")
-			dispatch('close');
-			return;
-		}
-		const comment_id = new URLSearchParams(window.location.search).get('comment');
-		getNewComments(post.data.subreddit, post.data.id, comment_id);
+	const viewAll = () => {
+		window.history.replaceState({}, '', window.location.origin + window.location.pathname);
+		getNewComments(post.data.subreddit, post.data.id);
 	};
 </script>
 
 <Header {about} show={false} />
-<svelte:window bind:innerWidth on:popstate={handlePopState} />
+<svelte:window bind:innerWidth />
 <div class="mt-8 w-full">
 	<div class="h-full w-full">
 		<div class="mb-1">
@@ -117,7 +110,12 @@
 		</div>
 		<Post_Block {post} />
 		<div class="mt-12">
-			<Sort options={filter} on:select={handleSort} />
+			<div class="flex place-content-between place-items-center">
+				<Sort options={filter} on:select={handleSort} />
+				{#if id}
+					<button class="text-sm text-blue-500 hover:underline" on:click={viewAll}>view all</button>
+				{/if}
+			</div>
 			<div class="mt-2 flex flex-col gap-y-4">
 				{#each comments as comment}
 					{#if comment.kind !== 'more'}
