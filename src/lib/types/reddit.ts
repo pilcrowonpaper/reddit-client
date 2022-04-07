@@ -451,12 +451,80 @@ export interface Comment_Branch {
 }
 
 export interface Comment_Tree {
-	things: Comment_Branch[]
+	things: Comment_Branch[];
 }
 
 export interface Comment_Tree_Result {
 	json: {
-		errors: string,
-		data: Comment_Tree
-	}
+		errors: string;
+		data: Comment_Tree;
+	};
+}
+
+export interface User {
+	is_employee: boolean;
+	is_friend: boolean;
+	subreddit: {
+		default_set: boolean;
+		user_is_contributor: any;
+		banner_img: string;
+		restrict_posting: boolean;
+		user_is_banned: string;
+		free_form_reports: boolean;
+		community_icon: string;
+		show_media: boolean;
+		icon_color: string;
+		user_is_muted: string;
+		display_name: string;
+		header_img: any;
+		title: string;
+		previous_names: any[];
+		over_18: boolean;
+		icon_size: [number, number];
+		primary_color: string;
+		icon_img: string;
+		description: string;
+		submit_link_label: string;
+		header_size: any;
+		restrict_commenting: boolean;
+		subscribers: number;
+		submit_text_label: string;
+		is_default_icon: boolean;
+		link_flair_position: string;
+		display_name_prefixed: string;
+		key_color: string;
+		name: string;
+		is_default_banner: boolean;
+		url: string;
+		quarantine: boolean;
+		banner_size: any;
+		user_is_moderator: any;
+		accept_followers: boolean;
+		public_description: string;
+		link_flair_enabled: boolean;
+		disable_contributor_requests: boolean;
+		subreddit_type: 'user';
+		user_is_subscriber: any;
+	};
+	snoovatar_size: any;
+	awardee_karma: number;
+	id: string;
+	verified: boolean;
+	is_gold: boolean;
+	is_mod: boolean;
+	awarder_karma: number;
+	has_verified_email: boolean;
+	icon_img: string;
+	hide_from_robots: boolean;
+	link_karma: number;
+	is_blocked: false;
+	total_karma: number;
+	pref_show_snoovatar: boolean;
+	name: string;
+	created: number;
+	created_utc: number;
+	snoovatar_img: any;
+	comment_karma: number;
+	accept_followers: boolean;
+	has_subscribed: boolean;
 }

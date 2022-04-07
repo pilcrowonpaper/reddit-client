@@ -38,7 +38,7 @@
 		<Expand size={5} color={toggle % 2 === 1 ? accent : "text-black"}/>
 	</button>
 	<div class="relative" class:hidden={toggle % 2 === 0}>
-		<ul class="absolute rounded bg-white shadow">
+		<ul class="absolute rounded bg-white shadow z-50">
 			{#each options as option, i}
 				<li on:click={() => select(i)}>{option}</li>
 			{/each}

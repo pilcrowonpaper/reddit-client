@@ -18,7 +18,7 @@
 	};
 </script>
 
-<div class="py-4 cursor-pointer" use:inViewport on:view on:click={openPost}>
+<div class="py-4 cursor-pointer" use:inViewport on:display on:click={openPost}>
 	<div class="flex gap-x-2">
 		{#if post.data.thumbnail === 'self' || !post.data.thumbnail}
 			<div

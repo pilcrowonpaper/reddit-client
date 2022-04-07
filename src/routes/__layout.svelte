@@ -11,9 +11,7 @@
 	/>
 </svelte:head>
 
-<div class="px-4 py-3 sm:px-8 md:px-16 lg:px-24">
-	<slot />
-</div>
+<slot/>
 
 <style lang="postcss">
 	:global(body) {

@@ -10,7 +10,7 @@
 	export const load: Load = async ({ params, fetch, url }) => {
 		const subreddit = params.subreddit;
 		const post_id = params.post;
-		const id = url.searchParams.get("comment") || null
+		const id = url.searchParams.get('comment') || null;
 		if (!subreddit) {
 			return {
 				status: 404
@@ -61,14 +61,16 @@
 	export let filter: Comment_Filter = {
 		sort: 'best'
 	};
-	export let id : string = null
+	export let id: string = null;
 
 	const post = post_listing.data.children[0];
 	const comments = comment_listing.data.children;
 
 	const returnHome = () => {
-		goto(`/r/${$page.params.subreddit}`);
+		goto(`/r/${$page.params.subreddit}`, { replaceState: true });
 	};
 </script>
 
-<Post_Page {post} {comments} {about} {filter} {id} on:close={returnHome}/>
+<div class="h-screen px-4 py-3 sm:px-8 md:px-16 lg:px-24">
+	<Post_Page {post} {comments} {about} {filter} {id} on:close={returnHome} />
+</div>

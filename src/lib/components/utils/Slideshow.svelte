@@ -5,6 +5,7 @@
 
 	export let media_metadata: Record<string, Media_Metadata>;
 	export let max_height: number;
+	export let show = false;
 	let max_width: number;
 
 	const media_metadata_vals = Object.values(media_metadata);
@@ -42,29 +43,36 @@
 	}
 </script>
 
-<div bind:clientWidth={max_width} class="w-full">
-	<div class="bg-black-500 flex w-full place-content-center place-items-center rounded-lg bg-black" style:height="{box_height}px">
-		{#each images as image, i}
-			{#if page === i + 1}
-				<img
-					src={image.src}
-					alt=""
-					style:height="{image.size.height}px"
-					style:width="{image.size.width}px"
-					on:click={() => {
-						page += 1;
-					}}
+{#if show}
+	<div bind:clientWidth={max_width} class="w-full">
+		<div
+			class="bg-black-500 flex w-full place-content-center place-items-center rounded-lg bg-black"
+			style:height="{box_height}px"
+		>
+			{#each images as image, i}
+				{#if page === i + 1}
+					<img
+						src={image.src}
+						alt=""
+						style:height="{image.size.height}px"
+						style:width="{image.size.width}px"
+						on:click={() => {
+							page += 1;
+						}}
+					/>
+				{/if}
+			{/each}
+		</div>
+		<div class="mt-2 flex w-full place-content-center gap-1">
+			{#each Array(images.length) as _, i}
+				<div
+					class="h-2 w-2 rounded-full "
+					class:bg-blue-500={page === i + 1}
+					class:bg-gray-300={page !== i + 1}
 				/>
-			{/if}
-		{/each}
+			{/each}
+		</div>
 	</div>
-	<div class="mt-2 flex w-full place-content-center gap-1">
-		{#each Array(images.length) as _, i}
-			<div
-				class="h-2 w-2 rounded-full "
-				class:bg-blue-500={page === i + 1}
-				class:bg-gray-300={page !== i + 1}
-			/>
-		{/each}
-	</div>
-</div>
+{:else}
+	<div style:height="{box_height}px" style:width="100%" />
+{/if}

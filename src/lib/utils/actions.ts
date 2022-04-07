@@ -1,7 +1,9 @@
 export const inViewport = (node) => {
 	const observer: IntersectionObserver = new IntersectionObserver((entries) => {
 		if (entries[0].isIntersecting) {
-			node.dispatchEvent(new CustomEvent('view'));
+			node.dispatchEvent(new CustomEvent('display'));
+		} else {
+			node.dispatchEvent(new CustomEvent('hidden'));
 		}
 	});
 	observer.observe(node);
@@ -11,6 +13,8 @@ export const inViewport = (node) => {
 		}
 	};
 };
+
+
 
 export const clickOutside = (node) => {
 	const handleClick = (event) => {
