@@ -3,7 +3,6 @@
 	import Comment_Block from '$lib/components/post/Comment.svelte';
 	import Horizontal from '../voting/comment/Horizontal.svelte';
 	import { createEventDispatcher } from 'svelte';
-	import { children } from 'svelte/internal';
 
 	const dispatch = createEventDispatcher();
 

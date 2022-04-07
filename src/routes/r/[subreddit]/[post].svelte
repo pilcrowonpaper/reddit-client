@@ -49,7 +49,7 @@
 </script>
 
 <script lang="ts">
-	import PostPage from '$lib/components/post/post_page.svelte';
+	import Post_Page from '$lib/components/post/Post_Page.svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 
@@ -68,4 +68,4 @@
 	};
 </script>
 
-<PostPage {post} {comments} {about} {filter} on:close={returnHome}/>
+<Post_Page {post} {comments} {about} {filter} on:close={returnHome}/>

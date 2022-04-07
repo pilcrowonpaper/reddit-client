@@ -44,9 +44,9 @@
 		time: null
 	};
 
-	import Header from '$lib/components/subreddit/header.svelte';
-	import Compact from '$lib/components/cards/compact.svelte';
-	import Filter from '$lib/components/subreddit/filter.svelte';
+	import Header from '$lib/components/subreddit/Header.svelte';
+	import Compact from '$lib/components/cards/Compact.svelte';
+	import Filter from '$lib/components/subreddit/Filter.svelte';
 
 	import type { About, Listing, Post } from '$lib/types/reddit';
 	import type { Post_Filter } from '$lib/types/filter';
@@ -58,8 +58,7 @@
 		getPostRequestUrl
 	} from '$lib/utils/posts';
 	import { page } from '$app/stores';
-	import PostPage from '$lib/components/post/post_page.svelte';
-import { goto } from '$app/navigation';
+	import { goto } from '$app/navigation';
 
 	let posts = initial_listing.data.children;
 	let latest_post_in_view: number = 0;
@@ -114,27 +113,25 @@ import { goto } from '$app/navigation';
 
 	const openPost = (e: CustomEvent) => {
 		const selected_post = e.detail.post as Post;
-		const new_url = $page.url.origin + $page.url.pathname + "/" + selected_post.data.id
-		goto(new_url)
+		const new_url = $page.url.origin + $page.url.pathname + '/' + selected_post.data.id;
+		goto(new_url);
 	};
 
 	$: getNextPostBatch(latest_post_in_view);
-
-
 </script>
-	<Header {about} />
-	<div class="mt-8">
-		<Filter {filter} on:select={handleFilter} />
-	</div>
-	<div class="flex flex-col divide-y">
-		{#each posts as post, i}
-			<Compact
-				{post}
-				on:view={() => {
-					updateLatestPostInView(i);
-				}}
-				on:open={openPost}
-			/>
-		{/each}
-	</div>
 
+<Header {about} />
+<div class="mt-8">
+	<Filter {filter} on:select={handleFilter} />
+</div>
+<div class="flex flex-col divide-y">
+	{#each posts as post, i}
+		<Compact
+			{post}
+			on:view={() => {
+				updateLatestPostInView(i);
+			}}
+			on:open={openPost}
+		/>
+	{/each}
+</div>

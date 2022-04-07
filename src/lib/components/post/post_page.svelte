@@ -8,10 +8,8 @@
 	import type { About, Post, Comment } from '$lib/types/reddit';
 	import type { Comment_Filter } from '$lib/types/filter';
 
-	import { getCommentContents, getCommentsListing, getCommentsPathname } from '$lib/utils/comments';
-	import { page } from '$app/stores';
+	import { getCommentContents, getCommentsListing } from '$lib/utils/comments';
 	import { createEventDispatcher } from 'svelte';
-import { browser } from '$app/env';
 	const dispatch = createEventDispatcher();
 
 	export let post: Post;
@@ -22,18 +20,14 @@ import { browser } from '$app/env';
 	};
 	let next_comments: Comment[] = [];
 
-	const batch_count = 50
+	const batch_count = 50;
 
 	const handleSort = (e: CustomEvent) => {
 		filter = e.detail.options as Comment_Filter;
-		getNewComments(post.data.subreddit, post.data.id, true);
+		getNewComments(post.data.subreddit, post.data.id);
 	};
 
-	const getNewComments = async (
-		subreddit: string,
-		post_id: string,
-		comment_id?: string
-	) => {
+	const getNewComments = async (subreddit: string, post_id: string, comment_id?: string) => {
 		comments = [];
 		const initial_sort = filter.sort.valueOf();
 		let result = await getCommentsListing(subreddit, post_id, filter, comment_id);
@@ -46,8 +40,8 @@ import { browser } from '$app/env';
 	const handleContinueThread = async (e: CustomEvent) => {
 		const id = e.detail.id;
 		await getNewComments(post.data.subreddit, post.data.id, id);
-		const new_url = window.location.origin + window.location.pathname + "?comment=" + id
-		window.history.pushState({}, post.data.title, new_url)
+		const new_url = window.location.origin + window.location.pathname + '?comment=' + id;
+		window.history.pushState({}, post.data.title, new_url);
 	};
 
 	let innerWidth: number;
@@ -63,7 +57,10 @@ import { browser } from '$app/env';
 	let next_children_start = 0;
 
 	const getNextCommentBatch = async () => {
-		const next_children = more_children.slice(next_children_start, next_children_start + batch_count);
+		const next_children = more_children.slice(
+			next_children_start,
+			next_children_start + batch_count
+		);
 		const comment_result = await getCommentContents(
 			post.data.subreddit,
 			post.data.id,
@@ -90,17 +87,17 @@ import { browser } from '$app/env';
 
 	const handlePopState = () => {
 		// TODO: check if goto URL is the comment page
-		const test = new RegExp(/\/r\/(?!\?)[a-zA-Z0-9]/)
-		console.log(window.location.pathname, "handle")
-		if (!test.test(window.location.pathname)) return
-		console.log("push state")
-		const comment_id = new URLSearchParams(window.location.search).get("comment")
-		getNewComments(post.data.subreddit, post.data.id, comment_id)
-	}
+		const test = new RegExp(/\/r\/(?!\?)[a-zA-Z0-9]/);
+		console.log(window.location.pathname, 'handle');
+		if (!test.test(window.location.pathname)) return;
+		console.log('push state');
+		const comment_id = new URLSearchParams(window.location.search).get('comment');
+		getNewComments(post.data.subreddit, post.data.id, comment_id);
+	};
 </script>
 
 <Header {about} show={false} />
-<svelte:window bind:innerWidth/>
+<svelte:window bind:innerWidth />
 <div class="mt-8 w-full">
 	<div class="h-full w-full">
 		<div class="mb-1">
