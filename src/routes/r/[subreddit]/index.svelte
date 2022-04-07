@@ -59,6 +59,7 @@
 	} from '$lib/utils/posts';
 	import { page } from '$app/stores';
 	import PostPage from '$lib/components/post/post_page.svelte';
+import { goto } from '$app/navigation';
 
 	let posts = initial_listing.data.children;
 	let latest_post_in_view: number = 0;
@@ -111,18 +112,16 @@
 		batch_count = listing.data.dist;
 	};
 
-	let selected_post: Post;
-
 	const openPost = (e: CustomEvent) => {
-		selected_post = e.detail.post as Post;
+		const selected_post = e.detail.post as Post;
+		const new_url = $page.url.origin + $page.url.pathname + "/" + selected_post.data.id
+		goto(new_url)
 	};
 
 	$: getNextPostBatch(latest_post_in_view);
-</script>
 
-{#if selected_post}
-	<PostPage post={selected_post} {about} on:close={() => {selected_post = null}}/>
-{:else}
+
+</script>
 	<Header {about} />
 	<div class="mt-8">
 		<Filter {filter} on:select={handleFilter} />
@@ -138,4 +137,4 @@
 			/>
 		{/each}
 	</div>
-{/if}
+

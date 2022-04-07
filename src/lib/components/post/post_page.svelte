@@ -8,14 +8,10 @@
 	import type { About, Post, Comment } from '$lib/types/reddit';
 	import type { Comment_Filter } from '$lib/types/filter';
 
-	import {
-		getCommentsListing,
-		getCommentsPathname,
-		getMoreCommentsListing,
-		getMoreCommentsRequestUrl
-	} from '$lib/utils/comments';
+	import { getCommentContents, getCommentsListing, getCommentsPathname } from '$lib/utils/comments';
 	import { page } from '$app/stores';
 	import { createEventDispatcher } from 'svelte';
+import { browser } from '$app/env';
 	const dispatch = createEventDispatcher();
 
 	export let post: Post;
@@ -24,6 +20,9 @@
 	export let filter: Comment_Filter = {
 		sort: 'best'
 	};
+	let next_comments: Comment[] = [];
+
+	const batch_count = 50
 
 	const handleSort = (e: CustomEvent) => {
 		filter = e.detail.options as Comment_Filter;
@@ -33,14 +32,9 @@
 	const getNewComments = async (
 		subreddit: string,
 		post_id: string,
-		update_history: boolean,
 		comment_id?: string
 	) => {
 		comments = [];
-		const new_url = $page.url.origin + getCommentsPathname(subreddit, post_id, filter, comment_id);
-		if (update_history) {
-			window.history.pushState({}, document.title, new_url);
-		}
 		const initial_sort = filter.sort.valueOf();
 		let result = await getCommentsListing(subreddit, post_id, filter, comment_id);
 		if (initial_sort !== filter.sort) return;
@@ -49,9 +43,11 @@
 		comments = comment_listing.data.children;
 	};
 
-	const handleContinueThread = (e: CustomEvent) => {
+	const handleContinueThread = async (e: CustomEvent) => {
 		const id = e.detail.id;
-		getNewComments(post.data.subreddit, post.data.id, false, id);
+		await getNewComments(post.data.subreddit, post.data.id, id);
+		const new_url = window.location.origin + window.location.pathname + "?comment=" + id
+		window.history.pushState({}, post.data.title, new_url)
 	};
 
 	let innerWidth: number;
@@ -64,25 +60,47 @@
 		return Math.floor((width + 100) / 100);
 	};
 
-	const getMoreComments = async (e: CustomEvent) => {
-		// url should be : http://www.reddit.com/api/morechildren?link_id=t3_twrc42&children=i3hi8e8&api_type=json&raw_json=1
-		const children = e.detail.children as string[];
-		console.log("more")
-		let result = await getMoreCommentsListing(post.data.name, children);
-		if (!result.success) return;
-		const comment_listing = result.data.comment;
-		console.log(comment_listing)
+	let next_children_start = 0;
+
+	const getNextCommentBatch = async () => {
+		const next_children = more_children.slice(next_children_start, next_children_start + batch_count);
+		const comment_result = await getCommentContents(
+			post.data.subreddit,
+			post.data.id,
+			next_children
+		);
+		if (!comment_result.success) return;
+		next_children_start += comment_result.data.length;
+		next_comments = [...next_comments, ...comment_result.data];
 	};
 
 	$: depth_limit = handleCommentDepth(innerWidth);
 
 	if (comments.length === 0) {
-		getNewComments(post.data.subreddit, post.data.id, false);
+		getNewComments(post.data.subreddit, post.data.id);
+	}
+
+	let more_children: string[] = [];
+	$: if (comments.length) {
+		more_children =
+			comments[comments.length - 1].kind === 'more'
+				? comments[comments.length - 1].data.children
+				: [];
+	}
+
+	const handlePopState = () => {
+		// TODO: check if goto URL is the comment page
+		const test = new RegExp(/\/r\/(?!\?)[a-zA-Z0-9]/)
+		console.log(window.location.pathname, "handle")
+		if (!test.test(window.location.pathname)) return
+		console.log("push state")
+		const comment_id = new URLSearchParams(window.location.search).get("comment")
+		getNewComments(post.data.subreddit, post.data.id, comment_id)
 	}
 </script>
 
 <Header {about} show={false} />
-<svelte:window bind:innerWidth />
+<svelte:window bind:innerWidth/>
 <div class="mt-8 w-full">
 	<div class="h-full w-full">
 		<div class="mb-1">
@@ -95,18 +113,33 @@
 			/>
 		</div>
 		<Post_Block {post} />
-		<div class="mt-8">
+		<div class="mt-12">
 			<Sort options={filter} on:select={handleSort} />
 			<div class="mt-2 flex flex-col gap-y-4">
 				{#each comments as comment}
+					{#if comment.kind !== 'more'}
+						<Comment_Block
+							{comment}
+							on:continue={handleContinueThread}
+							{depth_limit}
+							op={post.data.author}
+						/>
+					{/if}
+				{/each}
+				{#each next_comments as comment}
 					<Comment_Block
 						{comment}
 						on:continue={handleContinueThread}
-						on:more={getMoreComments}
 						{depth_limit}
 						op={post.data.author}
 					/>
 				{/each}
+				{#if more_children.length > 0 && more_children.length - next_comments.length > 0}
+					<button
+						class="cursor-pointer text-sm text-blue-500 hover:underline"
+						on:click={getNextCommentBatch}>show more</button
+					>
+				{/if}
 			</div>
 		</div>
 	</div>

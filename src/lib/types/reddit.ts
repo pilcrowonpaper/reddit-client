@@ -328,7 +328,7 @@ export interface Media_Embed {
 export interface Comment {
 	kind: string;
 	data: {
-		children?: string[],
+		children?: string[];
 		subreddit_id: string;
 		approved_at_utc: any;
 		author_is_blocked: boolean;
@@ -435,4 +435,28 @@ interface Rule {
 	created_utc: number;
 	priority: number;
 	description_html?: string;
+}
+
+export interface Comment_Branch {
+	kind: string;
+	data: {
+		parent: string;
+		content: string;
+		contentText: string;
+		link: string;
+		replies?: string[];
+		contentHTML: string;
+		id: string;
+	};
+}
+
+export interface Comment_Tree {
+	things: Comment_Branch[]
+}
+
+export interface Comment_Tree_Result {
+	json: {
+		errors: string,
+		data: Comment_Tree
+	}
 }

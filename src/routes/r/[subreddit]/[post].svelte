@@ -50,6 +50,8 @@
 
 <script lang="ts">
 	import PostPage from '$lib/components/post/post_page.svelte';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 
 	export let post_listing: Listing<Post>;
 	export let comment_listing: Listing<Comment>;
@@ -58,8 +60,12 @@
 		sort: 'best'
 	};
 
-	const post = post_listing.data.children[0]
-	const comments = comment_listing.data.children
+	const post = post_listing.data.children[0];
+	const comments = comment_listing.data.children;
+
+	const returnHome = () => {
+		goto(`/r/${$page.params.subreddit}`);
+	};
 </script>
 
-<PostPage {post} {comments} {about} {filter} />
+<PostPage {post} {comments} {about} {filter} on:close={returnHome}/>

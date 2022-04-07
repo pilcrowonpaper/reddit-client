@@ -35,10 +35,7 @@
 				if (a > b) return a;
 				if (a < b) return b;
 			});
-		console.log(box_height);
 	};
-
-	$: console.log(max_width, max_height);
 
 	$: if (max_width && max_height) {
 		resizeImages(max_width, max_height);

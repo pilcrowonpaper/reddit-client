@@ -1,5 +1,5 @@
 import type { Promise_Status } from '$lib/types';
-import type { Listing, Post, Comment, Listing_List } from '$lib/types/reddit';
+import type { Listing, Post, Comment, Listing_List, Comment_Tree_Result } from '$lib/types/reddit';
 import type { Comment_Filter } from '$lib/types/filter';
 
 export const getCommentsListing = async (
@@ -63,30 +63,20 @@ export const getCommentsPathname = (
 	return pathname;
 };
 
-export const getMoreCommentsRequestUrl = (link_id: string, children : string[]) : string => {
-	console.log(children)
-	return `https://api.reddit.com/comments/${link_id.replace("t3_", "")}/morechildren?link=${link_id}&children=${children}&api_type=json`
-}
-
-export const getMoreCommentsListing = async (
-	link_id: string, children : string[]
-): Promise<Promise_Status<Listing_List>> => {
-	const url = getMoreCommentsRequestUrl(link_id, children);
-	console.log(url)
-	const response = await fetch(url);
-	if (!response.ok) {
-		return {
-			success: false
-		};
-	}
-	const result = await response.json();
-	const post_listing = result[0] as Listing<Post>;
-	const comment_listing = result[1] as Listing<Comment>;
+export const getCommentContents = async (
+	subreddit: string,
+	post_link: string,
+	id_list: string[]
+): Promise<Promise_Status<Comment[]>> => {
+	const comments_list =  await Promise.all(id_list.map(async(val) => {
+		const response = await fetch(`https://www.reddit.com/r/${subreddit}/comments/${post_link}/_/${val}.json?raw_json=1`)
+		const comment_result = await response.json() as [Listing<Post>, Listing<Comment>]
+		const comments = comment_result[1].data.children
+		return comments
+	}))
+	const result = comments_list.reduce((a, b) => [...a, ...b])
 	return {
 		success: true,
-		data: {
-			post: post_listing,
-			comment: comment_listing
-		}
+		data: result
 	};
 };
