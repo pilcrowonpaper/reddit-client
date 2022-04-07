@@ -133,7 +133,7 @@
 </svelte:head>
 
 {#if selected_post}
-	<div class="fixed h-screen w-full overflow-auto bg-white px-4 py-3 sm:px-8 md:px-16 lg:px-24 z-50">
+	<div class="fixed h-screen w-full overflow-auto bg-white px-4 py-3 sm:px-8 md:px-16 lg:px-24 z-50" style="-webkit-overflow-scrolling: touch">
 		<PostPage post={selected_post} {about} on:close={closePost} />
 	</div>
 {/if}

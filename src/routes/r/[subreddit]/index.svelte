@@ -133,11 +133,19 @@
 </svelte:head>
 
 {#if selected_post}
-	<div class="fixed h-screen w-full overflow-auto bg-white px-4 py-3 sm:px-8 md:px-16 lg:px-24 z-50">
+	<div
+		class="fixed z-50 h-screen w-full overflow-auto bg-white px-4 py-3 sm:px-8 md:px-16 lg:px-24"
+		style="-webkit-overflow-scrolling: touch"
+	>
 		<PostPage post={selected_post} {about} on:close={closePost} />
 	</div>
 {/if}
-<div class="px-4 py-3 sm:px-8 md:px-16 lg:px-24 h-screen" class:disable-scroll={selected_post} class:overflow-auto={!selected_post}>
+<div
+	class="h-screen px-4 py-3 sm:px-8 md:px-16 lg:px-24"
+	class:disable-scroll={selected_post}
+	class:overflow-auto={!selected_post}
+	style="-webkit-overflow-scrolling: touch"
+>
 	<Header {about} />
 	<div class="mt-12">
 		<Filter {filter} on:select={handleFilter} />
@@ -164,6 +172,6 @@
 
 <style lang="postcss">
 	.disable-scroll {
-		@apply overflow-hidden h-screen;
+		@apply h-screen overflow-hidden;
 	}
 </style>
