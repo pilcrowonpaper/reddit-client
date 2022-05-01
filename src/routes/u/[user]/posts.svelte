@@ -154,9 +154,15 @@
 	style="-webkit-overflow-scrolling: touch"
 >
 	<Header user={about} />
-	<div class="mt-12 flex place-content-between">
-		<Filter {filter} on:select={handleFilter} />
-		<Cards bind:type={card} on:select={handleCardTypeChange} />
+	<div class="mt-12">
+		<!-- <div class="flex gap-x-3">
+			<a href="/u/" class="font-medium hover:opacity-70">Posts</a>
+			<a href="/u/" class="font-medium hover:opacity-70">Comments</a>
+		</div> -->
+		<div class="flex place-content-between">
+			<Filter {filter} on:select={handleFilter} />
+			<Cards bind:type={card} on:select={handleCardTypeChange} />
+		</div>
 	</div>
 	<div class="flex flex-col divide-y">
 		{#each posts as post, i}

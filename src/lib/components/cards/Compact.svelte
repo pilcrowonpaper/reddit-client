@@ -67,7 +67,7 @@
 				{/if}
 			</h2>
 			<div class=" -mt-2 flex w-full place-items-center gap-x-1">
-				{#if show.includes("subredddit")}
+				{#if show.includes("subreddit")}
 				<a
 					class="text-xs hover:underline"
 					href="/r/{post.data.author}"

@@ -11,7 +11,7 @@
 	/>
 </svelte:head>
 
-<slot/>
+<slot />
 
 <style lang="postcss">
 	:global(body) {
@@ -39,22 +39,22 @@
 		@apply hidden;
 	}
 	:global(.md ol) {
-		@apply list-inside list-decimal mb-2;
+		@apply mb-2 list-inside list-decimal;
 	}
 	:global(.md ul) {
-		@apply list-inside list-disc mb-2;
+		@apply mb-2 list-inside list-disc;
 	}
 	:global(.md :not(pre) code) {
-		@apply bg-gray-200 rounded px-1 break-all;
+		@apply break-all rounded bg-gray-200 px-1;
 	}
 	:global(.md pre) {
-		@apply bg-gray-200 overflow-x-auto pb-3 pt-2 rounded-lg mb-2 px-2;
+		@apply mb-2 overflow-x-auto rounded-lg bg-gray-200 px-2 pb-3 pt-2;
 	}
 	:global(.md hr) {
 		@apply hidden;
 	}
 	:global(.md blockquote) {
-		@apply mb-2 pl-2 ml-1 border-l-4 border-gray-200 py-0.5;
+		@apply mb-2 ml-1 border-l-4 border-gray-200 py-0.5 pl-2;
 	}
 	:global(.md img) {
 		@apply rounded-md;

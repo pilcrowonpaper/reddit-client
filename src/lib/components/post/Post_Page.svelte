@@ -10,6 +10,7 @@
 
 	import { getCommentContents, getCommentsListing } from '$lib/utils/comments';
 	import { createEventDispatcher } from 'svelte';
+	import { post_page_in_view } from '$lib/utils/stores';
 	const dispatch = createEventDispatcher();
 
 	export let post: Post;
@@ -18,7 +19,7 @@
 	export let filter: Comment_Filter = {
 		sort: 'best'
 	};
-	export let id : string = null
+	export let id: string = null;
 	let next_comments: Comment[] = [];
 
 	const batch_count = 50;
@@ -41,7 +42,7 @@
 	const handleContinueThread = async (e: CustomEvent) => {
 		const comment_id = e.detail.id;
 		await getNewComments(post.data.subreddit, post.data.id, comment_id);
-		id = comment_id
+		id = comment_id;
 		const new_url = window.location.origin + window.location.pathname + '?comment=' + comment_id;
 		window.history.replaceState({}, '', new_url);
 	};
@@ -91,9 +92,11 @@
 		window.history.replaceState({}, '', window.location.origin + window.location.pathname);
 		getNewComments(post.data.subreddit, post.data.id);
 	};
+
+	post_page_in_view.set(true);
 </script>
 
-<Header {about} show={false} subreddit={post.data.subreddit}/>
+<Header {about} show={false} subreddit={post.data.subreddit} />
 <svelte:window bind:innerWidth />
 <div class="mt-8 w-full">
 	<div class="h-full w-full">
@@ -101,6 +104,7 @@
 			<Back_Arrow
 				size={6}
 				on:click={() => {
+					post_page_in_view.set(false)
 					dispatch('close');
 				}}
 				custom_class="cursor-pointer"

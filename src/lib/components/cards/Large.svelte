@@ -11,6 +11,7 @@
 	import { validateGif, convertGif } from '$lib/utils/media';
 	import Video from '../utils/Video.svelte';
 	import Iframe from '$lib/components/utils/Iframe.svelte';
+import { post_page_in_view } from '$lib/utils/stores';
 
 	export let post: Post;
 	export let show : string[]
@@ -67,7 +68,7 @@
 					{/if}
 				</h2>
 				<div class="flex gap-3 text-xs">
-					{#if show.includes('subredddit')}
+					{#if show.includes('subreddit')}
 						<a
 							class="font-medium hover:underline"
 							href="/r/{post.data.author}"
@@ -95,7 +96,7 @@
 						{max_width}
 						width={post.data.preview.images[0].source.width}
 						height={post.data.preview.images[0].source.height}
-						show={show_media}
+						show={show_media && !$post_page_in_view}
 					/>
 				{:else if post.data.post_hint === 'rich:video'}
 					<Iframe
@@ -105,17 +106,17 @@
 						width={post.data.media_embed.width}
 						height={post.data.media_embed.height}
 						title={post.data.title}
-						show={show_media}
+						show={show_media && !$post_page_in_view}
 					/>
-				{:else if post.data.domain === 'v.redd.it'}
+				{:else if post.data.domain === 'v.redd.it' && post.data.media}
 					<Video
 						src="{post.data.url}/HLSPlaylist.m3u8"
 						alt={post.data.title}
 						{max_height}
 						{max_width}
-						width={post.data.preview.images[0].source.width}
-						height={post.data.preview.images[0].source.height}
-						show={show_media}
+						width={post.data.media.reddit_video.width}
+						height={post.data.media.reddit_video.height}
+						show={show_media && !$post_page_in_view}
 						autoplay={true}
 					/>
 				{:else if post.data.post_hint === 'link' && validateGif(post.data.url)}
@@ -128,7 +129,7 @@
 						height={post.data.preview.images[0].source.height}
 						autoplay={true}
 						loop={true}
-						show={show_media}
+						show={show_media && !$post_page_in_view}
 					/>
 				{:else if post.data.is_self}
 					{#if post.data.selftext_html}

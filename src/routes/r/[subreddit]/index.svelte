@@ -61,6 +61,7 @@
 		getPostRequestUrl
 	} from '$lib/utils/posts';
 	import { page } from '$app/stores';
+import { post_page_in_view } from '$lib/utils/stores';
 
 	let posts = initial_listing.data.children;
 	let latest_post_in_view: number = 0;
