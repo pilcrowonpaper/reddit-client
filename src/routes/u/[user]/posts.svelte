@@ -13,7 +13,7 @@
 		const request_url = getUserRequestUrl(user, 'submitted', null, filter);
 		console.log(filter);
 		const data_promise = fetch(request_url);
-		const about_promise = fetch(`https://www.reddit.com/u/${user}/about.json?raw_json=1`);
+		const about_promise = fetch(`https://www.reddit.com/user/${user}/about.json?raw_json=1`);
 		const response = (await Promise.allSettled([data_promise, about_promise])) as {
 			status: string;
 			value?: Response;
