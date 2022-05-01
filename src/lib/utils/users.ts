@@ -3,12 +3,13 @@ import type { Post_Filter } from '$lib/types/filter';
 import type { Batch } from '$lib/types/posts';
 import type { Listing, Post } from '$lib/types/reddit';
 
-export const getPostListing = async (
-	subreddit: string,
+export const getUserListing = async (
+	user: string,
+	type?: string,
 	after?: string,
 	filter?: Post_Filter
 ): Promise<Promise_Status<Listing<Post>>> => {
-	const url = getPostRequestUrl(subreddit, after, filter);
+	const url = getUserRequestUrl(user, type, after, filter);
 	const response = await fetch(url);
 	if (!response.ok) {
 		return {
@@ -22,25 +23,43 @@ export const getPostListing = async (
 	};
 };
 
-export const getPostRequestUrl = (subreddit: string, after?: string, filter?: Post_Filter): string => {
-	let base_url = `https://www.reddit.com/r/${subreddit}`;
-	if (filter.sort) {
-		base_url = base_url + `/${filter.sort}`;
+export const getUserRequestUrl = (
+	user: string,
+	type?: string,
+	after?: string,
+	filter?: Post_Filter
+): string => {
+	let base_url = `https://www.reddit.com/user/${user}`;
+	if (type) {
+		base_url = base_url + `/${type}`;
 	}
 	let url = base_url + '.json?raw_json=1';
+    if (filter.sort) {
+		url = url + `&sort=${filter.sort}`;
+	}
 	if (filter.time) {
 		url = url + `&t=${filter.time}`;
 	}
 	if (after) {
 		url = url + `&after=${after}`;
 	}
+    console.log(url)
 	return url;
 };
 
-export const getPostPathname = (subreddit: string, after?: string, filter?: Post_Filter): string => {
-	let base = `/r/${subreddit}?`;
+export const getUserPathname = (
+	user: string,
+	path?: string,
+	after?: string,
+	filter?: Post_Filter
+): string => {
+	let base = `/u/${user}`;
+	if (path) {
+		base = base + `/${path}`;
+	}
+    base = base + "?"
 	if (filter.sort) {
-		base = base + `&sort=${filter.sort}?`;
+		base = base + `&sort=${filter.sort}`;
 	}
 	let pathname = base;
 	if (filter.time) {
@@ -53,11 +72,12 @@ export const getPostPathname = (subreddit: string, after?: string, filter?: Post
 };
 
 export const fetchNextPostBatch = async (
-	subreddit: string,
+	user: string,
+    type?: string,
 	after?: string,
 	filter?: Post_Filter
 ): Promise<Promise_Status<Batch>> => {
-	const result = await getPostListing(subreddit, after, filter);
+	const result = await getUserListing(user, type, after, filter);
 	if (!result.success) {
 		return {
 			success: false

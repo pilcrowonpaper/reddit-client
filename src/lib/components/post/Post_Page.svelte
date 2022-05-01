@@ -10,13 +10,11 @@
 
 	import { getCommentContents, getCommentsListing } from '$lib/utils/comments';
 	import { createEventDispatcher } from 'svelte';
-	import { browser } from '$app/env';
-	import { page } from '$app/stores';
 	const dispatch = createEventDispatcher();
 
 	export let post: Post;
 	export let comments: Comment[] = [];
-	export let about: About;
+	export let about: About = null;
 	export let filter: Comment_Filter = {
 		sort: 'best'
 	};
@@ -95,7 +93,7 @@
 	};
 </script>
 
-<Header {about} show={false} />
+<Header {about} show={false} subreddit={post.data.subreddit}/>
 <svelte:window bind:innerWidth />
 <div class="mt-8 w-full">
 	<div class="h-full w-full">

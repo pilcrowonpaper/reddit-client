@@ -47,6 +47,7 @@
 	import Header from '$lib/components/subreddit/Header.svelte';
 	import Compact from '$lib/components/cards/Compact.svelte';
 	import Filter from '$lib/components/subreddit/Filter.svelte';
+	import Cards from '$lib/components/subreddit/Cards.svelte';
 	import PostPage from '$lib/components/post/Post_Page.svelte';
 	import Large from '$lib/components/cards/Large.svelte';
 
@@ -66,6 +67,8 @@
 	let after_id = initial_listing.data.after;
 	let batch_count = initial_listing.data.dist;
 	const subreddit = $page.params.subreddit;
+
+	let card = 'large';
 
 	const updateLatestPostInView = (id: number) => {
 		if (id > latest_post_in_view) {
@@ -92,6 +95,10 @@
 	const handleFilter = (e: CustomEvent) => {
 		filter = e.detail.options as Post_Filter;
 		getNewPosts(true);
+	};
+
+	const handleCardTypeChange = (e: CustomEvent) => {
+		card = e.detail.value;
 	};
 
 	const getNewPosts = async (update_history: boolean) => {
@@ -147,25 +154,29 @@
 	style="-webkit-overflow-scrolling: touch"
 >
 	<Header {about} />
-	<div class="mt-12">
+	<div class="mt-12 flex place-content-between">
 		<Filter {filter} on:select={handleFilter} />
+		<Cards bind:type={card} on:select={handleCardTypeChange} /> 
 	</div>
 	<div class="flex flex-col divide-y">
 		{#each posts as post, i}
-			<!-- <Compact
-				{post}
-				on:display={() => {
-					updateLatestPostInView(i);
-				}}
-				on:open={openPost}
-			/> -->
-			<Large
-				{post}
-				on:display={() => {
-					updateLatestPostInView(i);
-				}}
-				on:open={openPost}
-			/>
+			{#if card === 'compact'}
+				<Compact
+					{post}
+					on:display={() => {
+						updateLatestPostInView(i);
+					}}
+					on:open={openPost}
+				/>
+			{:else if card === 'large'}
+				<Large
+					{post}
+					on:display={() => {
+						updateLatestPostInView(i);
+					}}
+					on:open={openPost}
+				/>
+			{/if}
 		{/each}
 	</div>
 </div>

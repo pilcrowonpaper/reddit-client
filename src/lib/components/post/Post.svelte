@@ -36,7 +36,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="divide-y grid grid-cols-1">
+		<div class="grid grid-cols-1">
 			<div class="flex flex-col place-items-center pb-2" bind:clientWidth={max_width}>
 				{#if post.data.post_hint === 'image'}
 					<Image
