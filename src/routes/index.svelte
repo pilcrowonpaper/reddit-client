@@ -2,11 +2,11 @@
 	import type { Load } from '@sveltejs/kit';
 
 	export const load: Load = async ({ fetch, url }) => {
-		const sort = url.searchParams.get('sort') || "hot";
+		const sort = url.searchParams.get('sort') || 'hot';
 		const time = url.searchParams.get('time') || null;
 		const filter = { sort, time };
 		const request_url = getPostRequestUrl(null, filter);
-        console.log(request_url)
+		console.log(request_url);
 		const data_promise = fetch(request_url);
 		const response = (await Promise.allSettled([data_promise])) as {
 			status: string;
@@ -52,13 +52,12 @@
 		getPostRequestUrl
 	} from '$lib/utils/home';
 	import { page } from '$app/stores';
-import Header from '$lib/components/home/Header.svelte';
+	import Header from '$lib/components/home/Header.svelte';
 
 	let posts = initial_listing.data.children;
 	let latest_post_in_view: number = 0;
 	let after_id = initial_listing.data.after;
 	let batch_count = initial_listing.data.dist;
-	const subreddit = $page.params.subreddit;
 
 	let card = 'large';
 
@@ -120,7 +119,11 @@ import Header from '$lib/components/home/Header.svelte';
 	};
 
 	const closePost = () => {
-		window.history.replaceState({}, null, `${window.location.origin}${getPostPathname(null, filter)}`);
+		window.history.replaceState(
+			{},
+			null,
+			`${window.location.origin}${getPostPathname(null, filter)}`
+		);
 		selected_post = null;
 	};
 
@@ -128,7 +131,7 @@ import Header from '$lib/components/home/Header.svelte';
 </script>
 
 <svelte:head>
-	<title>/r/{subreddit}</title>
+	<title>artic</title>
 </svelte:head>
 
 {#if selected_post}
@@ -145,10 +148,10 @@ import Header from '$lib/components/home/Header.svelte';
 	class:overflow-auto={!selected_post}
 	style="-webkit-overflow-scrolling: touch"
 >
-	<Header/>
+	<Header />
 	<div class="mt-12 flex place-content-between">
 		<Filter {filter} on:select={handleFilter} />
-		<Cards bind:type={card} on:select={handleCardTypeChange} /> 
+		<Cards bind:type={card} on:select={handleCardTypeChange} />
 	</div>
 	<div class="flex flex-col divide-y">
 		{#each posts as post, i}
@@ -159,7 +162,7 @@ import Header from '$lib/components/home/Header.svelte';
 						updateLatestPostInView(i);
 					}}
 					on:open={openPost}
-                    show={["user", "subreddit"]}
+					show={['user', 'subreddit']}
 				/>
 			{:else if card === 'large'}
 				<Large
@@ -168,7 +171,7 @@ import Header from '$lib/components/home/Header.svelte';
 						updateLatestPostInView(i);
 					}}
 					on:open={openPost}
-                    show={["user", "subreddit"]}
+					show={['user', 'subreddit']}
 				/>
 			{/if}
 		{/each}
