@@ -11,7 +11,6 @@
 		const time = url.searchParams.get('time') || null;
 		const filter = { sort, time };
 		const request_url = getUserRequestUrl(user, 'submitted', null, filter);
-		console.log(filter);
 		const data_promise = fetch(request_url);
 		const about_promise = fetch(`https://www.reddit.com/user/${user}/about.json?raw_json=1`);
 		const response = (await Promise.allSettled([data_promise, about_promise])) as {
@@ -46,11 +45,11 @@
 	};
 
 	import Header from '$lib/components/user/Header.svelte';
-	import Compact from '$lib/components/cards/Compact.svelte';
 	import Filter from '$lib/components/subreddit/Filter.svelte';
 	import Cards from '$lib/components/subreddit/Cards.svelte';
 	import PostPage from '$lib/components/post/Post_Page.svelte';
 	import Large from '$lib/components/cards/Large.svelte';
+	import Compact from '$lib/components/cards/Compact.svelte';
 
 	import type { User, Listing, Post } from '$lib/types/reddit';
 	import type { Post_Filter } from '$lib/types/filter';
@@ -168,6 +167,7 @@
 						updateLatestPostInView(i);
 					}}
 					on:open={openPost}
+					show={["subreddit"]}
 				/>
 			{:else if card === 'large'}
 				<Large
@@ -176,6 +176,7 @@
 						updateLatestPostInView(i);
 					}}
 					on:open={openPost}
+					show={["subreddit"]}
 				/>
 			{/if}
 		{/each}

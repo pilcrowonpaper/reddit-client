@@ -8,7 +8,7 @@
 	export let show = false;
 	let max_width: number;
 
-	const media_metadata_vals = Object.values(media_metadata);
+	const media_metadata_vals = Object.values(media_metadata || {});
 
 	interface Image {
 		src: string;

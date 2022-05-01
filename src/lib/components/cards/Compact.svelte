@@ -8,6 +8,7 @@
 	import type { Post } from '$lib/types/reddit';
 
 	export let post: Post;
+	export let show: string[];
 
 	const dispatch = createEventDispatcher();
 
@@ -18,7 +19,7 @@
 	};
 </script>
 
-<div class="py-4 cursor-pointer" use:inViewport on:display on:click={openPost}>
+<div class="cursor-pointer py-4" use:inViewport on:display on:click={openPost}>
 	<div class="flex gap-x-2">
 		{#if post.data.thumbnail === 'self' || !post.data.thumbnail}
 			<div
@@ -66,7 +67,20 @@
 				{/if}
 			</h2>
 			<div class=" -mt-2 flex w-full place-items-center gap-x-1">
-				<p class="text-xs">u/{post.data.author}</p>
+				{#if show.includes("subredddit")}
+				<a
+					class="text-xs hover:underline"
+					href="/r/{post.data.author}"
+					on:click|stopPropagation={() => {}}>r/{post.data.subreddit}</a
+				>
+				{/if}
+				{#if show.includes("user")}
+				<a
+					class="text-xs hover:underline"
+					href="/u/{post.data.author}"
+					on:click|stopPropagation={() => {}}>u/{post.data.author}</a
+				>
+				{/if}
 				{#if post.data.author_flair_text}
 					<div
 						class="w-fit rounded px-2 pt-0.5 font-medium leading-tight"

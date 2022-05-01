@@ -13,10 +13,12 @@
 	import Iframe from '$lib/components/utils/Iframe.svelte';
 
 	export let post: Post;
+	export let show : string[]
+	export const close = () => {console.log("close")}
 
 	const dispatch = createEventDispatcher();
 
-	let show = false;
+	let show_media = false;
 
 	const openPost = () => {
 		dispatch('open', {
@@ -25,20 +27,18 @@
 	};
 
 	const onDisplayHandle = () => {
-		show = true;
+		show_media = true;
 		dispatch('display');
 	};
 
 	const onHiddenHandle = () => {
-		show = false;
+		show_media = false;
 	};
 
 	let inner_height: number;
 	let max_height: number;
 	$: max_height = (inner_height * 2) / 3;
 	let max_width: number;
-
-    let clientHeight
 </script>
 
 <svelte:window bind:innerHeight={inner_height} />
@@ -53,23 +53,34 @@
 	<div class="flex grow flex-col gap-4 overflow-hidden">
 		<div class="flex flex-col gap-2">
 			<div>
-				<h2 class="break-words font-medium text-lg leading-tight md:text-xl md:leading-tight">
+				<h2 class="break-words text-lg font-medium leading-tight md:text-xl md:leading-tight">
 					{post.data.title}
 					{#if post.data.link_flair_text}
-					<span
-						class="w-fit rounded px-2 text-xs font-medium text-white"
-						style:background-color={post.data.link_flair_background_color}
-						class:text-white={post.data.link_flair_text_color === 'light'}
-						class:text-black={post.data.link_flair_text_color === 'dark'}
-					>
-						{removeEmoji(post.data.link_flair_text)}
-					</span>
-				{/if}
+						<span
+							class="w-fit rounded px-2 text-xs font-medium text-white"
+							style:background-color={post.data.link_flair_background_color}
+							class:text-white={post.data.link_flair_text_color === 'light'}
+							class:text-black={post.data.link_flair_text_color === 'dark'}
+						>
+							{removeEmoji(post.data.link_flair_text)}
+						</span>
+					{/if}
 				</h2>
 				<div class="flex gap-3 text-xs">
-					<a class="font-medium hover:underline" href="/u/{post.data.author}"
-						>u/{post.data.author}</a
-					>
+					{#if show.includes('subredddit')}
+						<a
+							class="font-medium hover:underline"
+							href="/r/{post.data.author}"
+							on:click|stopPropagation={() => {}}>r/{post.data.subreddit}</a
+						>
+					{/if}
+					{#if show.includes('user')}
+						<a
+							class="font-medium hover:underline"
+							href="/u/{post.data.author}"
+							on:click|stopPropagation={() => {}}>u/{post.data.author}</a
+						>
+					{/if}
 					<p>{formatTime(new Date().getTime() - post.data.created_utc * 1000)} ago</p>
 				</div>
 			</div>
@@ -84,7 +95,7 @@
 						{max_width}
 						width={post.data.preview.images[0].source.width}
 						height={post.data.preview.images[0].source.height}
-						{show}
+						show={show_media}
 					/>
 				{:else if post.data.post_hint === 'rich:video'}
 					<Iframe
@@ -94,7 +105,7 @@
 						width={post.data.media_embed.width}
 						height={post.data.media_embed.height}
 						title={post.data.title}
-						{show}
+						show={show_media}
 					/>
 				{:else if post.data.domain === 'v.redd.it'}
 					<Video
@@ -104,7 +115,8 @@
 						{max_width}
 						width={post.data.preview.images[0].source.width}
 						height={post.data.preview.images[0].source.height}
-						{show}
+						show={show_media}
+						autoplay={true}
 					/>
 				{:else if post.data.post_hint === 'link' && validateGif(post.data.url)}
 					<Video
@@ -116,12 +128,12 @@
 						height={post.data.preview.images[0].source.height}
 						autoplay={true}
 						loop={true}
-						{show}
+						show={show_media}
 					/>
 				{:else if post.data.is_self}
 					{#if post.data.selftext_html}
-						<div class="w-full overflow-hidden relative" style:max-height="8rem" bind:clientHeight={clientHeight}>
-                            <div
+						<div class="w-full overflow-hidden relative" style:max-height="8rem">
+							<div
 								class="absolute bottom-0 h-20 bg-white w-full"
 								style="-webkit-mask-image: -webkit-gradient(linear, left top, left bottom, 
                                 from(rgba(0,0,0,0)), to(rgba(0,0,0,1)));"
@@ -133,7 +145,7 @@
 					<Slideshow
 						media_metadata={post.data.media_metadata}
 						max_height={(max_height / 3) * 2}
-						{show}
+						show={show_media}
 					/>
 				{:else if post.data.domain}
 					<div class="rounded-md h-12 bg-gray-100 flex w-full">

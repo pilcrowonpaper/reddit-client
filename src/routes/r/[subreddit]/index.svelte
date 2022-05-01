@@ -167,6 +167,7 @@
 						updateLatestPostInView(i);
 					}}
 					on:open={openPost}
+					show={["user"]}
 				/>
 			{:else if card === 'large'}
 				<Large
@@ -175,6 +176,7 @@
 						updateLatestPostInView(i);
 					}}
 					on:open={openPost}
+					show={["user"]}
 				/>
 			{/if}
 		{/each}
