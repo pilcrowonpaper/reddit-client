@@ -131,8 +131,13 @@ import { selected_post } from '$lib/stores';
 </script>
 
 <svelte:head>
-	<title>/u/{user}</title>
+	{#if $selected_post}
+		<title>{$selected_post.data.title}</title>
+	{:else}
+		<title>u/{user}</title>
+	{/if}
 </svelte:head>
+
 
 <div
 	class="h-full overflow-auto px-4 py-3 sm:px-8 md:px-16 lg:px-24"

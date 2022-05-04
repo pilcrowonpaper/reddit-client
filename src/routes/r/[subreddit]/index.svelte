@@ -129,8 +129,13 @@
 </script>
 
 <svelte:head>
-	<title>/r/{subreddit}</title>
+	{#if $selected_post}
+		<title>{$selected_post.data.title}</title>
+	{:else}
+		<title>r/{subreddit}</title>
+	{/if}
 </svelte:head>
+
 
 <div
 	class="h-full overflow-auto px-4 py-3 sm:px-8 md:px-16 lg:px-24"

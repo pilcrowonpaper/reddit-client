@@ -122,19 +122,10 @@ import { selected_post } from '$lib/stores';
 		selected_post.set(e.detail.post as Post)
 	};
 
-	const closePost = () => {
-		window.history.replaceState({}, null, `${window.location.origin}/u/${user}`);
-		$selected_post = null;
-	};
-
 	$: getNextPostBatch(latest_post_in_view);
 
 	$: console.log(filter);
 </script>
-
-<svelte:head>
-	<title>/u/{user}</title>
-</svelte:head>
 
 <div class="mt-2 flex place-content-between">
 	<Filter_Select {filter} on:select={handleFilter} />

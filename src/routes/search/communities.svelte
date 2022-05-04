@@ -63,8 +63,6 @@
 	};
 
 	$: getNextPostBatch(latest_post_in_view);
-
-	console.log(communities);
 </script>
 
 <div class="mt-2 flex flex-col divide-y">

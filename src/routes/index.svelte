@@ -6,7 +6,6 @@
 		const time = url.searchParams.get('time') || null;
 		const filter = { sort, time };
 		const request_url = getPostRequestUrl(null, filter);
-		console.log(request_url);
 		const data_promise = fetch(request_url);
 		const response = (await Promise.allSettled([data_promise])) as {
 			status: string;
@@ -41,8 +40,9 @@
 	import Cards from '$lib/components/subreddit/Cards.svelte';
 	import PostPage from '$lib/components/post/Post_Page.svelte';
 	import Large from '$lib/components/cards/Large.svelte';
+	import Header from '$lib/components/home/Header.svelte';
 
-	import type { About, Listing, Post } from '$lib/types/reddit';
+	import type { Listing, Post } from '$lib/types/reddit';
 	import type { Filter } from '$lib/types/filter';
 
 	import {
@@ -52,7 +52,7 @@
 		getPostRequestUrl
 	} from '$lib/utils/home';
 	import { page } from '$app/stores';
-	import Header from '$lib/components/home/Header.svelte';
+	import { selected_post } from '$lib/stores';
 
 	let posts = initial_listing.data.children;
 	let latest_post_in_view: number = 0;
@@ -110,41 +110,26 @@
 		batch_count = listing.data.dist;
 	};
 
-	let selected_post: Post = null;
 
 	const openPost = (e: CustomEvent) => {
-		selected_post = e.detail.post as Post;
-		const new_url = `${window.location.origin}/r/${selected_post.data.subreddit}/${selected_post.data.id}`;
-		window.history.replaceState({}, selected_post.data.title, new_url);
-	};
-
-	const closePost = () => {
-		window.history.replaceState(
-			{},
-			null,
-			`${window.location.origin}${getPostPathname(null, filter)}`
-		);
-		selected_post = null;
+		selected_post.set(e.detail.post as Post)
 	};
 
 	$: getNextPostBatch(latest_post_in_view);
 </script>
 
 <svelte:head>
-	<title>artic</title>
+	{#if $selected_post}
+		<title>{$selected_post.data.title}</title>
+	{:else}
+		<title>artic</title>
+	{/if}
 </svelte:head>
 
-{#if selected_post}
-	<div
-		class="absolute z-40 h-full w-full overflow-auto bg-white px-4 py-3 sm:px-8 md:px-16 lg:px-24"
-	>
-		<PostPage post={selected_post} on:close={closePost} />
-	</div>
-{/if}
 <div
 	class="h-full overflow-auto px-4 py-3 sm:px-8 md:px-16 lg:px-24"
-	class:overflow-hidden={!!selected_post}
-	class:overflow-auto={!selected_post}
+	class:overflow-hidden={!!$selected_post}
+	class:overflow-auto={!$selected_post}
 >
 	<Header />
 	<div class="mt-12 flex place-content-between">

@@ -63,9 +63,7 @@
 		batch_count = new_users.length;
 	};
 
-	$: getNextPostBatch(latest_post_in_view);
-
-	console.log(users);
+	$: getNextPostBatch(latest_post_in_view)
 </script>
 
 <div class="mt-2 flex flex-col divide-y">

@@ -468,6 +468,7 @@ export interface User {
 	data: {
 		is_employee: boolean;
 		is_friend: boolean;
+		is_suspended: boolean;
 		subreddit: {
 			default_set: boolean;
 			user_is_contributor: any;
