@@ -28,10 +28,10 @@ export const get: RequestHandler = async ({ params, url }) => {
 		};
 	}
 	return {
-		body: JSON.stringify({
+		body: {
 			initial_listing: listing as Listing<Post>,
 			about: about as About,
 			filter
-		})
+		}
 	};
 };
