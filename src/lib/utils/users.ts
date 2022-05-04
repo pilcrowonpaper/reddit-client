@@ -34,7 +34,7 @@ export const getUserRequestUrl = (
 		base_url = base_url + `/${type}`;
 	}
 	let url = base_url + '.json?raw_json=1';
-    if (filter.sort) {
+	if (filter.sort) {
 		url = url + `&sort=${filter.sort}`;
 	}
 	if (filter.time) {
@@ -43,7 +43,6 @@ export const getUserRequestUrl = (
 	if (after) {
 		url = url + `&after=${after}`;
 	}
-    console.log(url)
 	return url;
 };
 
@@ -57,7 +56,7 @@ export const getUserPathname = (
 	if (path) {
 		base = base + `/${path}`;
 	}
-    base = base + "?"
+	base = base + '?';
 	if (filter.sort) {
 		base = base + `&sort=${filter.sort}`;
 	}
@@ -73,7 +72,7 @@ export const getUserPathname = (
 
 export const fetchNextPostBatch = async (
 	user: string,
-    type?: string,
+	type?: string,
 	after?: string,
 	filter?: Filter
 ): Promise<Promise_Status<Listing<any>>> => {

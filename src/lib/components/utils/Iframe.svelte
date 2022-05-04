@@ -17,15 +17,15 @@
 </script>
 
 {#if show}
-<iframe
-	class="rounded-md"
-	{src}
-	{title}
-	style:height="{size.height}px"
-	style:width="{size.width}px"
-	on:click
-    allow="fullscreen;"
-/>
+	<iframe
+		class="rounded-md"
+		{src}
+		{title}
+		style:height="{size.height}px"
+		style:width="{size.width}px"
+		on:click
+		allow="fullscreen;"
+	/>
 {:else}
 	<div style:height="{size.height}px" style:width="{size.width}px" />
 {/if}

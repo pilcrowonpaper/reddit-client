@@ -10,11 +10,7 @@
 <div>
 	<div class="flex place-items-center gap-2 pt-8 pb-4">
 		{#if user.data.icon_img}
-			<img
-				class="h-12 w-12 rounded-full"
-				src={user.data.icon_img}
-				alt="u/{user.data.name} icon"
-			/>
+			<img class="h-12 w-12 rounded-full" src={user.data.icon_img} alt="u/{user.data.name} icon" />
 		{:else}
 			<div
 				class="h-12 w-12 rounded-full bg-blue-500 flex place-items-center place-content-center text-white text-2xl font-semibold"
@@ -23,7 +19,7 @@
 			</div>
 		{/if}
 		<h1
-			class="text-2xl font-semibold cursor-pointer"
+			class="cursor-pointer text-2xl font-semibold"
 			on:click={() => {
 				goto(`/u/${user.data.name}`);
 			}}

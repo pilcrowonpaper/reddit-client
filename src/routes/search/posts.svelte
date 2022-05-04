@@ -9,13 +9,12 @@
 		let query_text: string;
 		let subreddit: string = null;
 		if (query.includes(':')) {
-            subreddit = query.split(':')[0]
+			subreddit = query.split(':')[0];
 			query_text = query.split(':')[1];
 		} else {
 			query_text = query;
 		}
 		const request_url = getSearchRequestUrl(query_text, 'link', subreddit, null, filter);
-        console.log(request_url)
 		const listing_response = await fetch(request_url);
 		if (!listing_response.ok) {
 			return {
@@ -57,7 +56,7 @@
 
 	import { page } from '$app/stores';
 	import { getSearchListing, getSearchPathname, getSearchRequestUrl } from '$lib/utils/search';
-import { selected_post } from '$lib/stores';
+	import { selected_post } from '$lib/stores';
 
 	let posts = initial_listing.data.children;
 	let latest_post_in_view: number = 0;
@@ -91,7 +90,6 @@ import { selected_post } from '$lib/stores';
 	};
 
 	const handleFilter = (e: CustomEvent) => {
-		console.log(e.detail);
 		filter = e.detail.options as Filter;
 		getNewPosts(true);
 	};
@@ -119,12 +117,10 @@ import { selected_post } from '$lib/stores';
 	};
 
 	const openPost = (e: CustomEvent) => {
-		selected_post.set(e.detail.post as Post)
+		selected_post.set(e.detail.post as Post);
 	};
 
 	$: getNextPostBatch(latest_post_in_view);
-
-	$: console.log(filter);
 </script>
 
 <div class="mt-2 flex place-content-between">

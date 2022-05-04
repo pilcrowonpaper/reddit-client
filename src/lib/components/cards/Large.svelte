@@ -12,13 +12,10 @@
 	import Video from '../utils/Video.svelte';
 	import Iframe from '$lib/components/utils/Iframe.svelte';
 	import { post_page_in_view } from '$lib/utils/stores';
-import { stop_propagation } from 'svelte/internal';
+	import { stop_propagation } from 'svelte/internal';
 
 	export let post: Post;
 	export let show: string[];
-	export const close = () => {
-		console.log('close');
-	};
 
 	const dispatch = createEventDispatcher();
 

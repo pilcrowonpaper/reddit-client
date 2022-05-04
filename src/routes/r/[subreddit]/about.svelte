@@ -29,7 +29,7 @@
 				status: 400
 			};
 		}
-		if (about.kind !== "t5") {
+		if (about.kind !== 't5') {
 			return {
 				status: 404
 			};
@@ -54,7 +54,7 @@
 	<Header {about} />
 	<div class="mt-12">
 		<h2 class="break-words text-xl font-medium leading-tight sm:leading-tight">rules</h2>
-		<div class="flex flex-col gap-6" >
+		<div class="flex flex-col gap-6">
 			{#each rules.rules as rule, i}
 				<div>
 					<h3 class="font-medium">{i + 1}. {rule.short_name}</h3>

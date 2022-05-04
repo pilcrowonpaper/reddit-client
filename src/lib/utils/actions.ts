@@ -14,8 +14,6 @@ export const inViewport = (node) => {
 	};
 };
 
-
-
 export const clickOutside = (node) => {
 	const handleClick = (event) => {
 		if (!node.contains(event.target)) {

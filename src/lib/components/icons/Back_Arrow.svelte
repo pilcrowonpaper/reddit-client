@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let size: number;
-    export let custom_class  = ""
+	export let custom_class = '';
 	let bg_color = 'text-black';
 </script>
 

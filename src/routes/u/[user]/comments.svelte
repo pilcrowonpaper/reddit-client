@@ -27,7 +27,7 @@
 				status: 400
 			};
 		}
-		if (about.kind !== "t5") {
+		if (about.kind !== 't5') {
 			return {
 				status: 404
 			};
@@ -66,7 +66,7 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { inViewport } from '$lib/utils/actions';
-	import { selected_post } from "$lib/stores"
+	import { selected_post } from '$lib/stores';
 
 	let comments = initial_listing.data.children;
 	let latest_post_in_view: number = 0;
@@ -121,7 +121,6 @@
 	};
 
 	$: getNextPostBatch(latest_post_in_view);
-
 </script>
 
 <svelte:head>
@@ -131,7 +130,6 @@
 		<title>u/{user}</title>
 	{/if}
 </svelte:head>
-
 
 <div
 	class="h-full overflow-auto px-4 py-3 sm:px-8 md:px-16 lg:px-24"
@@ -160,7 +158,9 @@
 					goto(`/r/${comment.data.subreddit}/${comment.data.link_id.substring(3)}`);
 				}}
 				use:inViewport
-				on:display={() => {updateLatestPostInView(i)}}
+				on:display={() => {
+					updateLatestPostInView(i);
+				}}
 			>
 				<div class="mb-1 flex flex-wrap gap-x-2 text-xs font-medium">
 					<p>{comment.data.link_title}</p>

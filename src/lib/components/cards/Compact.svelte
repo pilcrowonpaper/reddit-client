@@ -66,20 +66,20 @@
 					</span>
 				{/if}
 			</h2>
-			<div class=" -mt-2 flex w-full place-items-center gap-x-1 whitespace-nowrap flex-wrap">
-				{#if show.includes("subreddit")}
-				<a
-					class="text-xs hover:underline"
-					href="/r/{post.data.subreddit}"
-					on:click|stopPropagation={() => {}}>r/{post.data.subreddit}</a
-				>
+			<div class=" -mt-2 flex w-full flex-wrap place-items-center gap-x-1 whitespace-nowrap">
+				{#if show.includes('subreddit')}
+					<a
+						class="text-xs hover:underline"
+						href="/r/{post.data.subreddit}"
+						on:click|stopPropagation={() => {}}>r/{post.data.subreddit}</a
+					>
 				{/if}
-				{#if show.includes("user")}
-				<a
-					class="text-xs hover:underline"
-					href="/u/{post.data.author}"
-					on:click|stopPropagation={() => {}}>u/{post.data.author}</a
-				>
+				{#if show.includes('user')}
+					<a
+						class="text-xs hover:underline"
+						href="/u/{post.data.author}"
+						on:click|stopPropagation={() => {}}>u/{post.data.author}</a
+					>
 				{/if}
 				{#if post.data.author_flair_text}
 					<div

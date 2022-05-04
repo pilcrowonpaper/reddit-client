@@ -37,9 +37,9 @@ export const getPostRequestUrl = (after?: string, filter?: Post_Filter): string 
 };
 
 export const getPostPathname = (after?: string, filter?: Post_Filter): string => {
-	let base = "";
-	let pathname = base + "?";
-    if (filter.sort) {
+	let base = '';
+	let pathname = base + '?';
+	if (filter.sort) {
 		pathname = pathname + `&sort=${filter.sort}`;
 	}
 	if (filter.time) {

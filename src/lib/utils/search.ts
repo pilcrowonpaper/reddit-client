@@ -46,15 +46,11 @@ export const getSearchRequestUrl = (
 	if (after) {
 		url = url + `&after=${after}`;
 	}
-	url = url + '&raw_json=1&restrict_sr=1'
+	url = url + '&raw_json=1&restrict_sr=1';
 	return url;
 };
 
-export const getSearchPathname = (
-	query: string,
-	type: string,
-	filter?: Filter
-): string => {
+export const getSearchPathname = (query: string, type: string, filter?: Filter): string => {
 	let pathname = `/search/${type}?q=${query}`;
 	if (filter.sort) {
 		pathname = pathname + `&sort=${filter.sort}`;

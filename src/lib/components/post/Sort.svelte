@@ -2,12 +2,12 @@
 	import Select from '../utils/Select.svelte';
 
 	import { createEventDispatcher } from 'svelte';
-	import type { Comment_Filter } from '$lib/types/filter';
+	import type { Filter } from '$lib/types/filter';
 	import { comment_sort_options } from '$lib/utils/filter';
 
 	const dispatch = createEventDispatcher();
 
-	export let options: Comment_Filter;
+	export let options: Filter;
 
 	let default_sort_id: number;
 	let sort: string;

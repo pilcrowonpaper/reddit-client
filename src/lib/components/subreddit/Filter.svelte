@@ -14,7 +14,9 @@
 	let sort: string;
 	let time: string;
 
-	$: default_sort_id = post_sort_options.includes(filter.sort) ? post_sort_options.indexOf(filter.sort) : 0;
+	$: default_sort_id = post_sort_options.includes(filter.sort)
+		? post_sort_options.indexOf(filter.sort)
+		: 0;
 	$: default_time_id = time_values.includes(filter.time) ? time_values.indexOf(filter.time) : 1;
 	$: sort = post_sort_options[default_sort_id];
 	$: time = time_options[default_time_id];
@@ -40,8 +42,6 @@
 			}
 		});
 	};
-
-	$:console.log(time)
 </script>
 
 <div>

@@ -63,7 +63,7 @@
 		batch_count = new_users.length;
 	};
 
-	$: getNextPostBatch(latest_post_in_view)
+	$: getNextPostBatch(latest_post_in_view);
 </script>
 
 <div class="mt-2 flex flex-col divide-y">
@@ -75,10 +75,10 @@
 				updateLatestPostInView(i);
 			}}
 			on:click={() => {
-                if (user.data.is_suspended) return
+				if (user.data.is_suspended) return;
 				goto(`/u/${user.data.name}`);
 			}}
-            class:cursor-pointer={!user.data.is_suspended}
+			class:cursor-pointer={!user.data.is_suspended}
 		>
 			{#if user.data.icon_img}
 				<img class="h-8 rounded-full" src={user.data.icon_img} alt={user.data.name} />

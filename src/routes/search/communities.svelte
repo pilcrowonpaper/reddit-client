@@ -88,7 +88,7 @@
 			{/if}
 			<div>
 				<p class="text-sm font-medium">{community.data.display_name}</p>
-                <p class="text-xs font-medium">{community.data.subscribers.toLocaleString()} subscribers</p>
+				<p class="text-xs font-medium">{community.data.subscribers.toLocaleString()} subscribers</p>
 				<p class="text-xs">{community.data.public_description}</p>
 			</div>
 		</div>

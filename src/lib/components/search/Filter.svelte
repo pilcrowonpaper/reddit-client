@@ -26,8 +26,6 @@
 	$: sort = search_sort_values[default_sort_id];
 	$: time = time_values[default_time_id];
 
-	$:console.log(sort, time)
-
 	const select_sort = (e: CustomEvent) => {
 		if (sort === e.detail.value) return;
 		sort = e.detail.value;
@@ -60,7 +58,7 @@
 			on:select={select_sort}
 			id={default_sort_id}
 		/>
-		{#if sort !== 'hot' && sort !== "new"}
+		{#if sort !== 'hot' && sort !== 'new'}
 			<Select
 				options={time_options}
 				values={time_values}

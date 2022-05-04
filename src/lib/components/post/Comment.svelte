@@ -13,7 +13,7 @@
 	export let depth = 1;
 	export let depth_limit = 10;
 	export let op: string;
-	export let collapsable = true
+	export let collapsable = true;
 
 	const continueThread = (id: string) => {
 		dispatch('continue', {
@@ -29,9 +29,7 @@
 	};
 </script>
 
-<div
-	class="flex grow flex-col gap-y-1 py-1"
->
+<div class="flex grow flex-col gap-y-1 py-1">
 	<div class="flex gap-x-2">
 		<a class="w-fit text-xs font-medium hover:underline" href="/u/{comment.data.author}"
 			>u/{comment.data.author}</a
@@ -42,14 +40,14 @@
 	</div>
 	<div class="flex gap-x-2">
 		{#if collapsable}
-		<div
-			class="group flex w-4 shrink-0 cursor-pointer place-content-center"
-			on:click={() => {
-				collapse = true;
-			}}
-		>
-			<div class="h-full w-px bg-gray-200" class:group-hover:bg-blue-500={!collapse} />
-		</div>
+			<div
+				class="group flex w-4 shrink-0 cursor-pointer place-content-center"
+				on:click={() => {
+					collapse = true;
+				}}
+			>
+				<div class="h-full w-px bg-gray-200" class:group-hover:bg-blue-500={!collapse} />
+			</div>
 		{/if}
 		{#if !collapse}
 			<div class="overflow-hidden">

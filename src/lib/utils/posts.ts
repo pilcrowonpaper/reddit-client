@@ -22,7 +22,11 @@ export const getPostListing = async (
 	};
 };
 
-export const getPostRequestUrl = (subreddit: string, after?: string, filter?: Post_Filter): string => {
+export const getPostRequestUrl = (
+	subreddit: string,
+	after?: string,
+	filter?: Post_Filter
+): string => {
 	let base_url = `https://www.reddit.com/r/${subreddit}`;
 	if (filter.sort) {
 		base_url = base_url + `/${filter.sort}`;
@@ -37,7 +41,11 @@ export const getPostRequestUrl = (subreddit: string, after?: string, filter?: Po
 	return url;
 };
 
-export const getPostPathname = (subreddit: string, after?: string, filter?: Post_Filter): string => {
+export const getPostPathname = (
+	subreddit: string,
+	after?: string,
+	filter?: Post_Filter
+): string => {
 	let base = `/r/${subreddit}?`;
 	if (filter.sort) {
 		base = base + `&sort=${filter.sort}?`;

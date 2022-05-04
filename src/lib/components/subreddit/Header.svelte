@@ -7,8 +7,6 @@
 
 	import type { About } from '$lib/types/reddit';
 
-	console.log(about);
-
 	const getAbout = async () => {
 		const response = await fetch(`https://www.reddit.com/r/${subreddit}/about.json?raw_json=1`);
 		about = (await response.json()) as About;

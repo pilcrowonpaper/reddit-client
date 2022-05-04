@@ -27,7 +27,7 @@
 				status: 400
 			};
 		}
-		if (about.kind !== "t5") {
+		if (about.kind !== 't5') {
 			return {
 				status: 404
 			};
@@ -141,7 +141,6 @@
 		<title>r/{subreddit}</title>
 	{/if}
 </svelte:head>
-
 
 <div
 	class="h-full overflow-auto px-4 py-3 sm:px-8 md:px-16 lg:px-24"

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-import { page } from '$app/stores';
+	import { page } from '$app/stores';
 	import PostPage from '$lib/components/post/Post_Page.svelte';
 	import { selected_post } from '$lib/stores';
 	import type { Post } from '$lib/types/reddit';
@@ -21,18 +21,17 @@ import { page } from '$app/stores';
 		search_bar.focus();
 	};
 
-	let previous_url : string
-	let previous_post = false
-
+	let previous_url: string;
+	let previous_post = false;
 
 	const setNewUrl = (post: Post) => {
 		if (post) {
-			previous_url = $page.url.href.valueOf()
+			previous_url = $page.url.href.valueOf();
 			const new_url = `${window.location.origin}/r/${$selected_post.data.subreddit}/${$selected_post.data.id}`;
-			previous_post = true
-			window.history.replaceState({},null, new_url);
+			previous_post = true;
+			window.history.replaceState({}, null, new_url);
 		} else if (previous_post) {
-			previous_post = false
+			previous_post = false;
 			window.history.replaceState({}, null, previous_url);
 		}
 	};

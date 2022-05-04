@@ -17,8 +17,6 @@
 	let max_width: number;
 
 	let show = true
-
-	console.log(post)
 </script>
 
 <svelte:window bind:innerHeight={inner_height} />

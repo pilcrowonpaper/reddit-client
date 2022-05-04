@@ -37,7 +37,7 @@
 				status: about.error || post_data.error
 			};
 		}
-		if (about.kind !== "t5") {
+		if (about.kind !== 't5') {
 			return {
 				status: 404
 			};

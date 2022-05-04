@@ -110,9 +110,8 @@
 		batch_count = listing.data.dist;
 	};
 
-
 	const openPost = (e: CustomEvent) => {
-		selected_post.set(e.detail.post as Post)
+		selected_post.set(e.detail.post as Post);
 	};
 
 	$: getNextPostBatch(latest_post_in_view);

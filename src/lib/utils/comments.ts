@@ -68,13 +68,17 @@ export const getCommentContents = async (
 	post_link: string,
 	id_list: string[]
 ): Promise<Promise_Status<Comment[]>> => {
-	const comments_list =  await Promise.all(id_list.map(async(val) => {
-		const response = await fetch(`https://www.reddit.com/r/${subreddit}/comments/${post_link}/_/${val}.json?raw_json=1`)
-		const comment_result = await response.json() as [Listing<Post>, Listing<Comment>]
-		const comments = comment_result[1].data.children
-		return comments
-	}))
-	const result = comments_list.reduce((a, b) => [...a, ...b])
+	const comments_list = await Promise.all(
+		id_list.map(async (val) => {
+			const response = await fetch(
+				`https://www.reddit.com/r/${subreddit}/comments/${post_link}/_/${val}.json?raw_json=1`
+			);
+			const comment_result = (await response.json()) as [Listing<Post>, Listing<Comment>];
+			const comments = comment_result[1].data.children;
+			return comments;
+		})
+	);
+	const result = comments_list.reduce((a, b) => [...a, ...b]);
 	return {
 		success: true,
 		data: result

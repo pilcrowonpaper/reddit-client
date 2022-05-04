@@ -6,7 +6,7 @@
 	import Back_Arrow from '$lib/components/icons/Back_Arrow.svelte';
 
 	import type { About, Post, Comment } from '$lib/types/reddit';
-	import type { Comment_Filter } from '$lib/types/filter';
+	import type { Filter } from '$lib/types/filter';
 
 	import { getCommentContents, getCommentsListing } from '$lib/utils/comments';
 	import { createEventDispatcher } from 'svelte';
@@ -16,7 +16,7 @@
 	export let post: Post;
 	export let comments: Comment[] = [];
 	export let about: About = null;
-	export let filter: Comment_Filter = {
+	export let filter: Filter = {
 		sort: 'best'
 	};
 	export let id: string = null;
@@ -25,7 +25,7 @@
 	const batch_count = 50;
 
 	const handleSort = (e: CustomEvent) => {
-		filter = e.detail.options as Comment_Filter;
+		filter = e.detail.options as Filter;
 		getNewComments(post.data.subreddit, post.data.id);
 	};
 
@@ -104,7 +104,7 @@
 			<Back_Arrow
 				size={6}
 				on:click={() => {
-					post_page_in_view.set(false)
+					post_page_in_view.set(false);
 					dispatch('close');
 				}}
 				custom_class="cursor-pointer"
