@@ -46,7 +46,7 @@ export const getPostPathname = (
 ): string => {
 	let base = `/r/${subreddit}?`;
 	if (filter.sort) {
-		base = base + `&sort=${filter.sort}?`;
+		base = base + `&sort=${filter.sort}`;
 	}
 	let pathname = base;
 	if (filter.time) {
