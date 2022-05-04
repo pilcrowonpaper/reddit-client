@@ -34,7 +34,7 @@
 		const about: any = await response[1].value.json();
 		if (about.error || post_data.error) {
 			return {
-				status: 400
+				status: about.error || post_data.error
 			};
 		}
 		if (about.kind !== "t5") {

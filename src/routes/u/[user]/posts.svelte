@@ -24,7 +24,7 @@
 		const about: any = await response[1].value.json();
 		if (about.error || listing.error) {
 			return {
-				status: 400
+				status: about.error || listing.error
 			};
 		}
 		if (about.kind !== 't5') {
