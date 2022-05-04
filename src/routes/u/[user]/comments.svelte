@@ -27,7 +27,7 @@
 				status: 400
 			};
 		}
-		if (about.kind !== 't5') {
+		if (about.kind !== 't2') {
 			return {
 				status: 404
 			};
@@ -58,7 +58,6 @@
 	import type { Filter } from '$lib/types/filter';
 
 	import {
-		fetchNextPostBatch,
 		getUserListing,
 		getUserPathname,
 		getUserRequestUrl
@@ -87,7 +86,7 @@
 		}
 		const initial_sort = filter.sort ? filter.sort.valueOf() : null;
 		const initial_time = filter.time ? filter.time.valueOf() : null;
-		const result = await fetchNextPostBatch(user, 'comments', after_id, filter);
+		const result = await getUserListing(user, 'comments', after_id, filter);
 		if (!result.success) return;
 		if (initial_sort !== filter.sort || initial_time !== filter.time) return;
 		const listing = result.data;
@@ -104,7 +103,7 @@
 
 	const getNewPosts = async (update_history: boolean) => {
 		comments = [];
-		const new_url = $page.url.origin + getUserPathname(user, 'comments', null, filter);
+		const new_url = $page.url.origin + getUserPathname(user, 'comments', filter);
 		if (update_history) {
 			window.history.replaceState({}, document.title, new_url);
 		}
@@ -162,7 +161,7 @@
 					updateLatestPostInView(i);
 				}}
 			>
-				<div class="mb-1 flex flex-wrap gap-x-2 text-xs font-medium">
+				<div class="mb-2 flex flex-wrap gap-x-2 text-xs font-medium">
 					<p>{comment.data.link_title}</p>
 					<p>r/{comment.data.subreddit}</p>
 				</div>

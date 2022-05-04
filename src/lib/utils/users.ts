@@ -49,7 +49,6 @@ export const getUserRequestUrl = (
 export const getUserPathname = (
 	user: string,
 	path?: string,
-	after?: string,
 	filter?: Filter
 ): string => {
 	let base = `/u/${user}`;
@@ -64,27 +63,5 @@ export const getUserPathname = (
 	if (filter.time) {
 		pathname = pathname + `&time=${filter.time}`;
 	}
-	if (after) {
-		pathname = pathname + `&after=${after}`;
-	}
 	return pathname;
-};
-
-export const fetchNextPostBatch = async (
-	user: string,
-	type?: string,
-	after?: string,
-	filter?: Filter
-): Promise<Promise_Status<Listing<any>>> => {
-	const result = await getUserListing(user, type, after, filter);
-	if (!result.success) {
-		return {
-			success: false
-		};
-	}
-	const listing = result.data;
-	return {
-		success: true,
-		data: listing
-	};
 };

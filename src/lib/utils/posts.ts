@@ -1,12 +1,12 @@
 import type { Promise_Status } from '$lib/types';
-import type { Post_Filter } from '$lib/types/filter';
+import type { Filter } from '$lib/types/filter';
 import type { Batch } from '$lib/types/posts';
 import type { Listing, Post } from '$lib/types/reddit';
 
 export const getPostListing = async (
 	subreddit: string,
 	after?: string,
-	filter?: Post_Filter
+	filter?: Filter
 ): Promise<Promise_Status<Listing<Post>>> => {
 	const url = getPostRequestUrl(subreddit, after, filter);
 	const response = await fetch(url);
@@ -25,7 +25,7 @@ export const getPostListing = async (
 export const getPostRequestUrl = (
 	subreddit: string,
 	after?: string,
-	filter?: Post_Filter
+	filter?: Filter
 ): string => {
 	let base_url = `https://www.reddit.com/r/${subreddit}`;
 	if (filter.sort) {
@@ -43,8 +43,7 @@ export const getPostRequestUrl = (
 
 export const getPostPathname = (
 	subreddit: string,
-	after?: string,
-	filter?: Post_Filter
+	filter?: Filter
 ): string => {
 	let base = `/r/${subreddit}?`;
 	if (filter.sort) {
@@ -54,30 +53,5 @@ export const getPostPathname = (
 	if (filter.time) {
 		pathname = pathname + `&time=${filter.time}`;
 	}
-	if (after) {
-		pathname = pathname + `&after=${after}`;
-	}
 	return pathname;
-};
-
-export const fetchNextPostBatch = async (
-	subreddit: string,
-	after?: string,
-	filter?: Post_Filter
-): Promise<Promise_Status<Batch>> => {
-	const result = await getPostListing(subreddit, after, filter);
-	if (!result.success) {
-		return {
-			success: false
-		};
-	}
-	const listing = result.data;
-	return {
-		success: true,
-		data: {
-			posts: listing.data.children,
-			batch_count: listing.data.dist,
-			after_id: listing.data.after
-		}
-	};
 };

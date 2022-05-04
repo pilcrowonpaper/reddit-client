@@ -61,7 +61,6 @@
 	import type { Filter } from '$lib/types/filter';
 
 	import {
-		fetchNextPostBatch,
 		getPostListing,
 		getPostPathname,
 		getPostRequestUrl
@@ -91,13 +90,15 @@
 		}
 		const initial_sort = filter.sort ? filter.sort.valueOf() : null;
 		const initial_time = filter.time ? filter.time.valueOf() : null;
-		const result = await fetchNextPostBatch(subreddit, after_id, filter);
+		const result = await getPostListing(subreddit, after_id, filter);
 		if (!result.success) return;
 		if (initial_sort !== filter.sort || initial_time !== filter.time) return;
-		const batch = result.data;
-		posts = [...posts, ...batch.posts];
-		after_id = batch.after_id;
-		batch_count = batch.batch_count;
+		const listing = result.data;
+		const new_posts = listing.data.children;
+		posts = [...posts, ...new_posts];
+		latest_post_in_view = 0;
+		after_id = listing.data.after;
+		batch_count = listing.data.dist;
 	};
 
 	const handleFilter = (e: CustomEvent) => {
@@ -111,7 +112,7 @@
 
 	const getNewPosts = async (update_history: boolean) => {
 		posts = [];
-		const new_url = $page.url.origin + getPostPathname(subreddit, null, filter);
+		const new_url = $page.url.origin + getPostPathname(subreddit, filter);
 		if (update_history) {
 			window.history.replaceState({}, document.title, new_url);
 		}

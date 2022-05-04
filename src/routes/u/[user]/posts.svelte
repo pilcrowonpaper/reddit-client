@@ -27,11 +27,11 @@
 				status: about.error || listing.error
 			};
 		}
-		if (about.kind !== 't5') {
+		if (about.kind !== 't2') {
 			return {
 				status: 404
 			};
-		}
+		}	
 		return {
 			props: {
 				initial_listing: listing as Listing<Post>,
@@ -61,7 +61,6 @@
 	import type { Filter } from '$lib/types/filter';
 
 	import {
-		fetchNextPostBatch,
 		getUserListing,
 		getUserPathname,
 		getUserRequestUrl
@@ -90,7 +89,7 @@
 		}
 		const initial_sort = filter.sort ? filter.sort.valueOf() : null;
 		const initial_time = filter.time ? filter.time.valueOf() : null;
-		const result = await fetchNextPostBatch(user, 'submitted', after_id, filter);
+		const result = await getUserListing(user, 'submitted', after_id, filter);
 		if (!result.success) return;
 		if (initial_sort !== filter.sort || initial_time !== filter.time) return;
 		const listing = result.data;
@@ -111,7 +110,7 @@
 
 	const getNewPosts = async (update_history: boolean) => {
 		posts = [];
-		const new_url = $page.url.origin + getUserPathname(user, 'posts', null, filter);
+		const new_url = $page.url.origin + getUserPathname(user, 'posts', filter);
 		if (update_history) {
 			window.history.replaceState({}, document.title, new_url);
 		}

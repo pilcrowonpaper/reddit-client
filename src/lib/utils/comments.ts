@@ -1,11 +1,11 @@
 import type { Promise_Status } from '$lib/types';
-import type { Listing, Post, Comment, Listing_List, Comment_Tree_Result } from '$lib/types/reddit';
-import type { Comment_Filter } from '$lib/types/filter';
+import type { Listing, Post, Comment, Listing_List } from '$lib/types/reddit';
+import type { Filter } from '$lib/types/filter';
 
 export const getCommentsListing = async (
 	subreddit: string,
 	post_id: string,
-	filter?: Comment_Filter,
+	filter?: Filter,
 	comment_id?: string
 ): Promise<Promise_Status<Listing_List>> => {
 	const url = getCommentsRequestUrl(subreddit, post_id, filter, comment_id);
@@ -30,7 +30,7 @@ export const getCommentsListing = async (
 export const getCommentsRequestUrl = (
 	subreddit: string,
 	post_id: string,
-	filter?: Comment_Filter,
+	filter?: Filter,
 	comment_id?: string
 ): string => {
 	if (!subreddit || !post_id) return;
@@ -43,24 +43,6 @@ export const getCommentsRequestUrl = (
 		url = url + `&sort=${filter.sort}`;
 	}
 	return url;
-};
-
-export const getCommentsPathname = (
-	subreddit: string,
-	post_id: string,
-	sort_options?: Comment_Filter,
-	comment_id?: string
-): string => {
-	let base = `/r/${subreddit}/comments/${post_id}`;
-	if (!base) return;
-	if (comment_id) {
-		base = base + `/${comment_id}`;
-	}
-	let pathname = base;
-	if (sort_options.sort) {
-		pathname = pathname + `?sort=${sort_options.sort}`;
-	}
-	return pathname;
 };
 
 export const getCommentContents = async (
