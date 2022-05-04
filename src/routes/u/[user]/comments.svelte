@@ -22,10 +22,16 @@
 		}
 		const listing: any = await response[0].value.json();
 		const about: any = await response[1].value.json();
-		if (about.error || listing.error)
+		if (about.error || listing.error) {
+			return {
+				status: 400
+			};
+		}
+		if (about.kind !== "t5") {
 			return {
 				status: 404
 			};
+		}
 		return {
 			props: {
 				initial_listing: listing as Listing<Comment>,

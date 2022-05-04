@@ -24,10 +24,16 @@
 		}
 		const rules: any = await response[0].value.json();
 		const about: any = await response[1].value.json();
-		if (about.error || rules.error)
+		if (about.error) {
+			return {
+				status: 400
+			};
+		}
+		if (about.kind !== "t5") {
 			return {
 				status: 404
 			};
+		}
 		return {
 			props: {
 				rules: rules as Subreddit_Rules,

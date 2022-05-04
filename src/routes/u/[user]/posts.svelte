@@ -22,10 +22,16 @@
 		}
 		const listing: any = await response[0].value.json();
 		const about: any = await response[1].value.json();
-		if (about.error || listing.error)
+		if (about.error || listing.error) {
+			return {
+				status: 400
+			};
+		}
+		if (about.kind !== 't5') {
 			return {
 				status: 404
 			};
+		}
 		return {
 			props: {
 				initial_listing: listing as Listing<Post>,
@@ -61,7 +67,7 @@
 		getUserRequestUrl
 	} from '$lib/utils/users';
 	import { page } from '$app/stores';
-import { selected_post } from '$lib/stores';
+	import { selected_post } from '$lib/stores';
 
 	let posts = initial_listing.data.children;
 	let latest_post_in_view: number = 0;
@@ -87,8 +93,8 @@ import { selected_post } from '$lib/stores';
 		const result = await fetchNextPostBatch(user, 'submitted', after_id, filter);
 		if (!result.success) return;
 		if (initial_sort !== filter.sort || initial_time !== filter.time) return;
-		const listing = result.data
-		const new_posts = listing.data.children as Post[]
+		const listing = result.data;
+		const new_posts = listing.data.children as Post[];
 		posts = [...posts, ...new_posts];
 		after_id = result.data.data.after;
 		batch_count = new_posts.length;
@@ -122,12 +128,10 @@ import { selected_post } from '$lib/stores';
 	};
 
 	const openPost = (e: CustomEvent) => {
-		selected_post.set(e.detail.post as Post)
+		selected_post.set(e.detail.post as Post);
 	};
 
 	$: getNextPostBatch(latest_post_in_view);
-
-	console.log($page);
 </script>
 
 <svelte:head>
@@ -138,7 +142,6 @@ import { selected_post } from '$lib/stores';
 	{/if}
 </svelte:head>
 
-
 <div
 	class="h-full overflow-auto px-4 py-3 sm:px-8 md:px-16 lg:px-24"
 	class:overflow-hidden={!!$selected_post}
@@ -147,11 +150,16 @@ import { selected_post } from '$lib/stores';
 	<Header user={about} />
 	<div class="mt-12">
 		<div class="flex w-full text-sm">
-			<a href="/u/{$page.params.user}/posts" class="border-b-2 border-blue-500 px-3 font-medium hover:opacity-70">Posts</a>
-			<a href="/u/{$page.params.user}/comments" class="px-3 font-medium hover:opacity-70">Comments</a>
+			<a
+				href="/u/{$page.params.user}/posts"
+				class="border-b-2 border-blue-500 px-3 font-medium hover:opacity-70">Posts</a
+			>
+			<a href="/u/{$page.params.user}/comments" class="px-3 font-medium hover:opacity-70"
+				>Comments</a
+			>
 		</div>
 		<div class="w-full border-t" style:margin="-0.05rem" />
-		<div class="flex place-content-between mt-2">
+		<div class="mt-2 flex place-content-between">
 			<Filter_Select {filter} on:select={handleFilter} />
 			<Cards bind:type={card} on:select={handleCardTypeChange} />
 		</div>

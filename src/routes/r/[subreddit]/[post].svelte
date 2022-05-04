@@ -32,10 +32,16 @@
 		}
 		const post_data: any = await response[0].value.json();
 		const about: any = await response[1].value.json();
-		if (about.error || post_data.error)
+		if (about.error || post_data.error) {
+			return {
+				status: 400
+			};
+		}
+		if (about.kind !== "t5") {
 			return {
 				status: 404
 			};
+		}
 		const post_listing = post_data[0] as Listing<Post>;
 		const comment_listing = post_data[1] as Listing<Comment>;
 		return {

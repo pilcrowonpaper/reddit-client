@@ -47,7 +47,6 @@ export const getSearchRequestUrl = (
 		url = url + `&after=${after}`;
 	}
 	url = url + '&raw_json=1&restrict_sr=1'
-	console.log(url)
 	return url;
 };
 
@@ -63,6 +62,5 @@ export const getSearchPathname = (
 	if (filter.time) {
 		pathname = pathname + `&t=${filter.time}`;
 	}
-	console.log(pathname)
 	return pathname;
 };
