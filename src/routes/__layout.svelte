@@ -13,7 +13,7 @@
 	const handleInput = (e: KeyboardEvent) => {
 		if (e.keyCode !== 13) return;
 		if (!search_text) return;
-		goto(`/search?q=${search_text}`);
+		window.location.href = `/search?q=${search_text}`
 	};
 
 	const handleWindowInput = (e: KeyboardEvent) => {
