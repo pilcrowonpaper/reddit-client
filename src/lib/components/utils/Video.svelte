@@ -31,6 +31,7 @@
 	{muted}
 	{autoplay}
 	{loop}
+	on:click|stopPropagation={() => {}}
 >
 	<src src={convertGif(src)} /></video
 >

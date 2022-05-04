@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-	import type { Comment_Filter } from '$lib/types/filter';
+	import type { Filter } from '$lib/types/filter';
 
 	import type { About, Listing, Post, Comment } from '$lib/types/reddit';
 	import { getCommentsRequestUrl } from '$lib/utils/comments';
@@ -17,7 +17,7 @@
 			};
 		}
 		const sort = params.sort || url.searchParams.get('sort') || 'best';
-		const filter: Comment_Filter = {
+		const filter: Filter = {
 			sort
 		};
 		const request_url = getCommentsRequestUrl(subreddit, post_id, filter, id);
@@ -58,7 +58,7 @@
 	export let post_listing: Listing<Post>;
 	export let comment_listing: Listing<Comment>;
 	export let about: About;
-	export let filter: Comment_Filter = {
+	export let filter: Filter = {
 		sort: 'best'
 	};
 	export let id: string = null;

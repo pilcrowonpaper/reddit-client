@@ -1,3 +1,4 @@
-import { writable } from "svelte/store"
+import { writable, type Writable } from "svelte/store"
+import type { Post } from "$lib/types/reddit"
 
-export const test = writable(0)
+export const selected_post : Writable<Post> = writable()

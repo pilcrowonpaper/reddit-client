@@ -2,7 +2,7 @@
 	import type { Post } from '$lib/types/reddit';
 
 	import Horizontal from '$lib/components/voting/post/Horizontal.svelte';
-	import { formatTime } from '$lib/utils/format';
+	import { formatTime, removeEmoji } from '$lib/utils/format';
 	import Slideshow from '$lib/components/utils/Slideshow.svelte';
 	import Image from '$lib/components/utils/Image.svelte';
 	import { validateGif, convertGif } from '$lib/utils/media';
@@ -17,6 +17,8 @@
 	let max_width: number;
 
 	let show = true
+
+	console.log(post)
 </script>
 
 <svelte:window bind:innerHeight={inner_height} />
@@ -27,6 +29,16 @@
 			<div>
 				<h2 class="break-words text-xl font-medium leading-tight sm:leading-tight">
 					{post.data.title}
+					{#if post.data.link_flair_text}
+						<span
+							class="w-fit rounded px-2 text-xs font-medium text-white"
+							style:background-color={post.data.link_flair_background_color}
+							class:text-white={post.data.link_flair_text_color === 'light'}
+							class:text-black={post.data.link_flair_text_color === 'dark'}
+						>
+							{removeEmoji(post.data.link_flair_text)}
+						</span>
+					{/if}
 				</h2>
 				<div class="mt-0.5 flex gap-3 text-xs">
 					<a class="font-medium hover:underline" href="/u/{post.data.author}"
@@ -60,12 +72,13 @@
 					/>
 				{:else if post.data.domain === 'v.redd.it'}
 					<Video
-						src="{post.data.url}/HLSPlaylist.m3u8"
+						src="{post.data.media.reddit_video.hls_url}/HLSPlaylist.m3u8"
 						alt={post.data.title}
 						{max_height}
 						{max_width}
-						width={post.data.preview.images[0].source.width}
-						height={post.data.preview.images[0].source.height}
+						width={post.data.media.reddit_video.width}
+						height={post.data.media.reddit_video.height}
+						autoplay={true}
 						{show}
 					/>
 				{:else if post.data.post_hint === 'link' && validateGif(post.data.url)}

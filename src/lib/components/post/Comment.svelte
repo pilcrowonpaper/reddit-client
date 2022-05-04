@@ -13,6 +13,7 @@
 	export let depth = 1;
 	export let depth_limit = 10;
 	export let op: string;
+	export let collapsable = true
 
 	const continueThread = (id: string) => {
 		dispatch('continue', {
@@ -40,6 +41,7 @@
 		{/if}
 	</div>
 	<div class="flex gap-x-2">
+		{#if collapsable}
 		<div
 			class="group flex w-4 shrink-0 cursor-pointer place-content-center"
 			on:click={() => {
@@ -48,6 +50,7 @@
 		>
 			<div class="h-full w-px bg-gray-200" class:group-hover:bg-blue-500={!collapse} />
 		</div>
+		{/if}
 		{#if !collapse}
 			<div class="overflow-hidden">
 				<div>

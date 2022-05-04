@@ -66,11 +66,11 @@
 					</span>
 				{/if}
 			</h2>
-			<div class=" -mt-2 flex w-full place-items-center gap-x-1">
+			<div class=" -mt-2 flex w-full place-items-center gap-x-1 whitespace-nowrap flex-wrap">
 				{#if show.includes("subreddit")}
 				<a
 					class="text-xs hover:underline"
-					href="/r/{post.data.author}"
+					href="/r/{post.data.subreddit}"
 					on:click|stopPropagation={() => {}}>r/{post.data.subreddit}</a
 				>
 				{/if}

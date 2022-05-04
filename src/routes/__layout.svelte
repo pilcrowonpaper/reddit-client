@@ -1,5 +1,43 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+import { page } from '$app/stores';
+	import PostPage from '$lib/components/post/Post_Page.svelte';
+	import { selected_post } from '$lib/stores';
+	import type { Post } from '$lib/types/reddit';
+
 	import '../app.postcss';
+
+	let search_text: string;
+	let search_bar: HTMLInputElement;
+
+	const handleInput = (e: KeyboardEvent) => {
+		if (e.keyCode !== 13) return;
+		if (!search_text) return;
+		goto(`/search?q=${search_text}`);
+	};
+
+	const handleWindowInput = (e: KeyboardEvent) => {
+		if (!e.ctrlKey || e.code !== 'Space') return;
+		search_bar.focus();
+	};
+
+	let previous_url : string
+	let previous_post = false
+
+
+	const setNewUrl = (post: Post) => {
+		if (post) {
+			previous_url = $page.url.href.valueOf()
+			const new_url = `${window.location.origin}/r/${$selected_post.data.subreddit}/${$selected_post.data.id}`;
+			previous_post = true
+			window.history.replaceState({},null, new_url);
+		} else if (previous_post) {
+			previous_post = false
+			window.history.replaceState({}, null, previous_url);
+		}
+	};
+
+	$: setNewUrl($selected_post);
 </script>
 
 <svelte:head>
@@ -11,7 +49,42 @@
 	/>
 </svelte:head>
 
-<slot />
+<svelte:window on:keydown={handleWindowInput} />
+
+<div class="flex h-screen flex-col">
+	<div
+		class="z-50 flex w-full place-content-between place-items-center gap-x-4 border-b px-4 py-2 sm:px-8 md:px-16 lg:px-24"
+	>
+		<button
+			class="text-xl font-medium"
+			on:click={() => {
+				goto('/');
+			}}>artic</button
+		>
+		<input
+			class="w-full max-w-sm rounded-md bg-gray-100 px-4 py-1.5 text-sm outline-none"
+			placeholder="search"
+			bind:value={search_text}
+			on:keydown={handleInput}
+			bind:this={search_bar}
+		/>
+	</div>
+	<div class="relative grow overflow-scroll">
+		{#if $selected_post}
+			<div
+				class="absolute z-40 h-full w-full overflow-auto bg-white px-4 py-3 sm:px-8 md:px-16 lg:px-24"
+			>
+				<PostPage
+					post={$selected_post}
+					on:close={() => {
+						selected_post.set(null);
+					}}
+				/>
+			</div>
+		{/if}
+		<slot />
+	</div>
+</div>
 
 <style lang="postcss">
 	:global(body) {

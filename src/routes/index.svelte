@@ -31,19 +31,19 @@
 
 <script lang="ts">
 	export let initial_listing: Listing<Post>;
-	export let filter: Post_Filter = {
+	export let filter: Filter = {
 		sort: null,
 		time: null
 	};
 
 	import Compact from '$lib/components/cards/Compact.svelte';
-	import Filter from '$lib/components/subreddit/Filter.svelte';
+	import Filter_Select from '$lib/components/subreddit/Filter.svelte';
 	import Cards from '$lib/components/subreddit/Cards.svelte';
 	import PostPage from '$lib/components/post/Post_Page.svelte';
 	import Large from '$lib/components/cards/Large.svelte';
 
 	import type { About, Listing, Post } from '$lib/types/reddit';
-	import type { Post_Filter } from '$lib/types/filter';
+	import type { Filter } from '$lib/types/filter';
 
 	import {
 		fetchNextPostBatch,
@@ -84,7 +84,7 @@
 	};
 
 	const handleFilter = (e: CustomEvent) => {
-		filter = e.detail.options as Post_Filter;
+		filter = e.detail.options as Filter;
 		getNewPosts(true);
 	};
 
@@ -136,21 +136,19 @@
 
 {#if selected_post}
 	<div
-		class="fixed z-50 h-screen w-full overflow-auto bg-white px-4 py-3 sm:px-8 md:px-16 lg:px-24"
-		style="-webkit-overflow-scrolling: touch"
+		class="absolute z-40 h-full w-full overflow-auto bg-white px-4 py-3 sm:px-8 md:px-16 lg:px-24"
 	>
 		<PostPage post={selected_post} on:close={closePost} />
 	</div>
 {/if}
 <div
-	class="h-screen px-4 py-3 sm:px-8 md:px-16 lg:px-24"
-	class:disable-scroll={selected_post}
+	class="h-full overflow-auto px-4 py-3 sm:px-8 md:px-16 lg:px-24"
+	class:overflow-hidden={!!selected_post}
 	class:overflow-auto={!selected_post}
-	style="-webkit-overflow-scrolling: touch"
 >
 	<Header />
 	<div class="mt-12 flex place-content-between">
-		<Filter {filter} on:select={handleFilter} />
+		<Filter_Select {filter} on:select={handleFilter} />
 		<Cards bind:type={card} on:select={handleCardTypeChange} />
 	</div>
 	<div class="flex flex-col divide-y">
@@ -177,9 +175,3 @@
 		{/each}
 	</div>
 </div>
-
-<style lang="postcss">
-	.disable-scroll {
-		@apply h-screen overflow-hidden;
-	}
-</style>

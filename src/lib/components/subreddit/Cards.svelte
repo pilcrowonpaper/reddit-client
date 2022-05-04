@@ -19,6 +19,6 @@
 	};
 </script>
 
-<div>
+<div class="text-sm">
 	<Select options={card_options} values={card_values} on:select={select_card} />
 </div>

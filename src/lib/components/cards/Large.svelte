@@ -11,11 +11,14 @@
 	import { validateGif, convertGif } from '$lib/utils/media';
 	import Video from '../utils/Video.svelte';
 	import Iframe from '$lib/components/utils/Iframe.svelte';
-import { post_page_in_view } from '$lib/utils/stores';
+	import { post_page_in_view } from '$lib/utils/stores';
+import { stop_propagation } from 'svelte/internal';
 
 	export let post: Post;
-	export let show : string[]
-	export const close = () => {console.log("close")}
+	export let show: string[];
+	export const close = () => {
+		console.log('close');
+	};
 
 	const dispatch = createEventDispatcher();
 
@@ -67,11 +70,11 @@ import { post_page_in_view } from '$lib/utils/stores';
 						</span>
 					{/if}
 				</h2>
-				<div class="flex gap-3 text-xs">
+				<div class="flex flex-wrap gap-x-3 whitespace-nowrap text-xs">
 					{#if show.includes('subreddit')}
 						<a
 							class="font-medium hover:underline"
-							href="/r/{post.data.author}"
+							href="/r/{post.data.subreddit}"
 							on:click|stopPropagation={() => {}}>r/{post.data.subreddit}</a
 						>
 					{/if}
@@ -167,6 +170,7 @@ import { post_page_in_view } from '$lib/utils/stores';
 							<a
 								class="text-sm text-blue-500 hover:underline cursor-pointer ellipsis"
 								href={post.data.url}
+								on:click|stopPropagation={() => {}}
 							>
 								{post.data.domain}
 							</a>

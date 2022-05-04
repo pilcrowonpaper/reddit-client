@@ -1,5 +1,5 @@
 import type { Promise_Status } from '$lib/types';
-import type { Post_Filter } from '$lib/types/filter';
+import type { Filter } from '$lib/types/filter';
 import type { Batch } from '$lib/types/posts';
 import type { Listing, Post } from '$lib/types/reddit';
 
@@ -7,8 +7,8 @@ export const getUserListing = async (
 	user: string,
 	type?: string,
 	after?: string,
-	filter?: Post_Filter
-): Promise<Promise_Status<Listing<Post>>> => {
+	filter?: Filter
+): Promise<Promise_Status<Listing<any>>> => {
 	const url = getUserRequestUrl(user, type, after, filter);
 	const response = await fetch(url);
 	if (!response.ok) {
@@ -16,7 +16,7 @@ export const getUserListing = async (
 			success: false
 		};
 	}
-	const result = (await response.json()) as Listing<Post>;
+	const result = (await response.json()) as Listing<Post | Comment>;
 	return {
 		success: true,
 		data: result
@@ -27,7 +27,7 @@ export const getUserRequestUrl = (
 	user: string,
 	type?: string,
 	after?: string,
-	filter?: Post_Filter
+	filter?: Filter
 ): string => {
 	let base_url = `https://www.reddit.com/user/${user}`;
 	if (type) {
@@ -51,7 +51,7 @@ export const getUserPathname = (
 	user: string,
 	path?: string,
 	after?: string,
-	filter?: Post_Filter
+	filter?: Filter
 ): string => {
 	let base = `/u/${user}`;
 	if (path) {
@@ -75,8 +75,8 @@ export const fetchNextPostBatch = async (
 	user: string,
     type?: string,
 	after?: string,
-	filter?: Post_Filter
-): Promise<Promise_Status<Batch>> => {
+	filter?: Filter
+): Promise<Promise_Status<Listing<any>>> => {
 	const result = await getUserListing(user, type, after, filter);
 	if (!result.success) {
 		return {
@@ -86,10 +86,6 @@ export const fetchNextPostBatch = async (
 	const listing = result.data;
 	return {
 		success: true,
-		data: {
-			posts: listing.data.children,
-			batch_count: listing.data.dist,
-			after_id: listing.data.after
-		}
+		data: listing
 	};
 };

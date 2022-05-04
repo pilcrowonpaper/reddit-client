@@ -2,17 +2,17 @@
 	import type { Load } from '@sveltejs/kit';
 
 	export const load: Load = async ({ params, fetch, url }) => {
-		const subreddit = params.subreddit;
-		if (!subreddit)
+		const user = params.user;
+		if (!user)
 			return {
 				status: 404
 			};
 		const sort = url.searchParams.get('sort') || null;
 		const time = url.searchParams.get('time') || null;
 		const filter = { sort, time };
-		const request_url = getPostRequestUrl(subreddit, null, filter);
+		const request_url = getUserRequestUrl(user, 'comments', null, filter);
 		const data_promise = fetch(request_url);
-		const about_promise = fetch(`https://www.reddit.com/r/${subreddit}/about.json?raw_json=1`);
+		const about_promise = fetch(`https://www.reddit.com/user/${user}/about.json?raw_json=1`);
 		const response = (await Promise.allSettled([data_promise, about_promise])) as {
 			status: string;
 			value?: Response;
@@ -28,8 +28,8 @@
 			};
 		return {
 			props: {
-				initial_listing: listing as Listing<Post>,
-				about: about as About,
+				initial_listing: listing as Listing<Comment>,
+				about: about as User,
 				filter
 			}
 		};
@@ -37,40 +37,36 @@
 </script>
 
 <script lang="ts">
-	export let initial_listing: Listing<Post>;
-	export let about: About;
+	export let initial_listing: Listing<Comment>;
+	export let about: User;
 	export let filter: Filter = {
 		sort: null,
 		time: null
 	};
 
-	import Header from '$lib/components/subreddit/Header.svelte';
-	import Compact from '$lib/components/cards/Compact.svelte';
+	import Header from '$lib/components/user/Header.svelte';
 	import Filter_Select from '$lib/components/subreddit/Filter.svelte';
-	import Cards from '$lib/components/subreddit/Cards.svelte';
-	import PostPage from '$lib/components/post/Post_Page.svelte';
-	import Large from '$lib/components/cards/Large.svelte';
+	import Comment_Block from '$lib/components/post/Comment.svelte';
 
-	import type { About, Listing, Post } from '$lib/types/reddit';
+	import type { User, Listing, Comment, Post } from '$lib/types/reddit';
 	import type { Filter } from '$lib/types/filter';
 
 	import {
 		fetchNextPostBatch,
-		getPostListing,
-		getPostPathname,
-		getPostRequestUrl
-	} from '$lib/utils/posts';
+		getUserListing,
+		getUserPathname,
+		getUserRequestUrl
+	} from '$lib/utils/users';
 	import { page } from '$app/stores';
-	import { post_page_in_view } from '$lib/utils/stores';
-	import { selected_post } from '$lib/stores';
+	import { goto } from '$app/navigation';
+	import { inViewport } from '$lib/utils/actions';
+	import { selected_post } from "$lib/stores"
 
-	let posts = initial_listing.data.children;
+	let comments = initial_listing.data.children;
 	let latest_post_in_view: number = 0;
 	let after_id = initial_listing.data.after;
 	let batch_count = initial_listing.data.dist;
-	const subreddit = $page.params.subreddit;
-
-	let card = 'large';
+	const user = $page.params.user;
 
 	const updateLatestPostInView = (id: number) => {
 		if (id > latest_post_in_view) {
@@ -85,13 +81,14 @@
 		}
 		const initial_sort = filter.sort ? filter.sort.valueOf() : null;
 		const initial_time = filter.time ? filter.time.valueOf() : null;
-		const result = await fetchNextPostBatch(subreddit, after_id, filter);
+		const result = await fetchNextPostBatch(user, 'comments', after_id, filter);
 		if (!result.success) return;
 		if (initial_sort !== filter.sort || initial_time !== filter.time) return;
-		const batch = result.data;
-		posts = [...posts, ...batch.posts];
-		after_id = batch.after_id;
-		batch_count = batch.batch_count;
+		const listing = result.data;
+		const new_comments = listing.data.children as Comment[];
+		comments = [...comments, ...new_comments];
+		after_id = listing.data.after;
+		batch_count = new_comments.length;
 	};
 
 	const handleFilter = (e: CustomEvent) => {
@@ -99,37 +96,30 @@
 		getNewPosts(true);
 	};
 
-	const handleCardTypeChange = (e: CustomEvent) => {
-		card = e.detail.value;
-	};
-
 	const getNewPosts = async (update_history: boolean) => {
-		posts = [];
-		const new_url = $page.url.origin + getPostPathname(subreddit, null, filter);
+		comments = [];
+		const new_url = $page.url.origin + getUserPathname(user, 'comments', null, filter);
 		if (update_history) {
 			window.history.replaceState({}, document.title, new_url);
 		}
 		const initial_sort = filter.sort.valueOf();
 		const initial_time = filter.time.valueOf();
-		let result = await getPostListing(subreddit, null, filter);
+		let result = await getUserListing(user, 'comments', null, filter);
 		if (initial_sort !== filter.sort || initial_time !== filter.time) return;
 		if (!result.success) return;
-		const listing = result.data;
-		posts = listing.data.children;
+		const listing = result.data as Listing<Comment>;
+		comments = listing.data.children as Comment[];
 		latest_post_in_view = 0;
 		after_id = listing.data.after;
 		batch_count = listing.data.dist;
 	};
 
-	const openPost = (e: CustomEvent) => {
-		selected_post.set(e.detail.post as Post);
-	};
-
 	$: getNextPostBatch(latest_post_in_view);
+
 </script>
 
 <svelte:head>
-	<title>/r/{subreddit}</title>
+	<title>/u/{user}</title>
 </svelte:head>
 
 <div
@@ -137,32 +127,38 @@
 	class:overflow-hidden={!!$selected_post}
 	class:overflow-auto={!$selected_post}
 >
-	<Header {about} />
-	<div class="mt-12 flex place-content-between">
-		<Filter_Select {filter} on:select={handleFilter} />
-		<Cards bind:type={card} on:select={handleCardTypeChange} />
+	<Header user={about} />
+	<div class="mt-12">
+		<div class="flex w-full text-sm">
+			<a href="/u/{$page.params.user}/posts" class="px-3 font-medium hover:opacity-70">Posts</a>
+			<a
+				href="/u/{$page.params.user}/comments"
+				class="border-b-2 border-blue-500 px-3 font-medium hover:opacity-70">Comments</a
+			>
+		</div>
+		<div class="w-full border-t" style:margin="-0.05rem" />
+		<div class="mt-2 flex place-content-between">
+			<Filter_Select {filter} on:select={handleFilter} />
+		</div>
 	</div>
-	<div class="flex flex-col divide-y">
-		{#each posts as post, i}
-			{#if card === 'compact'}
-				<Compact
-					{post}
-					on:display={() => {
-						updateLatestPostInView(i);
-					}}
-					on:open={openPost}
-					show={['user']}
-				/>
-			{:else if card === 'large'}
-				<Large
-					{post}
-					on:display={() => {
-						updateLatestPostInView(i);
-					}}
-					on:open={openPost}
-					show={['user']}
-				/>
-			{/if}
+	<div class="mt-2 flex flex-col divide-y">
+		{#each comments as comment, i}
+			<div
+				class="cursor-pointer py-2"
+				on:click={() => {
+					goto(`/r/${comment.data.subreddit}/${comment.data.link_id.substring(3)}`);
+				}}
+				use:inViewport
+				on:display={() => {updateLatestPostInView(i)}}
+			>
+				<div class="mb-1 flex flex-wrap gap-x-2 text-xs font-medium">
+					<p>{comment.data.link_title}</p>
+					<p>r/{comment.data.subreddit}</p>
+				</div>
+				<div>
+					<Comment_Block {comment} op={comment.data.link_author} collapsable={false} />
+				</div>
+			</div>
 		{/each}
 	</div>
 </div>

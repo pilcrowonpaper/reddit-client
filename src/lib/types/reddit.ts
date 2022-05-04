@@ -112,7 +112,7 @@ export interface Listing<T> {
 		dist: number;
 		modhash: string;
 		geo_filter: any;
-		children: T[];
+		children?: T[];
 	};
 }
 
@@ -326,8 +326,10 @@ export interface Media_Embed {
 }
 
 export interface Comment {
-	kind: string;
+	kind: any;
 	data: {
+		link_title: string;
+		link_author: string;
 		children?: string[];
 		subreddit_id: string;
 		approved_at_utc: any;

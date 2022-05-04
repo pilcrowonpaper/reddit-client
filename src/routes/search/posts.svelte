@@ -2,35 +2,34 @@
 	import type { Load } from '@sveltejs/kit';
 
 	export const load: Load = async ({ params, fetch, url }) => {
-		const user = params.user;
-		if (!user)
-			return {
-				status: 404
-			};
-		const sort = url.searchParams.get('sort') || null;
-		const time = url.searchParams.get('time') || null;
+		const query = url.searchParams.get('q');
+		const sort = url.searchParams.get('sort') || 'relevance';
+		const time = url.searchParams.get('time') || 'all';
 		const filter = { sort, time };
-		const request_url = getUserRequestUrl(user, 'submitted', null, filter);
-		const data_promise = fetch(request_url);
-		const about_promise = fetch(`https://www.reddit.com/user/${user}/about.json?raw_json=1`);
-		const response = (await Promise.allSettled([data_promise, about_promise])) as {
-			status: string;
-			value?: Response;
-		}[];
-		if (response.filter((val) => val.status !== 'fulfilled').length > 0) {
-			return { status: 404 };
+		let query_text: string;
+		let subreddit: string = null;
+		if (query.includes(':')) {
+            subreddit = query.split(':')[0]
+			query_text = query.split(':')[1];
+		} else {
+			query_text = query;
 		}
-		const listing: any = await response[0].value.json();
-		const about: any = await response[1].value.json();
-		if (about.error || listing.error)
+		const request_url = getSearchRequestUrl(query_text, 'link', subreddit, null, filter);
+        console.log(request_url)
+		const listing_response = await fetch(request_url);
+		if (!listing_response.ok) {
 			return {
 				status: 404
 			};
+		}
+		const listing = await listing_response.json();
 		return {
 			props: {
 				initial_listing: listing as Listing<Post>,
-				about: about as User,
-				filter
+				filter,
+				subreddit,
+				query_text,
+				query
 			}
 		};
 	};
@@ -38,29 +37,26 @@
 
 <script lang="ts">
 	export let initial_listing: Listing<Post>;
-	export let about: User;
 	export let filter: Filter = {
 		sort: null,
 		time: null
 	};
+	export let subreddit: string;
+	export let query_text: string;
+	export let query: string;
 
 	import Header from '$lib/components/user/Header.svelte';
-	import Filter_Select from '$lib/components/subreddit/Filter.svelte';
+	import Filter_Select from '$lib/components/search/Filter.svelte';
 	import Cards from '$lib/components/subreddit/Cards.svelte';
 	import PostPage from '$lib/components/post/Post_Page.svelte';
 	import Large from '$lib/components/cards/Large.svelte';
 	import Compact from '$lib/components/cards/Compact.svelte';
 
-	import type { User, Listing, Post } from '$lib/types/reddit';
+	import type { Listing, Post } from '$lib/types/reddit';
 	import type { Filter } from '$lib/types/filter';
 
-	import {
-		fetchNextPostBatch,
-		getUserListing,
-		getUserPathname,
-		getUserRequestUrl
-	} from '$lib/utils/users';
 	import { page } from '$app/stores';
+	import { getSearchListing, getSearchPathname, getSearchRequestUrl } from '$lib/utils/search';
 import { selected_post } from '$lib/stores';
 
 	let posts = initial_listing.data.children;
@@ -84,17 +80,18 @@ import { selected_post } from '$lib/stores';
 		}
 		const initial_sort = filter.sort ? filter.sort.valueOf() : null;
 		const initial_time = filter.time ? filter.time.valueOf() : null;
-		const result = await fetchNextPostBatch(user, 'submitted', after_id, filter);
+		const result = await getSearchListing(query_text, 'link', subreddit, after_id, filter);
 		if (!result.success) return;
 		if (initial_sort !== filter.sort || initial_time !== filter.time) return;
-		const listing = result.data
-		const new_posts = listing.data.children as Post[]
+		const listing = result.data;
+		const new_posts = listing.data.children as Post[];
 		posts = [...posts, ...new_posts];
 		after_id = result.data.data.after;
 		batch_count = new_posts.length;
 	};
 
 	const handleFilter = (e: CustomEvent) => {
+		console.log(e.detail);
 		filter = e.detail.options as Filter;
 		getNewPosts(true);
 	};
@@ -105,13 +102,13 @@ import { selected_post } from '$lib/stores';
 
 	const getNewPosts = async (update_history: boolean) => {
 		posts = [];
-		const new_url = $page.url.origin + getUserPathname(user, 'posts', null, filter);
+		const new_url = $page.url.origin + getSearchPathname(query, 'link', filter);
 		if (update_history) {
 			window.history.replaceState({}, document.title, new_url);
 		}
 		const initial_sort = filter.sort.valueOf();
 		const initial_time = filter.time.valueOf();
-		let result = await getUserListing(user, 'submitted', null, filter);
+		let result = await getSearchListing(query_text, 'link', subreddit, after_id, filter);
 		if (initial_sort !== filter.sort || initial_time !== filter.time) return;
 		if (!result.success) return;
 		const listing = result.data;
@@ -125,53 +122,44 @@ import { selected_post } from '$lib/stores';
 		selected_post.set(e.detail.post as Post)
 	};
 
+	const closePost = () => {
+		window.history.replaceState({}, null, `${window.location.origin}/u/${user}`);
+		$selected_post = null;
+	};
+
 	$: getNextPostBatch(latest_post_in_view);
 
-	console.log($page);
+	$: console.log(filter);
 </script>
 
 <svelte:head>
 	<title>/u/{user}</title>
 </svelte:head>
 
-<div
-	class="h-full overflow-auto px-4 py-3 sm:px-8 md:px-16 lg:px-24"
-	class:overflow-hidden={!!$selected_post}
-	class:overflow-auto={!$selected_post}
->
-	<Header user={about} />
-	<div class="mt-12">
-		<div class="flex w-full text-sm">
-			<a href="/u/{$page.params.user}/posts" class="border-b-2 border-blue-500 px-3 font-medium hover:opacity-70">Posts</a>
-			<a href="/u/{$page.params.user}/comments" class="px-3 font-medium hover:opacity-70">Comments</a>
-		</div>
-		<div class="w-full border-t" style:margin="-0.05rem" />
-		<div class="flex place-content-between mt-2">
-			<Filter_Select {filter} on:select={handleFilter} />
-			<Cards bind:type={card} on:select={handleCardTypeChange} />
-		</div>
-	</div>
-	<div class="flex flex-col divide-y">
-		{#each posts as post, i}
-			{#if card === 'compact'}
-				<Compact
-					{post}
-					on:display={() => {
-						updateLatestPostInView(i);
-					}}
-					on:open={openPost}
-					show={['subreddit']}
-				/>
-			{:else if card === 'large'}
-				<Large
-					{post}
-					on:display={() => {
-						updateLatestPostInView(i);
-					}}
-					on:open={openPost}
-					show={['subreddit']}
-				/>
-			{/if}
-		{/each}
-	</div>
+<div class="mt-2 flex place-content-between">
+	<Filter_Select {filter} on:select={handleFilter} />
+	<Cards bind:type={card} on:select={handleCardTypeChange} />
+</div>
+<div class="mt-2 flex flex-col divide-y">
+	{#each posts as post, i}
+		{#if card === 'compact'}
+			<Compact
+				{post}
+				on:display={() => {
+					updateLatestPostInView(i);
+				}}
+				on:open={openPost}
+				show={['subreddit']}
+			/>
+		{:else if card === 'large'}
+			<Large
+				{post}
+				on:display={() => {
+					updateLatestPostInView(i);
+				}}
+				on:open={openPost}
+				show={['subreddit']}
+			/>
+		{/if}
+	{/each}
 </div>
