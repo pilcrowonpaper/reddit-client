@@ -71,7 +71,7 @@
 
 	const getNextPostBatch = async (id: number) => {
 		if (id > 0) {
-			if (id % batch_count !== 0) return;
+			if ((id + 1) % batch_count !== 0) return;
 			if (!after_id) return;
 		}
 		const initial_sort = filter.sort ? filter.sort.valueOf() : null;
