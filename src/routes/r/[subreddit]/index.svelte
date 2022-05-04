@@ -13,15 +13,9 @@
 		const request_url = getPostRequestUrl(subreddit, null, filter);
 		const data_promise = fetch(request_url);
 		const about_promise = fetch(`https://www.reddit.com/r/${subreddit}/about.json?raw_json=1`);
-		const response = (await Promise.allSettled([data_promise, about_promise])) as {
-			status: string;
-			value?: Response;
-		}[];
-		if (response.filter((val) => val.status !== 'fulfilled').length > 0) {
-			return { status: 404 };
-		}
-		const listing: any = await response[0].value.json();
-		const about: any = await response[1].value.json();
+		const response = (await Promise.all([data_promise, about_promise]));
+		const listing: any = await response[0].json()
+		const about: any = await response[1].json()
 		if (about.error || listing.error) {
 			return {
 				status: 400
@@ -54,7 +48,6 @@
 	import Compact from '$lib/components/cards/Compact.svelte';
 	import Filter_Select from '$lib/components/subreddit/Filter.svelte';
 	import Cards from '$lib/components/subreddit/Cards.svelte';
-	import PostPage from '$lib/components/post/Post_Page.svelte';
 	import Large from '$lib/components/cards/Large.svelte';
 
 	import type { About, Listing, Post } from '$lib/types/reddit';
@@ -69,7 +62,7 @@
 	import { selected_post } from '$lib/stores';
 
 	let posts = initial_listing.data.children;
-	let latest_post_in_view: number = 0;
+	let latest_post_in_view = 0;
 	let after_id = initial_listing.data.after;
 	let batch_count = initial_listing.data.dist;
 	const subreddit = $page.params.subreddit;
@@ -132,6 +125,7 @@
 	};
 
 	$: getNextPostBatch(latest_post_in_view);
+
 </script>
 
 <svelte:head>

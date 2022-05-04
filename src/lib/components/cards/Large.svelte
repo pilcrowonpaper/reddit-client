@@ -18,7 +18,7 @@
 
 	const dispatch = createEventDispatcher();
 
-	let show_media = false;
+	export let show_media = false;
 
 	const openPost = () => {
 		dispatch('open', {
@@ -33,8 +33,7 @@
 
 	const onHiddenHandle = () => {
 		show_media = false;
-	};
-
+	}
 	let inner_height: number;
 	let max_height: number;
 	$: max_height = (inner_height * 2) / 3;
