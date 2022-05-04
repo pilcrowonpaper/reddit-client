@@ -11,7 +11,7 @@
 	import { validateGif, convertGif } from '$lib/utils/media';
 	import Video from '../utils/Video.svelte';
 	import Iframe from '$lib/components/utils/Iframe.svelte';
-	import { post_page_in_view } from '$lib/utils/stores';
+	import { selected_post } from '$lib/stores';
 
 	export let post: Post;
 	export let show: string[];
@@ -33,7 +33,8 @@
 
 	const onHiddenHandle = () => {
 		show_media = false;
-	}
+	};
+
 	let inner_height: number;
 	let max_height: number;
 	$: max_height = (inner_height * 2) / 3;
@@ -94,7 +95,7 @@
 						{max_width}
 						width={post.data.preview.images[0].source.width}
 						height={post.data.preview.images[0].source.height}
-						show={show_media && !$post_page_in_view}
+						show={show_media && !$selected_post}
 					/>
 				{:else if post.data.post_hint === 'rich:video'}
 					<Iframe
@@ -104,7 +105,7 @@
 						width={post.data.media_embed.width}
 						height={post.data.media_embed.height}
 						title={post.data.title}
-						show={show_media && !$post_page_in_view}
+						show={show_media && !$selected_post}
 					/>
 				{:else if post.data.domain === 'v.redd.it' && post.data.media}
 					<Video
@@ -114,7 +115,7 @@
 						{max_width}
 						width={post.data.media.reddit_video.width}
 						height={post.data.media.reddit_video.height}
-						show={show_media && !$post_page_in_view}
+						show={show_media && !$selected_post}
 						autoplay={true}
 					/>
 				{:else if post.data.post_hint === 'link' && validateGif(post.data.url)}
@@ -127,7 +128,7 @@
 						height={post.data.preview.images[0].source.height}
 						autoplay={true}
 						loop={true}
-						show={show_media && !$post_page_in_view}
+						show={show_media && !$selected_post}
 					/>
 				{:else if post.data.is_self}
 					{#if post.data.selftext_html}

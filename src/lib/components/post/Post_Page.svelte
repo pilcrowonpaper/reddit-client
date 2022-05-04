@@ -10,7 +10,6 @@
 
 	import { getCommentContents, getCommentsListing } from '$lib/utils/comments';
 	import { createEventDispatcher } from 'svelte';
-	import { post_page_in_view } from '$lib/utils/stores';
 	const dispatch = createEventDispatcher();
 
 	export let post: Post;
@@ -92,8 +91,6 @@
 		window.history.replaceState({}, '', window.location.origin + window.location.pathname);
 		getNewComments(post.data.subreddit, post.data.id);
 	};
-
-	post_page_in_view.set(true);
 </script>
 
 <Header {about} show={false} subreddit={post.data.subreddit} />
@@ -104,7 +101,6 @@
 			<Back_Arrow
 				size={6}
 				on:click={() => {
-					post_page_in_view.set(false);
 					dispatch('close');
 				}}
 				custom_class="cursor-pointer"

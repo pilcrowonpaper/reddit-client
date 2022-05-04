@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { afterNavigate, goto } from '$app/navigation';
+	import { navigating, page } from '$app/stores';
 	import PostPage from '$lib/components/post/Post_Page.svelte';
 	import { selected_post } from '$lib/stores';
 	import type { Post } from '$lib/types/reddit';
@@ -37,6 +37,10 @@
 	};
 
 	$: setNewUrl($selected_post);
+
+	afterNavigate(() => {
+		selected_post.set(null)
+	})
 </script>
 
 <svelte:head>
