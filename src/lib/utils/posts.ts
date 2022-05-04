@@ -1,6 +1,5 @@
 import type { Promise_Status } from '$lib/types';
 import type { Filter } from '$lib/types/filter';
-import type { Batch } from '$lib/types/posts';
 import type { Listing, Post } from '$lib/types/reddit';
 
 export const getPostListing = async (

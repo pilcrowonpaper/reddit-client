@@ -44,10 +44,8 @@
 	export let query_text: string;
 	export let query: string;
 
-	import Header from '$lib/components/user/Header.svelte';
 	import Filter_Select from '$lib/components/search/Filter.svelte';
 	import Cards from '$lib/components/subreddit/Cards.svelte';
-	import PostPage from '$lib/components/post/Post_Page.svelte';
 	import Large from '$lib/components/cards/Large.svelte';
 	import Compact from '$lib/components/cards/Compact.svelte';
 
@@ -62,7 +60,6 @@
 	let latest_post_in_view: number = 0;
 	let after_id = initial_listing.data.after;
 	let batch_count = initial_listing.data.dist;
-	const user = $page.params.user;
 
 	let card = 'large';
 

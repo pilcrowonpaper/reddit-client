@@ -66,7 +66,6 @@
 		getPostRequestUrl
 	} from '$lib/utils/posts';
 	import { page } from '$app/stores';
-	import { post_page_in_view } from '$lib/utils/stores';
 	import { selected_post } from '$lib/stores';
 
 	let posts = initial_listing.data.children;

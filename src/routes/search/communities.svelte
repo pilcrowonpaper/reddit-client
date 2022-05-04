@@ -30,7 +30,7 @@
 	export let initial_listing: Listing<About>;
 	export let query_text: string;
 
-	import type { Listing, About, User } from '$lib/types/reddit';
+	import type { Listing, About } from '$lib/types/reddit';
 
 	import { getSearchListing, getSearchRequestUrl } from '$lib/utils/search';
 	import { inViewport } from '$lib/utils/actions';

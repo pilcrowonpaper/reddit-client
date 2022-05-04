@@ -53,7 +53,6 @@
 	import Header from '$lib/components/user/Header.svelte';
 	import Filter_Select from '$lib/components/subreddit/Filter.svelte';
 	import Cards from '$lib/components/subreddit/Cards.svelte';
-	import PostPage from '$lib/components/post/Post_Page.svelte';
 	import Large from '$lib/components/cards/Large.svelte';
 	import Compact from '$lib/components/cards/Compact.svelte';
 

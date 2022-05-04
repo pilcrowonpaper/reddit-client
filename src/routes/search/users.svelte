@@ -30,12 +30,11 @@
 	export let initial_listing: Listing<User>;
 	export let query_text: string;
 
-	import type { Listing, Post, User } from '$lib/types/reddit';
+	import type { Listing, User } from '$lib/types/reddit';
 
 	import { getSearchListing, getSearchRequestUrl } from '$lib/utils/search';
 	import { inViewport } from '$lib/utils/actions';
 	import { goto } from '$app/navigation';
-	import { dataset_dev } from 'svelte/internal';
 
 	let users = initial_listing.data.children;
 	let latest_post_in_view: number = 0;
