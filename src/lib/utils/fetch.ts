@@ -9,7 +9,7 @@ export const retryFetch = async (url: string, count: number = 1) => {
             console.log("success")
             return await response.json()
 		} catch (e) {
-			console.log("error", e);
+			console.log("error");
 			await sleep((attempts + 1) * 100);
 			attempts += 1;
 		}
