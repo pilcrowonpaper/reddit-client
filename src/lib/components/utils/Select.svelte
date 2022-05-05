@@ -27,7 +27,7 @@
 	on:outclick={() => {
 		toggle = 0;
 	}}
-	class="text-sm"
+	class="text-sm sm:text-base"
 >
 	<button
 		on:click={() => {
