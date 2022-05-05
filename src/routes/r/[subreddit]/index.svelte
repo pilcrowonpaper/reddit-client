@@ -1,22 +1,3 @@
-<script context="module" lang="ts">
-	export const load = async ({ params, url, fetch }) => {
-		const sort = url.searchParams.get('sort') || null;
-		const time = url.searchParams.get('time') || null;
-		let request_url = `${url.pathname}.json?`;
-		if (sort) {
-			request_url = request_url + `&sort=${sort}`;
-		}
-		if (time) {
-			request_url = request_url + `&time=${time}`;
-		}
-		const response = await fetch(request_url);
-		const result = await response.json();
-		return {
-			props: result
-		};
-	};
-</script>
-
 <script lang="ts">
 	export let initial_listing: Listing<Post>;
 	export let about: About;
