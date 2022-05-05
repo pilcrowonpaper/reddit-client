@@ -7,7 +7,7 @@
 	import { getSearchListing } from '$lib/utils/reddit/search';
 	import { inViewport } from '$lib/utils/actions';
 	import { goto } from '$app/navigation';
-import { browser } from '$app/env';
+	import { browser } from '$app/env';
 
 	let communities = initial_listing.data.children;
 	let latest_post_in_view: number = 0;
@@ -63,7 +63,9 @@ import { browser } from '$app/env';
 			{/if}
 			<div>
 				<p class="text-sm font-medium">{community.data.display_name}</p>
+				{#if community.data.subscribers}
 				<p class="text-xs font-medium">{community.data.subscribers.toLocaleString()} subscribers</p>
+				{/if}
 				<p class="text-xs">{community.data.public_description}</p>
 			</div>
 		</div>
