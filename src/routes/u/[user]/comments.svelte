@@ -21,6 +21,7 @@
 	import { goto } from '$app/navigation';
 	import { inViewport } from '$lib/utils/actions';
 	import { selected_post } from '$lib/stores';
+import { browser } from '$app/env';
 
 	let comments = initial_listing.data.children;
 	let latest_post_in_view: number = 0;
@@ -74,7 +75,9 @@
 		batch_count = listing.data.dist;
 	};
 
-	$: getNextPostBatch(latest_post_in_view);
+	$: if (browser) {
+		getNextPostBatch(latest_post_in_view);
+	}
 </script>
 
 <svelte:head>

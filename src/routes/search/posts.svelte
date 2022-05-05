@@ -19,6 +19,7 @@
 	import { page } from '$app/stores';
 	import { getSearchListing, getSearchPathname } from '$lib/utils/reddit/search';
 	import { selected_post } from '$lib/stores';
+import { browser } from '$app/env';
 
 	let posts = initial_listing.data.children;
 	let latest_post_in_view: number = 0;
@@ -81,7 +82,9 @@
 		selected_post.set(e.detail.post as Post);
 	};
 
-	$: getNextPostBatch(latest_post_in_view);
+	$: if (browser) {
+		getNextPostBatch(latest_post_in_view);
+	}
 </script>
 
 <div class="mt-2 flex place-content-between">

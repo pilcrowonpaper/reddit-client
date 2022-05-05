@@ -7,6 +7,7 @@
 	import { getSearchListing } from '$lib/utils/reddit/search';
 	import { inViewport } from '$lib/utils/actions';
 	import { goto } from '$app/navigation';
+import { browser } from '$app/env';
 
 	let users = initial_listing.data.children;
 	let latest_post_in_view: number = 0;
@@ -34,7 +35,9 @@
 		batch_count = new_users.length;
 	};
 
-	$: getNextPostBatch(latest_post_in_view);
+	$: if (browser) {
+		getNextPostBatch(latest_post_in_view);
+	}
 </script>
 
 <div class="mt-2 flex flex-col divide-y">
