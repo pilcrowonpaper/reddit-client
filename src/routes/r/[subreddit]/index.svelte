@@ -19,6 +19,8 @@
 	import { page } from '$app/stores';
 	import { selected_post } from '$lib/stores';
 	import { retryFetch } from '$lib/utils/fetch';
+	import { onMount } from 'svelte';
+	import { browser } from '$app/env';
 
 	let posts = initial_listing.data.children;
 	let latest_post_in_view = 0;
@@ -83,7 +85,9 @@
 		selected_post.set(e.detail.post as Post);
 	};
 
-	$: getNextPostBatch(latest_post_in_view);
+	$: if (browser) {
+		getNextPostBatch(latest_post_in_view);
+	}
 </script>
 
 <svelte:head>
