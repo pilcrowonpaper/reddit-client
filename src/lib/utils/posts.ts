@@ -27,11 +27,11 @@ export const getPostRequestUrl = (
 	filter?: Filter
 ): string => {
 	let base_url = `https://www.reddit.com/r/${subreddit}`;
-	if (filter.sort) {
+	if (filter && filter.sort) {
 		base_url = base_url + `/${filter.sort}`;
 	}
 	let url = base_url + '.json?raw_json=1';
-	if (filter.time) {
+	if (filter && filter.time) {
 		url = url + `&t=${filter.time}`;
 	}
 	if (after) {
