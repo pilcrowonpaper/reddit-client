@@ -14,12 +14,18 @@
 			retry: 3,
 			async onRequestError() {
 				console.log('error at fetching listing');
+			},
+			async onResponse() {
+				console.log('success: fetching listing');
 			}
 		});
 		const about_promise = ohmyfetch(`https://www.reddit.com/r/${subreddit}/about.json?raw_json=1`, {
 			retry: 3,
 			async onRequestError() {
 				console.log('error at fetching about');
+			},
+			async onResponse() {
+				console.log('success: fetching about');
 			}
 		});
 		const response = await Promise.all([data_promise, about_promise]);
