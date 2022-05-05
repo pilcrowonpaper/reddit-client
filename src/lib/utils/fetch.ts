@@ -1,9 +1,10 @@
-export const retryFetch = async (url: string, fetch: Function, count: number) => {
+import { $fetch as ohmyfetch } from 'ohmyfetch';
+
+export const retryFetch = async (url: string, fetch: Function, count: number = 1) => {
 	let attempts = 0;
 	while (attempts < count) {
 		try {
-			const response = await fetch(url);
-			return await response.json();
+			return await ohmyfetch(url);
 		} catch (e) {
 			console.log(e);
 			await sleep((attempts + 1) * 100);
