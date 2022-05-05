@@ -1,39 +1,21 @@
-<!-- <script context="module" lang="ts">
-	import { $fetch as ohmyfetch } from 'ohmyfetch';
+<script context="module" lang="ts">
 	export const load = async ({ params, url, fetch }) => {
-		const subreddit = params.subreddit;
-		if (!subreddit)
-			return {
-				status: 404
-			};
 		const sort = url.searchParams.get('sort') || null;
 		const time = url.searchParams.get('time') || null;
-		const filter = { sort, time };
-		const request_url = getPostRequestUrl(subreddit, null, filter);
-		const data_promise = retryFetch(request_url, fetch, 5);
-		const about_promise = retryFetch(`https://www.reddit.com/r/${subreddit}/about.json?raw_json=1`, fetch, 5);
-		const response = await Promise.all([data_promise, about_promise]);
-		const listing: any = await response[0];
-		const about: any = await response[1];
-		if (about.error || listing.error) {
-			return {
-				status: 400
-			};
+		let request_url = `${url.pathname}.json?`;
+		if (sort) {
+			request_url = request_url + `&sort=${sort}`;
 		}
-		if (about.kind !== 't5') {
-			return {
-				status: 404
-			};
+		if (time) {
+			request_url = request_url + `&time=${time}`;
 		}
+		const response = await fetch(request_url);
+		const result = await response.json();
 		return {
-			props: {
-				initial_listing: listing as Listing<Post>,
-				about: about as About,
-				filter
-			}
+			props: result
 		};
 	};
-</script> -->
+</script>
 
 <script lang="ts">
 	export let initial_listing: Listing<Post>;
