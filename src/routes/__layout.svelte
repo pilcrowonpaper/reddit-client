@@ -87,9 +87,7 @@
 				/>
 			</div>
 		{/if}
-		<div class="mb-12">
-			<slot />
-		</div>
+		<slot />
 	</div>
 </div>
 
