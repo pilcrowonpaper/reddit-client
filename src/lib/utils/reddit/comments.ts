@@ -8,23 +8,29 @@ export const getCommentsListing = async (
 	filter?: Filter,
 	comment_id?: string
 ): Promise<Promise_Status<Listing_List>> => {
-	const url = getCommentsRequestUrl(subreddit, post_id, filter, comment_id);
-	const response = await fetch(url);
-	if (!response.ok) {
+	try {
+		const url = getCommentsRequestUrl(subreddit, post_id, filter, comment_id);
+		const response = await fetch(url);
+		if (!response.ok) {
+			return {
+				success: false
+			};
+		}
+		const result = await response.json();
+		const post_listing = result[0] as Listing<Post>;
+		const comment_listing = result[1] as Listing<Comment>;
+		return {
+			success: true,
+			data: {
+				post: post_listing,
+				comment: comment_listing
+			}
+		};
+	} catch {
 		return {
 			success: false
 		};
 	}
-	const result = await response.json();
-	const post_listing = result[0] as Listing<Post>;
-	const comment_listing = result[1] as Listing<Comment>;
-	return {
-		success: true,
-		data: {
-			post: post_listing,
-			comment: comment_listing
-		}
-	};
 };
 
 export const getCommentsRequestUrl = (

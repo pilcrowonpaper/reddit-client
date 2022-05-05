@@ -2,7 +2,7 @@
 	import type { Filter } from '$lib/types/filter';
 
 	import type { About, Listing, Post, Comment } from '$lib/types/reddit';
-	import { getCommentsRequestUrl } from '$lib/utils/comments';
+	import { getCommentsRequestUrl } from '$lib/utils/reddit/comments';
 	import type { Load } from '@sveltejs/kit';
 
 	// this page also handles r/[subreddit]/index.svelte

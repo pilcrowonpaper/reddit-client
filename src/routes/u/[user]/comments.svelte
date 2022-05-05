@@ -54,14 +54,14 @@
 	import Filter_Select from '$lib/components/subreddit/Filter.svelte';
 	import Comment_Block from '$lib/components/post/Comment.svelte';
 
-	import type { User, Listing, Comment, Post } from '$lib/types/reddit';
+	import type { User, Listing, Comment } from '$lib/types/reddit';
 	import type { Filter } from '$lib/types/filter';
 
 	import {
 		getUserListing,
 		getUserPathname,
 		getUserRequestUrl
-	} from '$lib/utils/users';
+	} from '$lib/utils/reddit/users';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { inViewport } from '$lib/utils/actions';

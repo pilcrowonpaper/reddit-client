@@ -63,7 +63,7 @@
 		getUserListing,
 		getUserPathname,
 		getUserRequestUrl
-	} from '$lib/utils/users';
+	} from '$lib/utils/reddit/users';
 	import { page } from '$app/stores';
 	import { selected_post } from '$lib/stores';
 

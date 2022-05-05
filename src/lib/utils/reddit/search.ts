@@ -9,18 +9,24 @@ export const getSearchListing = async (
 	after?: string,
 	filter?: Filter
 ): Promise<Promise_Status<Listing<any>>> => {
-	const url = getSearchRequestUrl(query, type, subreddit, after, filter);
-	const response = await fetch(url);
-	if (!response.ok) {
+	try {
+		const url = getSearchRequestUrl(query, type, subreddit, after, filter);
+		const response = await fetch(url);
+		if (!response.ok) {
+			return {
+				success: false
+			};
+		}
+		const result = (await response.json()) as Listing<Post | Comment>;
+		return {
+			success: true,
+			data: result
+		};
+	} catch {
 		return {
 			success: false
 		};
 	}
-	const result = (await response.json()) as Listing<Post | Comment>;
-	return {
-		success: true,
-		data: result
-	};
 };
 
 export const getSearchRequestUrl = (

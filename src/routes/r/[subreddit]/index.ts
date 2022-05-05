@@ -1,5 +1,5 @@
 import type { About, Listing, Post } from '$lib/types/reddit';
-import { getPostRequestUrl } from '$lib/utils/posts';
+import { getPostRequestUrl } from '$lib/utils/reddit/posts';
 import type { RequestHandler } from '@sveltejs/kit';
 
 export const get: RequestHandler = async ({ url, params }) => {

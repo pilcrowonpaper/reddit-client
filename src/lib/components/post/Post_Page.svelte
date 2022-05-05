@@ -8,7 +8,7 @@
 	import type { About, Post, Comment } from '$lib/types/reddit';
 	import type { Filter } from '$lib/types/filter';
 
-	import { getCommentContents, getCommentsListing } from '$lib/utils/comments';
+	import { getCommentContents, getCommentsListing } from '$lib/utils/reddit/comments';
 	import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
 

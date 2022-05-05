@@ -6,18 +6,24 @@ export const getPostListing = async (
 	after?: string,
 	filter?: Filter
 ): Promise<Promise_Status<Listing<Post>>> => {
-	const url = getPostRequestUrl(after, filter);
-	const response = await fetch(url);
-	if (!response.ok) {
+	try {
+		const url = getPostRequestUrl(after, filter);
+		const response = await fetch(url);
+		if (!response.ok) {
+			return {
+				success: false
+			};
+		}
+		const result = (await response.json()) as Listing<Post>;
+		return {
+			success: true,
+			data: result
+		};
+	} catch {
 		return {
 			success: false
 		};
 	}
-	const result = (await response.json()) as Listing<Post>;
-	return {
-		success: true,
-		data: result
-	};
 };
 
 export const getPostRequestUrl = (after?: string, filter?: Filter): string => {

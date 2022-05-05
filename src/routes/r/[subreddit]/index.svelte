@@ -15,7 +15,7 @@
 	import type { About, Listing, Post } from '$lib/types/reddit';
 	import type { Filter } from '$lib/types/filter';
 
-	import { getPostListing, getPostPathname, getPostRequestUrl } from '$lib/utils/posts';
+	import { getPostListing, getPostPathname, getPostRequestUrl } from '$lib/utils/reddit/posts';
 	import { page } from '$app/stores';
 	import { selected_post } from '$lib/stores';
 	import { retryFetch } from '$lib/utils/fetch';

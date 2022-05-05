@@ -32,7 +32,7 @@
 
 	import type { Listing, User } from '$lib/types/reddit';
 
-	import { getSearchListing, getSearchRequestUrl } from '$lib/utils/search';
+	import { getSearchListing, getSearchRequestUrl } from '$lib/utils/reddit/search';
 	import { inViewport } from '$lib/utils/actions';
 	import { goto } from '$app/navigation';
 

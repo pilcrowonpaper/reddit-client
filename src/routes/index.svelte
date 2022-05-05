@@ -48,7 +48,7 @@
 		getPostListing,
 		getPostPathname,
 		getPostRequestUrl
-	} from '$lib/utils/home';
+	} from '$lib/utils/reddit/home';
 	import { page } from '$app/stores';
 	import { selected_post } from '$lib/stores';
 

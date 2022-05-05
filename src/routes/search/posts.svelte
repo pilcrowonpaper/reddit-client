@@ -53,7 +53,7 @@
 	import type { Filter } from '$lib/types/filter';
 
 	import { page } from '$app/stores';
-	import { getSearchListing, getSearchPathname, getSearchRequestUrl } from '$lib/utils/search';
+	import { getSearchListing, getSearchPathname, getSearchRequestUrl } from '$lib/utils/reddit/search';
 	import { selected_post } from '$lib/stores';
 
 	let posts = initial_listing.data.children;
