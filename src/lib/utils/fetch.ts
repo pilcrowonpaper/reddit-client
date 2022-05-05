@@ -5,6 +5,7 @@ export const retryFetch = async (url: string, count: number = 1) => {
 	while (attempts < count) {
 		try {
 			const response = await fetch(url);
+            if (!response.ok) throw Error()
             console.log("success")
             return await response.json()
 		} catch (e) {
