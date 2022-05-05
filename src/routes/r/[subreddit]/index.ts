@@ -13,13 +13,13 @@ export const get: RequestHandler = async ({ url, params }) => {
 	const time = url.searchParams.get('time') || null;
 	const filter = { sort, time };
 	const request_url = getPostRequestUrl(subreddit, null, filter);
-	const data_promise = retryFetch(request_url, 5);
-	const about_promise = retryFetch(
-		`https://www.reddit.com/r/${subreddit}/about.json?raw_json=1`,
-		5
-	);
 	try {
-        const response = await Promise.all([data_promise, about_promise]);
+		const data_promise = retryFetch(request_url, 5);
+		const about_promise = retryFetch(
+			`https://www.reddit.com/r/${subreddit}/about.json?raw_json=1`,
+			5
+		);
+		const response = await Promise.all([data_promise, about_promise]);
 		const listing: any = response[0];
 		const about: any = response[1];
 		if (about.error || listing.error) {
@@ -40,10 +40,10 @@ export const get: RequestHandler = async ({ url, params }) => {
 			}
 		};
 	} catch (e) {
-        console.log("error")
-        console.log(e)
-        return {
-            status: 500
-        }
-    }
+		console.log('error');
+		console.log(e);
+		return {
+			status: 500
+		};
+	}
 };
