@@ -16,9 +16,9 @@ export const get: RequestHandler = async ({ url, params }) => {
 	try {
 		const data_promise = fetch(request_url);
 		const about_promise = fetch(`https://www.reddit.com/r/${subreddit}/about.json?raw_json=1`);
-		const response = await Promise.all([data_promise, about_promise]);
-		const listing: any = await response[0].json();
-		const about: any = await response[1].json();
+		const response = await Promise.allSettled([data_promise, about_promise]);
+		const listing: any = await response[0].value.json()
+		const about: any = await response[1].value.json()
 		if (about.error || listing.error) throw Error();
 		if (about.kind !== 't5') return { status: 404 };
 		return {
