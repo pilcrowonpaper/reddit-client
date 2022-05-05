@@ -5,7 +5,7 @@
 
 	const dispatch = createEventDispatcher();
 
-	const card_options = ['Large', 'Compact'];
+	const card_options = ['large', 'compact'];
 	const card_values = ['large', 'compact'];
 
 	export let type = card_values[0];
