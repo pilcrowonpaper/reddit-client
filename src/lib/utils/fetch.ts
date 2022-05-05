@@ -1,19 +1,19 @@
 import { $fetch as ohmyfetch } from 'ohmyfetch';
 
-export const retryFetch = async (url: string, fetch: Function, count: number = 1) => {
+export const retryFetch = async (url: string, count: number = 1) => {
 	let attempts = 0;
 	while (attempts < count) {
 		try {
-			const result = await ohmyfetch(url);
+			const response = await fetch(url);
             console.log("success")
-            return result
+            return await response.json()
 		} catch (e) {
 			console.log("error", e);
 			await sleep((attempts + 1) * 100);
 			attempts += 1;
 		}
 	}
-    throw new Error()
+    throw Error()
 };
 
 const sleep = (ms: number) => {

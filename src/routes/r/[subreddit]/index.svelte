@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<!-- <script context="module" lang="ts">
 	import { $fetch as ohmyfetch } from 'ohmyfetch';
 	export const load = async ({ params, url, fetch }) => {
 		const subreddit = params.subreddit;
@@ -33,7 +33,7 @@
 			}
 		};
 	};
-</script>
+</script> -->
 
 <script lang="ts">
 	export let initial_listing: Listing<Post>;
@@ -55,7 +55,7 @@
 	import { getPostListing, getPostPathname, getPostRequestUrl } from '$lib/utils/posts';
 	import { page } from '$app/stores';
 	import { selected_post } from '$lib/stores';
-import { retryFetch } from '$lib/utils/fetch';
+	import { retryFetch } from '$lib/utils/fetch';
 
 	let posts = initial_listing.data.children;
 	let latest_post_in_view = 0;
