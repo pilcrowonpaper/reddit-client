@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
 	import { $fetch as ohmyfetch } from 'ohmyfetch';
-	export const load = async ({ params, url }) => {
+	export const load = async ({ params, url, fetch }) => {
 		const subreddit = params.subreddit;
 		if (!subreddit)
 			return {
@@ -10,24 +10,8 @@
 		const time = url.searchParams.get('time') || null;
 		const filter = { sort, time };
 		const request_url = getPostRequestUrl(subreddit, null, filter);
-		const data_promise = ohmyfetch(request_url, {
-			retry: 5,
-			async onRequestError() {
-				console.log('error at fetching listing');
-			},
-			async onResponse() {
-				console.log('success: fetching listing');
-			}
-		});
-		const about_promise = ohmyfetch(`https://www.reddit.com/r/${subreddit}/about.json?raw_json=1`, {
-			retry: 5,
-			async onRequestError() {
-				console.log('error at fetching about');
-			},
-			async onResponse() {
-				console.log('success: fetching about');
-			}
-		});
+		const data_promise = retryFetch(request_url, fetch, 5);
+		const about_promise = retryFetch(`https://www.reddit.com/r/${subreddit}/about.json?raw_json=1`, fetch, 5);
 		const response = await Promise.all([data_promise, about_promise]);
 		const listing: any = await response[0];
 		const about: any = await response[1];
@@ -71,6 +55,7 @@
 	import { getPostListing, getPostPathname, getPostRequestUrl } from '$lib/utils/posts';
 	import { page } from '$app/stores';
 	import { selected_post } from '$lib/stores';
+import { retryFetch } from '$lib/utils/fetch';
 
 	let posts = initial_listing.data.children;
 	let latest_post_in_view = 0;
