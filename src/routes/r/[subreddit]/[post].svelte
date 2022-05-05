@@ -22,6 +22,6 @@
 	};
 </script>
 
-<div class="h-screen px-4 py-3 sm:px-8 md:px-16 lg:px-24">
+<div class="px-4 py-3 sm:px-8 md:px-16 lg:px-24 pb-12">
 	<Post_Page {post} {comments} {about} {filter} {id} on:close={returnHome} />
 </div>

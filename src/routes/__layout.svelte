@@ -77,7 +77,7 @@
 	<div class="relative grow overflow-scroll">
 		{#if $selected_post}
 			<div
-				class="absolute z-40 h-full w-full overflow-auto bg-white px-4 py-3 sm:px-8 md:px-16 lg:px-24 pb-12"
+				class="absolute z-40 h-full w-full overflow-auto bg-white px-4 py-3 sm:px-8 md:px-16 lg:px-24"
 			>
 				<PostPage
 					post={$selected_post}
@@ -85,11 +85,10 @@
 						selected_post.set(null);
 					}}
 				/>
+				<div class="h-12 w-full"/>
 			</div>
 		{/if}
-		<div class="mb-12 h-full">
-			<slot />
-		</div>
+		<slot />
 	</div>
 </div>
 
