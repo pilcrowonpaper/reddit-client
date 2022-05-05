@@ -1,5 +1,5 @@
 import type { About, Listing, Post } from '$lib/types/reddit';
-import { retryFetch } from '$lib/utils/fetch';
+import { retryFetch, sleep } from '$lib/utils/fetch';
 import { getPostRequestUrl } from '$lib/utils/posts';
 import type { RequestHandler } from '@sveltejs/kit';
 
@@ -16,6 +16,7 @@ export const get: RequestHandler = async ({ url, params }) => {
 	try {
 		const data_promise = fetch(request_url);
 		const about_promise = fetch(`https://www.reddit.com/r/${subreddit}/about.json?raw_json=1`);
+		await sleep(50)
 		const response = await Promise.allSettled([data_promise, about_promise]);
 		const listing: any = await response[0].value.json()
 		const about: any = await response[1].value.json()
