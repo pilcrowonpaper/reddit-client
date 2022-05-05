@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
-	import {$fetch as ohmyfetch } from "ohmyfetch"
-	export const load = async ({params, url}) => {
+	import { $fetch as ohmyfetch } from 'ohmyfetch';
+	export const load = async ({ params, url }) => {
 		const subreddit = params.subreddit;
 		if (!subreddit)
 			return {
@@ -10,8 +10,12 @@
 		const time = url.searchParams.get('time') || null;
 		const filter = { sort, time };
 		const request_url = getPostRequestUrl(subreddit, null, filter);
-		const data_promise = ohmyfetch(request_url);
-		const about_promise = ohmyfetch(`https://www.reddit.com/r/${subreddit}/about.json?raw_json=1`);
+		const data_promise = ohmyfetch(request_url, {
+			retry: 1
+		});
+		const about_promise = ohmyfetch(`https://www.reddit.com/r/${subreddit}/about.json?raw_json=1`, {
+			retry: 1
+		});
 		const response = await Promise.all([data_promise, about_promise]);
 		const listing: any = await response[0];
 		const about: any = await response[1];
