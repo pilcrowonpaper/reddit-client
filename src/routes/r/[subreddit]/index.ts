@@ -1,5 +1,4 @@
 import type { About, Listing, Post } from '$lib/types/reddit';
-import { retryFetch, sleep } from '$lib/utils/fetch';
 import { getPostRequestUrl } from '$lib/utils/posts';
 import type { RequestHandler } from '@sveltejs/kit';
 
