@@ -42,7 +42,7 @@
 		selected_post.set(null)
 	})
 
-	console.log($selected_post)
+	$:console.log($selected_post)
 </script>
 
 <svelte:head>
