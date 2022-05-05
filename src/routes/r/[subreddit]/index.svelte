@@ -1,3 +1,40 @@
+<script context="module" lang="ts">
+	import {$fetch as ohmyfetch } from "ohmyfetch"
+	export const load = async ({params, url}) => {
+		const subreddit = params.subreddit;
+		if (!subreddit)
+			return {
+				status: 404
+			};
+		const sort = url.searchParams.get('sort') || null;
+		const time = url.searchParams.get('time') || null;
+		const filter = { sort, time };
+		const request_url = getPostRequestUrl(subreddit, null, filter);
+		const data_promise = ohmyfetch(request_url);
+		const about_promise = ohmyfetch(`https://www.reddit.com/r/${subreddit}/about.json?raw_json=1`);
+		const response = await Promise.all([data_promise, about_promise]);
+		const listing: any = await response[0];
+		const about: any = await response[1];
+		if (about.error || listing.error) {
+			return {
+				status: 400
+			};
+		}
+		if (about.kind !== 't5') {
+			return {
+				status: 404
+			};
+		}
+		return {
+			props: {
+				initial_listing: listing as Listing<Post>,
+				about: about as About,
+				filter
+			}
+		};
+	};
+</script>
+
 <script lang="ts">
 	export let initial_listing: Listing<Post>;
 	export let about: About;
@@ -15,11 +52,7 @@
 	import type { About, Listing, Post } from '$lib/types/reddit';
 	import type { Filter } from '$lib/types/filter';
 
-	import {
-		getPostListing,
-		getPostPathname,
-		getPostRequestUrl
-	} from '$lib/utils/posts';
+	import { getPostListing, getPostPathname, getPostRequestUrl } from '$lib/utils/posts';
 	import { page } from '$app/stores';
 	import { selected_post } from '$lib/stores';
 
@@ -87,7 +120,6 @@
 	};
 
 	$: getNextPostBatch(latest_post_in_view);
-
 </script>
 
 <svelte:head>

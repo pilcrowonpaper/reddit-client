@@ -35,6 +35,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"intersection-observer": "^0.12.0"
+		"intersection-observer": "^0.12.0",
+		"ohmyfetch": "^0.4.16"
 	}
 }
