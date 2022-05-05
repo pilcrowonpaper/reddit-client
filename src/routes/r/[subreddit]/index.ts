@@ -18,8 +18,8 @@ export const get: RequestHandler = async ({ url, params }) => {
 		`https://www.reddit.com/r/${subreddit}/about.json?raw_json=1`,
 		5
 	);
-	const response = await Promise.all([data_promise, about_promise]);
 	try {
+        const response = await Promise.all([data_promise, about_promise]);
 		const listing: any = response[0];
 		const about: any = response[1];
 		if (about.error || listing.error) {
