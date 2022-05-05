@@ -11,7 +11,7 @@
 		const filter = { sort, time };
 		const request_url = getPostRequestUrl(subreddit, null, filter);
 		const data_promise = ohmyfetch(request_url, {
-			retry: 3,
+			retry: 5,
 			async onRequestError() {
 				console.log('error at fetching listing');
 			},
@@ -20,7 +20,7 @@
 			}
 		});
 		const about_promise = ohmyfetch(`https://www.reddit.com/r/${subreddit}/about.json?raw_json=1`, {
-			retry: 3,
+			retry: 5,
 			async onRequestError() {
 				console.log('error at fetching about');
 			},
