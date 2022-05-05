@@ -9,7 +9,8 @@ const config = {
 
 	kit: {
 		adapter: adapter({
-			edge: true
+			edge: true,
+			split: true
 		})
 	}
 };

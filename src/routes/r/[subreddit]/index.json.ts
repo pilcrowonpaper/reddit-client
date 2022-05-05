@@ -14,11 +14,8 @@ export const get: RequestHandler = async ({ url, params }) => {
 	const filter = { sort, time };
 	const request_url = getPostRequestUrl(subreddit, null, filter);
 	try {
-		const data_promise = retryFetch(request_url, 5);
-		const about_promise = retryFetch(
-			`https://www.reddit.com/r/${subreddit}/about.json?raw_json=1`,
-			5
-		);
+		const data_promise = fetch(request_url);
+		const about_promise = fetch(`https://www.reddit.com/r/${subreddit}/about.json?raw_json=1`);
 		const response = await Promise.all([data_promise, about_promise]);
 		const listing: any = response[0];
 		const about: any = response[1];
