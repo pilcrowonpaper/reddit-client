@@ -45,7 +45,7 @@
 </script>
 
 <div>
-	<div class="flex gap-2 text-sm">
+	<div class="flex gap-2 text-sm sm:text-base">
 		<p>sort by:</p>
 		<Select options={post_sort_options} on:select={select_sort} id={default_sort_id} />
 		{#if sort === 'top' || sort === 'controversial'}

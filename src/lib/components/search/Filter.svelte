@@ -50,7 +50,7 @@
 </script>
 
 <div>
-	<div class="flex gap-2 text-sm">
+	<div class="flex gap-2 text-sm sm:text-base">
 		<p>sort by:</p>
 		<Select
 			options={search_sort_options}
