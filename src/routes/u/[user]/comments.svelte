@@ -1,47 +1,3 @@
-<script context="module" lang="ts">
-	import type { Load } from '@sveltejs/kit';
-
-	export const load: Load = async ({ params, fetch, url }) => {
-		const user = params.user;
-		if (!user)
-			return {
-				status: 404
-			};
-		const sort = url.searchParams.get('sort') || null;
-		const time = url.searchParams.get('time') || null;
-		const filter = { sort, time };
-		const request_url = getUserRequestUrl(user, 'comments', null, filter);
-		const data_promise = fetch(request_url);
-		const about_promise = fetch(`https://www.reddit.com/user/${user}/about.json?raw_json=1`);
-		const response = (await Promise.allSettled([data_promise, about_promise])) as {
-			status: string;
-			value?: Response;
-		}[];
-		if (response.filter((val) => val.status !== 'fulfilled').length > 0) {
-			return { status: 404 };
-		}
-		const listing: any = await response[0].value.json();
-		const about: any = await response[1].value.json();
-		if (about.error || listing.error) {
-			return {
-				status: 400
-			};
-		}
-		if (about.kind !== 't2') {
-			return {
-				status: 404
-			};
-		}
-		return {
-			props: {
-				initial_listing: listing as Listing<Comment>,
-				about: about as User,
-				filter
-			}
-		};
-	};
-</script>
-
 <script lang="ts">
 	export let initial_listing: Listing<Comment>;
 	export let about: User;
@@ -59,8 +15,7 @@
 
 	import {
 		getUserListing,
-		getUserPathname,
-		getUserRequestUrl
+		getUserPathname
 	} from '$lib/utils/reddit/users';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';

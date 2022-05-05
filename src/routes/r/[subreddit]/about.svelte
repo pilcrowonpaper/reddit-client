@@ -1,51 +1,8 @@
-<script context="module" lang="ts">
-	import type { About, Listing, Post, Subreddit_Rules } from '$lib/types/reddit';
-	import type { Load } from '@sveltejs/kit';
-
-	// this page also handles r/[subreddit]/index.svelte
-
-	export const load: Load = async ({ params, fetch, url }) => {
-		const subreddit = params.subreddit;
-		if (!subreddit) {
-			return {
-				status: 404
-			};
-		}
-		const rules_promise = fetch(
-			`https://www.reddit.com/r/${subreddit}/about/rules.json?raw_json=1`
-		);
-		const about_promise = fetch(`https://www.reddit.com/r/${subreddit}/about.json?raw_json=1`);
-		const response = (await Promise.allSettled([rules_promise, about_promise])) as {
-			status: string;
-			value?: Response;
-		}[];
-		if (response.filter((val) => val.status !== 'fulfilled').length > 0) {
-			return { status: 404 };
-		}
-		const rules: any = await response[0].value.json();
-		const about: any = await response[1].value.json();
-		if (about.error) {
-			return {
-				status: 400
-			};
-		}
-		if (about.kind !== 't5') {
-			return {
-				status: 404
-			};
-		}
-		return {
-			props: {
-				rules: rules as Subreddit_Rules,
-				about: about as About
-			}
-		};
-	};
-</script>
-
 <script lang="ts">
 	export let rules: Subreddit_Rules;
 	export let about: About;
+
+	import type { About, Subreddit_Rules } from '$lib/types/reddit';
 
 	import Header from '$lib/components/subreddit/Header.svelte';
 </script>

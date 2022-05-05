@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { afterNavigate, goto } from '$app/navigation';
-	import { navigating, page } from '$app/stores';
+	import { page } from '$app/stores';
 	import PostPage from '$lib/components/post/Post_Page.svelte';
 	import { selected_post } from '$lib/stores';
 	import type { Post } from '$lib/types/reddit';

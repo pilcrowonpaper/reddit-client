@@ -1,38 +1,10 @@
-<script context="module" lang="ts">
-	import type { Load } from '@sveltejs/kit';
-
-	export const load: Load = async ({ fetch, url }) => {
-		const query = url.searchParams.get('q');
-		let query_text: string;
-		if (query.includes(':')) {
-			query_text = query.split(':')[1];
-		} else {
-			query_text = query;
-		}
-		const request_url = getSearchRequestUrl(query_text, 'sr');
-		const listing_response = await fetch(request_url);
-		if (!listing_response.ok) {
-			return {
-				status: 404
-			};
-		}
-		const listing = await listing_response.json();
-		return {
-			props: {
-				initial_listing: listing as Listing<About>,
-				query_text
-			}
-		};
-	};
-</script>
-
 <script lang="ts">
 	export let initial_listing: Listing<About>;
 	export let query_text: string;
 
 	import type { Listing, About } from '$lib/types/reddit';
 
-	import { getSearchListing, getSearchRequestUrl } from '$lib/utils/reddit/search';
+	import { getSearchListing } from '$lib/utils/reddit/search';
 	import { inViewport } from '$lib/utils/actions';
 	import { goto } from '$app/navigation';
 

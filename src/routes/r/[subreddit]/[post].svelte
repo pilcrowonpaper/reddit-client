@@ -1,65 +1,10 @@
-<script context="module" lang="ts">
-	import type { Filter } from '$lib/types/filter';
-
-	import type { About, Listing, Post, Comment } from '$lib/types/reddit';
-	import { getCommentsRequestUrl } from '$lib/utils/reddit/comments';
-	import type { Load } from '@sveltejs/kit';
-
-	// this page also handles r/[subreddit]/index.svelte
-
-	export const load: Load = async ({ params, fetch, url }) => {
-		const subreddit = params.subreddit;
-		const post_id = params.post;
-		const id = url.searchParams.get('comment') || null;
-		if (!subreddit) {
-			return {
-				status: 404
-			};
-		}
-		const sort = params.sort || url.searchParams.get('sort') || 'best';
-		const filter: Filter = {
-			sort
-		};
-		const request_url = getCommentsRequestUrl(subreddit, post_id, filter, id);
-		const data_promise = fetch(request_url);
-		const about_promise = fetch(`https://www.reddit.com/r/${subreddit}/about.json?raw_json=1`);
-		const response = (await Promise.allSettled([data_promise, about_promise])) as {
-			status: string;
-			value?: Response;
-		}[];
-		if (response.filter((val) => val.status !== 'fulfilled').length > 0) {
-			return { status: 404 };
-		}
-		const post_data: any = await response[0].value.json();
-		const about: any = await response[1].value.json();
-		if (about.error || post_data.error) {
-			return {
-				status: about.error || post_data.error
-			};
-		}
-		if (about.kind !== 't5') {
-			return {
-				status: 404
-			};
-		}
-		const post_listing = post_data[0] as Listing<Post>;
-		const comment_listing = post_data[1] as Listing<Comment>;
-		return {
-			props: {
-				post_listing,
-				comment_listing,
-				about: about as About,
-				filter,
-				id
-			}
-		};
-	};
-</script>
-
 <script lang="ts">
 	import Post_Page from '$lib/components/post/Post_Page.svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+
+	import type { Filter } from '$lib/types/filter';
+	import type { About, Listing, Post, Comment } from '$lib/types/reddit';
 
 	export let post_listing: Listing<Post>;
 	export let comment_listing: Listing<Comment>;

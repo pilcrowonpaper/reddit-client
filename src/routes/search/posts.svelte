@@ -1,39 +1,3 @@
-<script context="module" lang="ts">
-	import type { Load } from '@sveltejs/kit';
-
-	export const load: Load = async ({ params, fetch, url }) => {
-		const query = url.searchParams.get('q');
-		const sort = url.searchParams.get('sort') || 'relevance';
-		const time = url.searchParams.get('time') || 'all';
-		const filter = { sort, time };
-		let query_text: string;
-		let subreddit: string = null;
-		if (query.includes(':')) {
-			subreddit = query.split(':')[0];
-			query_text = query.split(':')[1];
-		} else {
-			query_text = query;
-		}
-		const request_url = getSearchRequestUrl(query_text, 'link', subreddit, null, filter);
-		const listing_response = await fetch(request_url);
-		if (!listing_response.ok) {
-			return {
-				status: 404
-			};
-		}
-		const listing = await listing_response.json();
-		return {
-			props: {
-				initial_listing: listing as Listing<Post>,
-				filter,
-				subreddit,
-				query_text,
-				query
-			}
-		};
-	};
-</script>
-
 <script lang="ts">
 	export let initial_listing: Listing<Post>;
 	export let filter: Filter = {
@@ -53,7 +17,7 @@
 	import type { Filter } from '$lib/types/filter';
 
 	import { page } from '$app/stores';
-	import { getSearchListing, getSearchPathname, getSearchRequestUrl } from '$lib/utils/reddit/search';
+	import { getSearchListing, getSearchPathname } from '$lib/utils/reddit/search';
 	import { selected_post } from '$lib/stores';
 
 	let posts = initial_listing.data.children;

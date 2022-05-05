@@ -1,33 +1,3 @@
-<script context="module" lang="ts">
-	import type { Load } from '@sveltejs/kit';
-
-	export const load: Load = async ({ fetch, url }) => {
-		const sort = url.searchParams.get('sort') || 'hot';
-		const time = url.searchParams.get('time') || null;
-		const filter = { sort, time };
-		const request_url = getPostRequestUrl(null, filter);
-		const data_promise = fetch(request_url);
-		const response = (await Promise.allSettled([data_promise])) as {
-			status: string;
-			value?: Response;
-		}[];
-		if (response.filter((val) => val.status !== 'fulfilled').length > 0) {
-			return { status: 404 };
-		}
-		const listing: any = await response[0].value.json();
-		if (listing.error)
-			return {
-				status: 404
-			};
-		return {
-			props: {
-				initial_listing: listing as Listing<Post>,
-				filter
-			}
-		};
-	};
-</script>
-
 <script lang="ts">
 	export let initial_listing: Listing<Post>;
 	export let filter: Filter = {
@@ -44,11 +14,7 @@
 	import type { Listing, Post } from '$lib/types/reddit';
 	import type { Filter } from '$lib/types/filter';
 
-	import {
-		getPostListing,
-		getPostPathname,
-		getPostRequestUrl
-	} from '$lib/utils/reddit/home';
+	import { getPostListing, getPostPathname } from '$lib/utils/reddit/home';
 	import { page } from '$app/stores';
 	import { selected_post } from '$lib/stores';
 
