@@ -20,5 +20,5 @@
 </script>
 
 <div class="text-sm sm:text-base">
-	<Select options={card_options} values={card_values} on:select={select_card} />
+	<Select options={card_options} values={card_values} on:select={select_card} align="right"/>
 </div>
