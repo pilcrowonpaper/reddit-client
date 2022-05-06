@@ -7,7 +7,7 @@
 	{#if $selected_post}
 		<title>{$selected_post.data.title}</title>
 	{:else}
-		<title>artic search results</title>
+		<title>arctic search results</title>
 	{/if}
 </svelte:head>
 
