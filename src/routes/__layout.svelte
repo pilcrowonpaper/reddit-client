@@ -64,7 +64,7 @@
 			class="text-xl font-medium"
 			on:click={() => {
 				goto('/');
-			}}>artic</button
+			}}>arctic</button
 		>
 		<input
 			class="w-full max-w-sm rounded-md bg-gray-100 px-4 py-1.5 text-sm outline-none"

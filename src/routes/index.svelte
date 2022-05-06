@@ -90,7 +90,7 @@ import { browser } from '$app/env';
 	{#if $selected_post}
 		<title>{$selected_post.data.title}</title>
 	{:else}
-		<title>artic</title>
+		<title>arctic</title>
 	{/if}
 </svelte:head>
 
