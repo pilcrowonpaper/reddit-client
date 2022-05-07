@@ -101,7 +101,7 @@
 					<Slideshow media_metadata={post.data.media_metadata} max_height={(max_height / 3) * 2} {show}/>
 				{:else if post.data.domain}
 					<div class="rounded-md h-12 bg-gray-100 flex w-full">
-						{#if post.data.thumbnail === 'default'}
+						{#if post.data.thumbnail === 'default' || !post.data.thumbnail}
 							<div
 								class="h-full w-16 rounded-l-md object-cover bg-blue-500 flex place-items-center place-content-center"
 							>
