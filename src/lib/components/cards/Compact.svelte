@@ -21,7 +21,7 @@
 
 <div class="cursor-pointer py-4" use:inViewport on:display on:click={openPost}>
 	<div class="flex gap-x-2">
-		{#if post.data.thumbnail === 'self' || !post.data.thumbnail}
+		{#if post.data.thumbnail === 'self' || post.data.selftext}
 			<div
 				class="flex h-16 w-16 shrink-0 place-content-center place-items-center rounded-md bg-gray-200"
 			>
@@ -39,7 +39,7 @@
 			>
 				<p class="text-sm text-gray-400">spoiler</p>
 			</div>
-		{:else if post.data.thumbnail === 'default'}
+		{:else if post.data.thumbnail === 'default' || !post.data.thumbnail}
 			<div
 				class="h-16 w-16 shrink-0 rounded-md bg-gray-200 flex place-content-center place-items-center"
 			>
