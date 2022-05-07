@@ -37,6 +37,8 @@
 		{alt}
 		height="{size.height}px"
 		width="{size.width}px"
+		style:height="{size.height}px"
+		style:width="{size.width}px"
 		on:click
 		{controls}
 		{muted}
