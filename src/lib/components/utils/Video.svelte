@@ -14,9 +14,20 @@
 	export let controls = true;
 	export let autoplay = false;
 	export let show = false;
+	export let play = false
 
 	let size: Image_Size;
 	$: size = calculateImageSize(width, height, max_width, max_height);
+
+	let videoElement : HTMLVideoElement
+
+	$: if (videoElement) {
+		if (play) {
+			videoElement.play()
+		} else {
+			videoElement.pause()
+		}
+	}
 </script>
 
 {#if show}
@@ -32,6 +43,7 @@
 		{autoplay}
 		{loop}
 		on:click|stopPropagation={() => {}}
+		bind:this={videoElement}
 	>
 		<src src={convertGif(src)} /></video
 	>

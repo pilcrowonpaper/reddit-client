@@ -21,6 +21,7 @@
 	const dispatch = createEventDispatcher();
 
 	export let show_media = false;
+	let insideViewport = false
 
 	const openPost = () => {
 		dispatch('open', {
@@ -31,10 +32,12 @@
 	const onDisplayHandle = () => {
 		dispatch('display');
 		newPostInView(id)
+		insideViewport = true
 	};
 
 	const onHiddenHandle = () => {
 		newPostOutsideView(id)
+		insideViewport = false
 	};
 
 	let inner_height: number;
@@ -58,8 +61,6 @@
 		<div class="flex flex-col gap-2">
 			<div>
 				<h2 class="break-words text-lg font-medium leading-tight md:text-xl md:leading-tight">
-					{id}
-					{show_media}
 					{post.data.title}
 					{#if post.data.link_flair_text}
 						<span
@@ -123,6 +124,7 @@
 						height={post.data.media.reddit_video.height}
 						show={show_media && !$selected_post}
 						autoplay={true}
+						play={insideViewport}
 					/>
 				{:else if post.data.post_hint === 'link' && validateGif(post.data.url)}
 					<Video
@@ -135,6 +137,7 @@
 						autoplay={true}
 						loop={true}
 						show={show_media && !$selected_post}
+						play={insideViewport}
 					/>
 				{:else if post.data.is_self}
 					{#if post.data.selftext_html}
