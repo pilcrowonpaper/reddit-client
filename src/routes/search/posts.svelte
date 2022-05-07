@@ -18,8 +18,8 @@
 
 	import { page } from '$app/stores';
 	import { getSearchListing, getSearchPathname } from '$lib/utils/reddit/search';
-	import selected_post from '$lib/stores/post';;
-import { browser } from '$app/env';
+	import selected_post from '$lib/stores/post';
+	import { onMount } from 'svelte';
 
 	let posts = initial_listing.data.children;
 	let latest_post_in_view: number = 0;
@@ -31,6 +31,7 @@ import { browser } from '$app/env';
 	const updateLatestPostInView = (id: number) => {
 		if (id > latest_post_in_view) {
 			latest_post_in_view = id;
+			getNextPostBatch(latest_post_in_view);
 		}
 	};
 
@@ -82,9 +83,9 @@ import { browser } from '$app/env';
 		selected_post.set(e.detail.post as Post);
 	};
 
-	$: if (browser) {
-		getNextPostBatch(latest_post_in_view);
-	}
+	onMount(() => {
+		getNextPostBatch(0);
+	});
 </script>
 
 <div class="mt-2 flex place-content-between">

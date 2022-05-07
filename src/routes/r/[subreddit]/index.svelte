@@ -18,7 +18,7 @@
 	import { getPostListing, getPostPathname } from '$lib/utils/reddit/posts';
 	import { page } from '$app/stores';
 	import selected_post from '$lib/stores/post';
-	import { browser } from '$app/env';
+	import { onMount } from 'svelte';
 
 	let posts = initial_listing.data.children;
 	let latest_post_in_view = 0;
@@ -31,6 +31,7 @@
 	const updateLatestPostInView = (id: number) => {
 		if (id > latest_post_in_view) {
 			latest_post_in_view = id;
+			getNextPostBatch(latest_post_in_view);
 		}
 	};
 
@@ -83,9 +84,9 @@
 		selected_post.set(e.detail.post as Post);
 	};
 
-	$: if (browser) {
-		getNextPostBatch(latest_post_in_view);
-	}
+	onMount(() => {
+		getNextPostBatch(0);
+	});
 </script>
 
 <svelte:head>

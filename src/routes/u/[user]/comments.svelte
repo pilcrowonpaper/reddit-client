@@ -13,15 +13,12 @@
 	import type { User, Listing, Comment } from '$lib/types/reddit';
 	import type { Filter } from '$lib/types/filter';
 
-	import {
-		getUserListing,
-		getUserPathname
-	} from '$lib/utils/reddit/users';
+	import { getUserListing, getUserPathname } from '$lib/utils/reddit/users';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { inViewport } from '$lib/utils/actions';
-	import selected_post from '$lib/stores/post';;
-import { browser } from '$app/env';
+	import selected_post from '$lib/stores/post';
+	import { onMount } from 'svelte';
 
 	let comments = initial_listing.data.children;
 	let latest_post_in_view: number = 0;
@@ -32,10 +29,11 @@ import { browser } from '$app/env';
 	const updateLatestPostInView = (id: number) => {
 		if (id > latest_post_in_view) {
 			latest_post_in_view = id;
+			getNextCommentBatch(latest_post_in_view);
 		}
 	};
 
-	const getNextPostBatch = async (id: number) => {
+	const getNextCommentBatch = async (id: number) => {
 		if (id > 0) {
 			if ((id + 1) % batch_count !== 0) return;
 			if (!after_id) return;
@@ -54,10 +52,10 @@ import { browser } from '$app/env';
 
 	const handleFilter = (e: CustomEvent) => {
 		filter = e.detail.options as Filter;
-		getNewPosts(true);
+		getNewComments(true);
 	};
 
-	const getNewPosts = async (update_history: boolean) => {
+	const getNewComments = async (update_history: boolean) => {
 		comments = [];
 		const new_url = $page.url.origin + getUserPathname(user, 'comments', filter);
 		if (update_history) {
@@ -75,9 +73,9 @@ import { browser } from '$app/env';
 		batch_count = listing.data.dist;
 	};
 
-	$: if (browser) {
-		getNextPostBatch(latest_post_in_view);
-	}
+	onMount(() => {
+		getNextCommentBatch(0);
+	});
 </script>
 
 <svelte:head>
