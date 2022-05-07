@@ -30,6 +30,7 @@
 				size: calculateImageSize(val.s.x, val.s.y, max_w, max_h)
 			};
 		});
+		if (images.length < 1) return
 		box_height = images
 			.map((val) => val.size.height)
 			.reduce((a, b) => {
