@@ -4,6 +4,7 @@
 	import { calculateImageSize, convertGif } from '$lib/utils/media';
 
 	export let src: string;
+	export let fallback: string = null;
 	export let width: number;
 	export let height: number;
 	export let max_height: number;
@@ -14,18 +15,18 @@
 	export let controls = true;
 	export let autoplay = false;
 	export let show = false;
-	export let play = false
+	export let play = false;
 
 	let size: Image_Size;
 	$: size = calculateImageSize(width, height, max_width, max_height);
 
-	let videoElement : HTMLVideoElement
+	let videoElement: HTMLVideoElement;
 
 	$: if (videoElement) {
 		if (play) {
-			videoElement.play()
+			videoElement.play();
 		} else {
-			videoElement.pause()
+			videoElement.pause();
 		}
 	}
 </script>
@@ -33,7 +34,6 @@
 {#if show}
 	<video
 		class="rounded-md object-contain"
-		{src}
 		{alt}
 		height="{size.height}px"
 		width="{size.width}px"
@@ -45,8 +45,11 @@
 		on:click|stopPropagation={() => {}}
 		bind:this={videoElement}
 	>
-		<src src={convertGif(src)} /></video
-	>
+		<source src={convertGif(src)} />
+		{#if fallback}
+			<source src={fallback} />
+		{/if}
+	</video>
 {:else}
 	<div style:height="{size.height}px" style:width="{size.width}px" />
 {/if}
