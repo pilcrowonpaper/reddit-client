@@ -4,6 +4,7 @@
 	import { formatTime, removeEmoji } from '$lib/utils/format';
 	import { inViewport } from '$lib/utils/actions';
 	import { createEventDispatcher } from 'svelte';
+	import postsToLoad, { newPostInView, newPostOutsideView } from "$lib/stores/viewport"
 
 	import type { Post } from '$lib/types/reddit';
 	import Slideshow from '../utils/Slideshow.svelte';
@@ -11,10 +12,11 @@
 	import { validateGif, convertGif } from '$lib/utils/media';
 	import Video from '../utils/Video.svelte';
 	import Iframe from '$lib/components/utils/Iframe.svelte';
-	import { selected_post } from '$lib/stores';
+	import selected_post from '$lib/stores/post';;
 
 	export let post: Post;
 	export let show: string[];
+	export let id : number
 
 	const dispatch = createEventDispatcher();
 
@@ -27,18 +29,20 @@
 	};
 
 	const onDisplayHandle = () => {
-		show_media = true;
 		dispatch('display');
+		newPostInView(id)
 	};
 
 	const onHiddenHandle = () => {
-		show_media = false;
+		newPostOutsideView(id)
 	};
 
 	let inner_height: number;
 	let max_height: number;
 	$: max_height = (inner_height * 2) / 3;
 	let max_width: number;
+
+	$:show_media = $postsToLoad.includes(id)
 </script>
 
 <svelte:window bind:innerHeight={inner_height} />
@@ -54,6 +58,8 @@
 		<div class="flex flex-col gap-2">
 			<div>
 				<h2 class="break-words text-lg font-medium leading-tight md:text-xl md:leading-tight">
+					{id}
+					{show_media}
 					{post.data.title}
 					{#if post.data.link_flair_text}
 						<span
@@ -145,7 +151,7 @@
 					<Slideshow
 						media_metadata={post.data.media_metadata}
 						max_height={(max_height / 3) * 2}
-						show={show_media}
+						show={show_media && !$selected_post}
 					/>
 				{:else if post.data.domain}
 					<div class="rounded-md h-12 bg-gray-100 flex w-full">

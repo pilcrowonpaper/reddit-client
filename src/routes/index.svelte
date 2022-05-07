@@ -16,8 +16,8 @@
 
 	import { getPostListing, getPostPathname } from '$lib/utils/reddit/home';
 	import { page } from '$app/stores';
-	import { selected_post } from '$lib/stores';
-import { browser } from '$app/env';
+	import selected_post from '$lib/stores/post';
+	import { browser } from '$app/env';
 
 	let posts = initial_listing.data.children;
 	let latest_post_in_view: number = 0;
@@ -123,6 +123,7 @@ import { browser } from '$app/env';
 					}}
 					on:open={openPost}
 					show={['user', 'subreddit']}
+					id={i}
 				/>
 			{/if}
 		{/each}

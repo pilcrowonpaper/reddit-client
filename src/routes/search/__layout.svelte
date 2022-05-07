@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { selected_post } from '$lib/stores';
+	import selected_post from '$lib/stores/post';;
 	import { page } from '$app/stores';
 </script>
 

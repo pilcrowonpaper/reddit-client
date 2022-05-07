@@ -20,7 +20,7 @@
 		getUserPathname,
 	} from '$lib/utils/reddit/users';
 	import { page } from '$app/stores';
-	import { selected_post } from '$lib/stores';
+	import selected_post from '$lib/stores/post';;
 import { browser } from '$app/env';
 
 	let posts = initial_listing.data.children;
@@ -139,6 +139,7 @@ import { browser } from '$app/env';
 					}}
 					on:open={openPost}
 					show={['subreddit']}
+					id={i}
 				/>
 			{/if}
 		{/each}

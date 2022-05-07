@@ -3,6 +3,7 @@
 
 	import { removeEmoji } from '$lib/utils/format';
 	import { inViewport } from '$lib/utils/actions';
+	import { default as postsInView, newPostInView, newPostOutsideView } from "$lib/stores/viewport"
 	import { createEventDispatcher } from 'svelte';
 
 	import type { Post } from '$lib/types/reddit';

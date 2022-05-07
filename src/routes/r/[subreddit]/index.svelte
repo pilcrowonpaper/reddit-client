@@ -17,7 +17,7 @@
 
 	import { getPostListing, getPostPathname } from '$lib/utils/reddit/posts';
 	import { page } from '$app/stores';
-	import { selected_post } from '$lib/stores';
+	import selected_post from '$lib/stores/post';
 	import { browser } from '$app/env';
 
 	let posts = initial_listing.data.children;
@@ -125,6 +125,7 @@
 					}}
 					on:open={openPost}
 					show={['user']}
+					id={i}
 				/>
 			{/if}
 		{/each}
