@@ -29,7 +29,7 @@ arctic-reddit.vercel.app
 - Posts
 - arctic account(?)
 
-### Contributing
+## Contributing
 
 Make sure to open a new issue before creating a pull request (especially for big changes).
 
