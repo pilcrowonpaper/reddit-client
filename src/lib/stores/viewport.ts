@@ -6,12 +6,10 @@ export default postsToLoad
 const postsInView : number[] = []
 
 export const newPostInView = (id: number) => {
-    console.log(id)
     postsToLoad.update($postsToLoad => {
        if (postsInView.includes(id)) return $postsToLoad
        postsInView.push(id)
        const result = calculatePostsToLoad()
-       console.log(result)
        return result
     })
 }

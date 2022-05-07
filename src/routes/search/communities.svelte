@@ -7,7 +7,7 @@
 	import { getSearchListing } from '$lib/utils/reddit/search';
 	import { inViewport } from '$lib/utils/actions';
 	import { goto } from '$app/navigation';
-	import { browser } from '$app/env';
+	import { onMount } from 'svelte';
 
 	let communities = initial_listing.data.children;
 	let latest_post_in_view: number = 0;
@@ -17,6 +17,7 @@
 	const updateLatestPostInView = (id: number) => {
 		if (id > latest_post_in_view) {
 			latest_post_in_view = id;
+			getNextPostBatch(latest_post_in_view);
 		}
 	};
 
@@ -35,9 +36,9 @@
 		batch_count = new_communities.length;
 	};
 
-	$: if (browser) {
-		getNextPostBatch(latest_post_in_view);
-	}
+	onMount(() => {
+		getNextPostBatch(0);
+	});
 </script>
 
 <div class="mt-2 flex flex-col divide-y">
@@ -64,7 +65,9 @@
 			<div>
 				<p class="text-sm font-medium">{community.data.display_name}</p>
 				{#if community.data.subscribers}
-				<p class="text-xs font-medium">{community.data.subscribers.toLocaleString()} subscribers</p>
+					<p class="text-xs font-medium">
+						{community.data.subscribers.toLocaleString()} subscribers
+					</p>
 				{/if}
 				<p class="text-xs">{community.data.public_description}</p>
 			</div>
