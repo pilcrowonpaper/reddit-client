@@ -21,8 +21,8 @@
 		class="rounded-md object-contain"
 		{src}
 		{alt}
-		style:height="{size.height}px"
-		style:width="{size.width}px"
+		height="{size.height}px"
+		width="{size.width}px"
 		on:click
 	/>
 {:else}
