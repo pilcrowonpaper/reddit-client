@@ -20,7 +20,7 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { inViewport } from '$lib/utils/actions';
-	import { selected_post } from '$lib/stores';
+	import selected_post from '$lib/stores/post';;
 import { browser } from '$app/env';
 
 	let comments = initial_listing.data.children;

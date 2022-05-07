@@ -4,6 +4,7 @@
 	import { formatTime, removeEmoji } from '$lib/utils/format';
 	import { inViewport } from '$lib/utils/actions';
 	import { createEventDispatcher } from 'svelte';
+	import postsToLoad, { newPostInView, newPostOutsideView } from "$lib/stores/viewport"
 
 	import type { Post } from '$lib/types/reddit';
 	import Slideshow from '../utils/Slideshow.svelte';
@@ -11,14 +12,16 @@
 	import { validateGif, convertGif } from '$lib/utils/media';
 	import Video from '../utils/Video.svelte';
 	import Iframe from '$lib/components/utils/Iframe.svelte';
-	import { selected_post } from '$lib/stores';
+	import selected_post from '$lib/stores/post';;
 
 	export let post: Post;
 	export let show: string[];
+	export let id : number
 
 	const dispatch = createEventDispatcher();
 
 	export let show_media = false;
+	let insideViewport = false
 
 	const openPost = () => {
 		dispatch('open', {
@@ -27,18 +30,22 @@
 	};
 
 	const onDisplayHandle = () => {
-		show_media = true;
 		dispatch('display');
+		newPostInView(id)
+		insideViewport = true
 	};
 
 	const onHiddenHandle = () => {
-		show_media = false;
+		newPostOutsideView(id)
+		insideViewport = false
 	};
 
 	let inner_height: number;
 	let max_height: number;
 	$: max_height = (inner_height * 2) / 3;
 	let max_width: number;
+
+	$:show_media = $postsToLoad.includes(id)
 </script>
 
 <svelte:window bind:innerHeight={inner_height} />
@@ -117,6 +124,7 @@
 						height={post.data.media.reddit_video.height}
 						show={show_media && !$selected_post}
 						autoplay={true}
+						play={insideViewport}
 					/>
 				{:else if post.data.post_hint === 'link' && validateGif(post.data.url)}
 					<Video
@@ -129,6 +137,7 @@
 						autoplay={true}
 						loop={true}
 						show={show_media && !$selected_post}
+						play={insideViewport}
 					/>
 				{:else if post.data.is_self}
 					{#if post.data.selftext_html}
@@ -145,7 +154,7 @@
 					<Slideshow
 						media_metadata={post.data.media_metadata}
 						max_height={(max_height / 3) * 2}
-						show={show_media}
+						show={show_media && !$selected_post}
 					/>
 				{:else if post.data.domain}
 					<div class="rounded-md h-12 bg-gray-100 flex w-full">

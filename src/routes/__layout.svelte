@@ -2,7 +2,7 @@
 	import { afterNavigate, goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import PostPage from '$lib/components/post/Post_Page.svelte';
-	import { selected_post } from '$lib/stores';
+	import selected_post from '$lib/stores/post';
 	import type { Post } from '$lib/types/reddit';
 
 	import '../app.postcss';
