@@ -71,6 +71,7 @@
 				{:else if post.data.domain === 'v.redd.it'}
 					<Video
 						src="{post.data.media.reddit_video.hls_url}/HLSPlaylist.m3u8"
+						fallback={post.data.media.reddit_video.fallback_url}
 						alt={post.data.title}
 						{max_height}
 						{max_width}
