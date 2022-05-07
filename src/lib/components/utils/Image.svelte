@@ -16,17 +16,19 @@
 	$: size = calculateImageSize(width, height, max_width, max_height);
 </script>
 
-{#if show}
-	<img
-		class="rounded-md object-contain"
-		{src}
-		{alt}
-		height="{size.height}px"
-		width="{size.width}px"
-		style:height="{size.height}px"
-		style:width="{size.width}px"
-		on:click
-	/>
-{:else}
-	<div style:height="{size.height}px" style:width="{size.width}px" />
-{/if}
+<div class="w-full flex place-content-center" style:height="{size.height}px">
+	{#if show}
+		<img
+			class="rounded-md object-contain"
+			{src}
+			{alt}
+			height="{size.height}px"
+			width="{size.width}px"
+			style:height="{size.height}px"
+			style:width="{size.width}px"
+			on:click
+		/>
+	{:else}
+		<div style:height="{size.height}px" style:width="{size.width}px" />
+	{/if}
+</div>

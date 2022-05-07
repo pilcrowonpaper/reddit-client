@@ -31,27 +31,29 @@
 	}
 </script>
 
-{#if show}
-	<video
-		class="rounded-md object-contain"
-		{alt}
-		height="{size.height}px"
-		width="{size.width}px"
-		style:height="{size.height}px"
-		style:width="{size.width}px"
-		on:click
-		{controls}
-		{muted}
-		{autoplay}
-		{loop}
-		on:click|stopPropagation={() => {}}
-		bind:this={videoElement}
-	>
-		<source src={convertGif(src)} />
-		{#if fallback}
-			<source src={fallback} />
-		{/if}
-	</video>
-{:else}
-	<div style:height="{size.height}px" style:width="{size.width}px" />
-{/if}
+<div class="w-full flex place-content-center" style:height="{size.height}px">
+	{#if show}
+		<video
+			class="rounded-md object-contain"
+			{alt}
+			height="{size.height}px"
+			width="{size.width}px"
+			style:height="{size.height}px"
+			style:width="{size.width}px"
+			on:click
+			{controls}
+			{muted}
+			{autoplay}
+			{loop}
+			on:click|stopPropagation={() => {}}
+			bind:this={videoElement}
+		>
+			<source src={convertGif(src)} />
+			{#if fallback}
+				<source src={fallback} />
+			{/if}
+		</video>
+	{:else}
+		<div style:height="{size.height}px" style:width="{size.width}px" />
+	{/if}
+</div>
