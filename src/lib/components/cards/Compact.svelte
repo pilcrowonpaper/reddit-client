@@ -9,6 +9,7 @@
 
 	export let post: Post;
 	export let show: string[];
+	export let show_nsfw = false
 
 	const dispatch = createEventDispatcher();
 
@@ -27,7 +28,7 @@
 			>
 				<p class="text-sm text-gray-400">text</p>
 			</div>
-		{:else if post.data.thumbnail === 'nsfw'}
+		{:else if (post.data.thumbnail === 'nsfw' || post.data.over_18) && !show_nsfw}
 			<div
 				class="h-16 w-16 shrink-0 rounded-md bg-gray-200 flex place-content-center place-items-center"
 			>

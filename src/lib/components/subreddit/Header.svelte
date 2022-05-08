@@ -46,9 +46,12 @@
 				<div class="flex gap-4  font-medium">
 					<p>{about.data.subscribers.toLocaleString()} members</p>
 					<p>{about.data.accounts_active.toLocaleString()} online</p>
+					{#if about.data.over18}
+					<p class="text-red-400">nsfw</p>
+					{/if}
 				</div>
 				<div>
-					<p>{@html about.data.public_description_html || ''}</p>
+					<p id="md">{@html about.data.public_description_html || ''}</p>
 					<a
 						class="mt-4 text-sm text-blue-500 hover:underline"
 						href="/r/{about.data.display_name}/about">rules</a

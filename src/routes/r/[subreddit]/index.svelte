@@ -87,6 +87,8 @@
 	onMount(() => {
 		getNextPostBatch(0);
 	});
+
+	//over18
 </script>
 
 <svelte:head>
@@ -117,6 +119,7 @@
 					}}
 					on:open={openPost}
 					show={['user']}
+					show_nsfw={about.data.over18}
 				/>
 			{:else if card === 'large'}
 				<Large
@@ -127,6 +130,7 @@
 					on:open={openPost}
 					show={['user']}
 					id={i}
+					show_nsfw={about.data.over18}
 				/>
 			{/if}
 		{/each}

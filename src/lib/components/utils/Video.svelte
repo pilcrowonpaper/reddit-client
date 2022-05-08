@@ -16,6 +16,7 @@
 	export let autoplay = false;
 	export let show = false;
 	export let play = false;
+	export let censor = false
 
 	let size: Image_Size;
 	$: size = calculateImageSize(width, height, max_width, max_height);
@@ -23,37 +24,45 @@
 	let videoElement: HTMLVideoElement;
 
 	$: if (videoElement) {
-		if (play) {
+		if (play && !censor) {
 			videoElement.play();
 		} else {
 			videoElement.pause();
 		}
 	}
+
+	const handleVideoClick = (e: Event) => {
+		if (!censor) return
+		censor = false
+	}
 </script>
 
-<div class="w-full flex place-content-center" style:height="{size.height}px">
-	{#if show}
-		<video
-			class="rounded-md object-contain"
-			{alt}
-			height="{size.height}px"
-			width="{size.width}px"
-			style:height="{size.height}px"
-			style:width="{size.width}px"
-			on:click
-			{controls}
-			{muted}
-			{autoplay}
-			{loop}
-			on:click|stopPropagation={() => {}}
-			bind:this={videoElement}
-		>
-			<source src={convertGif(src)} />
-			{#if fallback}
-				<source src={fallback} />
-			{/if}
-		</video>
-	{:else}
-		<div style:height="{size.height}px" style:width="{size.width}px" />
-	{/if}
+<div class="flex w-full place-content-center" style:height="{size.height}px">
+	<div class="h-full overflow-hidden rounded-md" style:width="{size.width}px">
+		{#if show}
+			<video
+				class="rounded-md object-contain"
+				{alt}
+				height="{size.height}px"
+				width="{size.width}px"
+				style:height="{size.height}px"
+				style:width="{size.width}px"
+				on:click
+				{controls}
+				{muted}
+				{autoplay}
+				{loop}
+				on:click|stopPropagation={handleVideoClick}
+				bind:this={videoElement}
+				class:blur-xl={censor}
+			>
+				<source src={convertGif(src)} />
+				{#if fallback}
+					<source src={fallback} />
+				{/if}
+			</video>
+		{:else}
+			<div style:height="{size.height}px" style:width="{size.width}px" />
+		{/if}
+	</div>
 </div>
