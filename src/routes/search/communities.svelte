@@ -44,7 +44,7 @@
 <div class="mt-2 flex flex-col divide-y">
 	{#each communities as community, i}
 		<div
-			class="flex cursor-pointer gap-x-4 py-2"
+			class="flex cursor-pointer gap-x-4 py-2 group"
 			use:inViewport
 			on:display={() => {
 				updateLatestPostInView(i);
@@ -63,7 +63,7 @@
 				</div>
 			{/if}
 			<div>
-				<p class="text-sm font-medium">{community.data.display_name}</p>
+				<p class="text-sm font-medium group-hover:text-blue-500">{community.data.display_name}</p>
 				{#if community.data.subscribers}
 					<p class="text-xs font-medium">
 						{community.data.subscribers.toLocaleString()} subscribers

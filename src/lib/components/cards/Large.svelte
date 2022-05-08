@@ -5,14 +5,15 @@
 	import { inViewport } from '$lib/utils/actions';
 	import { createEventDispatcher } from 'svelte';
 	import postsToLoad, { newPostInView, newPostOutsideView } from "$lib/stores/viewport"
+	import { validateGif, convertGif } from '$lib/utils/media';
+	import selected_post from '$lib/stores/post';;
 
-	import type { Post } from '$lib/types/reddit';
 	import Slideshow from '../utils/Slideshow.svelte';
 	import Image from '$lib/components/utils/Image.svelte';
-	import { validateGif, convertGif } from '$lib/utils/media';
 	import Video from '../utils/Video.svelte';
 	import Iframe from '$lib/components/utils/Iframe.svelte';
-	import selected_post from '$lib/stores/post';;
+	
+	import type { Post } from '$lib/types/reddit';
 
 	export let post: Post;
 	export let show: string[];
@@ -51,7 +52,7 @@
 <svelte:window bind:innerHeight={inner_height} />
 
 <div
-	class="cursor-pointer py-4"
+	class="cursor-pointer py-4 group"
 	on:click={openPost}
 	use:inViewport
 	on:display={onDisplayHandle}
@@ -60,7 +61,7 @@
 	<div class="flex grow flex-col gap-4 overflow-hidden">
 		<div class="flex flex-col gap-2">
 			<div>
-				<h2 class="break-words text-lg font-medium leading-tight md:text-xl md:leading-tight">
+				<h2 class="break-words text-lg font-medium leading-tight md:text-xl md:leading-tight group-hover:text-blue-500">
 					{post.data.title}
 					{#if post.data.link_flair_text}
 						<span
