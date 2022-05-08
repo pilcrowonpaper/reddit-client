@@ -57,6 +57,7 @@
 						width={post.data.preview.images[0].source.width}
 						height={post.data.preview.images[0].source.height}
 						{show}
+						censor={post.data.over_18}
 					/>
 				{:else if post.data.post_hint === 'rich:video'}
 					<Iframe
@@ -67,6 +68,7 @@
 						height={post.data.media_embed.height}
 						title={post.data.title}
 						{show}
+						censor={post.data.over_18}
 					/>
 				{:else if post.data.domain === 'v.redd.it'}
 					<Video
@@ -79,6 +81,7 @@
 						height={post.data.media.reddit_video.height}
 						autoplay={true}
 						{show}
+						censor={post.data.over_18}
 					/>
 				{:else if post.data.post_hint === 'link' && validateGif(post.data.url)}
 					<Video
@@ -91,6 +94,7 @@
 						autoplay={true}
 						loop={true}
 						{show}
+						censor={post.data.over_18}
 					/>
 				{:else if post.data.is_self}
 					{#if post.data.selftext_html}

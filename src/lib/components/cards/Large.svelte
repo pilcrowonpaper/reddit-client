@@ -18,6 +18,7 @@
 	export let post: Post;
 	export let show: string[];
 	export let id : number
+	export let show_nsfw = false
 
 	const dispatch = createEventDispatcher();
 
@@ -47,6 +48,8 @@
 	let max_width: number;
 
 	$:show_media = $postsToLoad.includes(id)
+
+	let censor = (post.data.over_18 && !show_nsfw) || post.data.spoiler
 </script>
 
 <svelte:window bind:innerHeight={inner_height} />
@@ -90,6 +93,12 @@
 						>
 					{/if}
 					<p>{formatTime(new Date().getTime() - post.data.created_utc * 1000)} ago</p>
+					{#if post.data.over_18}
+					<p class="text-red-400 text-xs">nsfw</p>
+					{/if}
+					{#if post.data.spoiler}
+					<p class="text-gray-400 text-xs">spoiler</p>
+					{/if}
 				</div>
 			</div>
 		</div>
@@ -104,6 +113,7 @@
 						width={post.data.preview.images[0].source.width}
 						height={post.data.preview.images[0].source.height}
 						show={show_media && !$selected_post}
+						{censor}
 					/>
 				{:else if post.data.post_hint === 'rich:video'}
 					<Iframe
@@ -114,6 +124,7 @@
 						height={post.data.media_embed.height}
 						title={post.data.title}
 						show={show_media && !$selected_post}
+						{censor}
 					/>
 				{:else if post.data.domain === 'v.redd.it' && post.data.media}
 					<Video
@@ -127,6 +138,7 @@
 						show={show_media && !$selected_post}
 						autoplay={true}
 						play={insideViewport}
+						censor={post.data.over_18 && !show_nsfw}
 					/>
 				{:else if post.data.post_hint === 'link' && validateGif(post.data.url)}
 					<Video
@@ -140,6 +152,7 @@
 						loop={true}
 						show={show_media && !$selected_post}
 						play={insideViewport}
+						{censor}
 					/>
 				{:else if post.data.is_self}
 					{#if post.data.selftext_html}

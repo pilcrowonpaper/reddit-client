@@ -10,25 +10,36 @@
 	export let max_width: number;
 	export let alt = '';
 	export let show = false;
+	export let censor = false;
 
 	let size: Image_Size;
 
 	$: size = calculateImageSize(width, height, max_width, max_height);
+
+	const handleImgClick = (e: Event) => {
+		if (!censor) return;
+		e.stopPropagation();
+		censor = false;
+	};
 </script>
 
-<div class="w-full flex place-content-center" style:height="{size.height}px">
-	{#if show}
-		<img
-			class="rounded-md object-contain"
-			{src}
-			{alt}
-			height="{size.height}px"
-			width="{size.width}px"
-			style:height="{size.height}px"
-			style:width="{size.width}px"
-			on:click
-		/>
-	{:else}
-		<div style:height="{size.height}px" style:width="{size.width}px" />
-	{/if}
+<div class="flex w-full place-content-center" style:height="{size.height}px">
+	<div class="h-full overflow-hidden rounded-md" style:width="{size.width}px">
+		{#if show}
+			<img
+				class="rounded-md object-contain"
+				{src}
+				{alt}
+				height="{size.height}px"
+				width="{size.width}px"
+				style:height="{size.height}px"
+				style:width="{size.width}px"
+				on:click
+				class:blur-xl={censor}
+				on:click={handleImgClick}
+			/>
+		{:else}
+			<div style:height="{size.height}px" style:width="{size.width}px" />
+		{/if}
+	</div>
 </div>
