@@ -17,6 +17,8 @@ arctic-reddit.vercel.app
 - [ ] (Un)Subscribe to subreddits
 - [ ] Better search
 
+[Milestone](https://github.com/pilcrowOnPaper/arctic/issues?q=is%3Aopen+is%3Aissue+milestone%3A1.0)
+
 ### 1.X
 
 - Custom filter
