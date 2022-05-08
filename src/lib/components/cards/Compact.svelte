@@ -3,7 +3,6 @@
 
 	import { removeEmoji } from '$lib/utils/format';
 	import { inViewport } from '$lib/utils/actions';
-	import { default as postsInView, newPostInView, newPostOutsideView } from "$lib/stores/viewport"
 	import { createEventDispatcher } from 'svelte';
 
 	import type { Post } from '$lib/types/reddit';
@@ -20,7 +19,7 @@
 	};
 </script>
 
-<div class="cursor-pointer py-4" use:inViewport on:display on:click={openPost}>
+<div class="cursor-pointer py-4 group" use:inViewport on:display on:click={openPost}>
 	<div class="flex gap-x-2">
 		{#if post.data.thumbnail === 'self' || post.data.selftext}
 			<div
@@ -54,7 +53,7 @@
 			/>
 		{/if}
 		<div class="grow">
-			<h2 class="semibold break-long-words text-sm leading-tight md:text-base md:leading-tight">
+			<h2 class="semibold break-long-words text-sm leading-tight md:text-base md:leading-tight group-hover:text-blue-500">
 				{post.data.title}
 				{#if post.data.link_flair_text}
 					<span

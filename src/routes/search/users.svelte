@@ -44,7 +44,7 @@
 <div class="mt-2 flex flex-col divide-y">
 	{#each users as user, i}
 		<div
-			class="flex gap-x-4 py-2"
+			class="flex gap-x-4 py-2 group"
 			use:inViewport
 			on:display={() => {
 				updateLatestPostInView(i);
@@ -66,7 +66,7 @@
 			{/if}
 
 			<div>
-				<p class="text-sm font-medium">{user.data.name}</p>
+				<p class="text-sm font-medium group-hover:text-blue-500">{user.data.name}</p>
 				{#if user.data.subreddit}
 					<p class="text-xs">{user.data.subreddit.public_description}</p>
 				{/if}

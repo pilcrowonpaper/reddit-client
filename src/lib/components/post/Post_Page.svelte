@@ -97,7 +97,7 @@
 <svelte:window bind:innerWidth />
 <div class="mt-8 w-full">
 	<div class="h-full w-full">
-		<div class="mb-1">
+		<div class="mb-1 rounded-full hover:bg-gray-100 w-fit">
 			<Back_Arrow
 				size={6}
 				on:click={() => {
