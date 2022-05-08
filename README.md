@@ -1,6 +1,6 @@
 # arctic
 
-arctic, a minimalistic, open-source, mobile-friendly Reddi client
+arctic, a minimalistic, open-source, mobile-friendly Reddit client
 
 arctic-reddit.vercel.app
 
