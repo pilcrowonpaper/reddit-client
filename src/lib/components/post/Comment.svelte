@@ -1,8 +1,11 @@
 <script lang="ts">
-	import type { Comment } from '$lib/types/reddit';
 	import Comment_Block from '$lib/components/post/Comment.svelte';
 	import Horizontal from '../voting/comment/Horizontal.svelte';
+
 	import { createEventDispatcher } from 'svelte';
+	import { formatTime } from '$lib/utils/format';
+
+	import type { Comment } from '$lib/types/reddit';
 
 	const dispatch = createEventDispatcher();
 
@@ -37,6 +40,7 @@
 		{#if op === comment.data.author}
 			<p class="text-xs font-semibold text-blue-500">OP</p>
 		{/if}
+		<p class="text-xs text-gray-400">{formatTime(new Date().getTime() - comment.data.created_utc * 1000)} ago</p>
 	</div>
 	<div class="flex gap-x-2">
 		{#if collapsable}
