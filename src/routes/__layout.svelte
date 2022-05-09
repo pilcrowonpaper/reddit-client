@@ -4,6 +4,7 @@
 	import PostPage from '$lib/components/post/Post_Page.svelte';
 	import selected_post from '$lib/stores/post';
 	import type { Post } from '$lib/types/reddit';
+import { onMount } from 'svelte';
 
 	import '../app.postcss';
 
@@ -13,7 +14,7 @@
 	const handleInput = (e: KeyboardEvent) => {
 		if (e.keyCode !== 13) return;
 		if (!search_text) return;
-		window.location.href = `/search?q=${search_text}`
+		window.location.href = `/search?q=${search_text}`;
 	};
 
 	const handleWindowInput = (e: KeyboardEvent) => {
@@ -39,8 +40,20 @@
 	$: setNewUrl($selected_post);
 
 	afterNavigate(() => {
-		selected_post.set(null)
+		selected_post.set(null);
+	});
+
+	let header_height : number
+	let inner_height : number
+	let body_element : HTMLBodyElement
+
+	onMount(() => {
+		body_element = document.body as HTMLBodyElement
 	})
+
+	$:if (body_element && $selected_post) {
+		body_element.style.overflow = "hidden"
+	}
 </script>
 
 <svelte:head>
@@ -52,12 +65,11 @@
 	/>
 </svelte:head>
 
-<svelte:window on:keydown={handleWindowInput} />
+<svelte:window on:keydown={handleWindowInput} bind:innerHeight={inner_height}/>
+<svelte:body/>
 
-<div class="flex h-screen flex-col">
-	<div
-		class="z-50 flex w-full place-content-between place-items-center gap-x-4 border-b px-4 py-2 sm:px-8 md:px-16 lg:px-24"
-	>
+<div class="sticky top-0 z-50 border-b bg-white px-4 py-2 sm:px-8 md:px-16 lg:px-24" bind:clientHeight={header_height}>
+	<div class="mx-auto flex w-full max-w-5xl place-content-between place-items-center gap-x-4">
 		<button
 			class="text-xl font-medium"
 			on:click={() => {
@@ -72,20 +84,26 @@
 			bind:this={search_bar}
 		/>
 	</div>
-	<div class="relative grow overflow-scroll">
-		{#if $selected_post}
-			<div
-				class="absolute z-40 h-full w-full overflow-auto bg-white px-4 py-3 sm:px-8 md:px-16 lg:px-24"
-			>
-				<PostPage
-					post={$selected_post}
-					on:close={() => {
-						selected_post.set(null);
-					}}
-				/>
-				<div class="h-12 w-full"/>
-			</div>
-		{/if}
+</div>
+{#if $selected_post}
+	<div
+		class="fixed z-40 w-full overflow-scroll bg-white px-4 py-3 sm:px-8 md:px-16 lg:px-24"
+		style:height="{inner_height - header_height}px"
+		on:scroll={e => e.stopImmediatePropagation}
+	>
+		<div class="mx-auto w-full max-w-5xl mb-12">
+			<PostPage
+				post={$selected_post}
+				on:close={() => {
+					selected_post.set(null);
+					body_element.style.overflow = ""
+				}}
+			/>
+		</div>
+	</div>
+{/if}
+<div class=" px-4 py-3 sm:px-8 md:px-16 lg:px-24">
+	<div class="mx-auto max-w-5xl mb-12">
 		<slot />
 	</div>
 </div>

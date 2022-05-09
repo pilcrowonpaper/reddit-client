@@ -25,6 +25,4 @@
 	selected_post.set(null)
 </script>
 
-<div class="px-4 py-3 sm:px-8 md:px-16 lg:px-24 pb-12">
-	<Post_Page {post} {comments} {about} {filter} {id} on:close={returnHome} />
-</div>
+<Post_Page {post} {comments} {about} {filter} {id} on:close={returnHome} />

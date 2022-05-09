@@ -86,45 +86,39 @@
 	{/if}
 </svelte:head>
 
-<div
-	class="h-full overflow-auto px-4 py-3 sm:px-8 md:px-16 lg:px-24"
-	class:overflow-hidden={!!$selected_post}
-	class:overflow-auto={!$selected_post}
->
-	<Header user={about} />
-	<div class="mt-12">
-		<div class="flex w-full text-sm">
-			<a href="/u/{$page.params.user}/posts" class="px-3 font-medium hover:opacity-70">Posts</a>
-			<a
-				href="/u/{$page.params.user}/comments"
-				class="border-b-2 border-blue-500 px-3 font-medium hover:opacity-70">Comments</a
-			>
-		</div>
-		<div class="w-full border-t" style:margin="-0.05rem" />
-		<div class="mt-2 flex place-content-between">
-			<Filter_Select {filter} on:select={handleFilter} />
-		</div>
+<Header user={about} />
+<div class="mt-12">
+	<div class="flex w-full text-sm">
+		<a href="/u/{$page.params.user}/posts" class="px-3 font-medium hover:opacity-70">Posts</a>
+		<a
+			href="/u/{$page.params.user}/comments"
+			class="border-b-2 border-blue-500 px-3 font-medium hover:opacity-70">Comments</a
+		>
 	</div>
-	<div class="mt-2 flex flex-col divide-y">
-		{#each comments as comment, i}
-			<div
-				class="cursor-pointer py-2"
-				on:click={() => {
-					goto(`/r/${comment.data.subreddit}/${comment.data.link_id.substring(3)}`);
-				}}
-				use:inViewport
-				on:display={() => {
-					updateLatestPostInView(i);
-				}}
-			>
-				<div class="mb-2 flex flex-wrap gap-x-2 text-xs font-medium">
-					<p>{comment.data.link_title}</p>
-					<p>r/{comment.data.subreddit}</p>
-				</div>
-				<div>
-					<Comment_Block {comment} op={comment.data.link_author} collapsable={false} />
-				</div>
+	<div class="w-full border-t" style:margin="-0.05rem" />
+	<div class="mt-2 flex place-content-between">
+		<Filter_Select {filter} on:select={handleFilter} />
+	</div>
+</div>
+<div class="mt-2 flex flex-col divide-y">
+	{#each comments as comment, i}
+		<div
+			class="cursor-pointer py-2"
+			on:click={() => {
+				goto(`/r/${comment.data.subreddit}/${comment.data.link_id.substring(3)}`);
+			}}
+			use:inViewport
+			on:display={() => {
+				updateLatestPostInView(i);
+			}}
+		>
+			<div class="mb-2 flex flex-wrap gap-x-2 text-xs font-medium">
+				<p>{comment.data.link_title}</p>
+				<p>r/{comment.data.subreddit}</p>
 			</div>
-		{/each}
-	</div>
+			<div>
+				<Comment_Block {comment} op={comment.data.link_author} collapsable={false} />
+			</div>
+		</div>
+	{/each}
 </div>
