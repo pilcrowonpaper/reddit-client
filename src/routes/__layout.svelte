@@ -68,46 +68,43 @@ import { onMount } from 'svelte';
 <svelte:window on:keydown={handleWindowInput} bind:innerHeight={inner_height}/>
 <svelte:body/>
 
-<div>
-	<div class="sticky top-0 z-50 border-b bg-white px-4 py-2 sm:px-8 md:px-16 lg:px-24" bind:clientHeight={header_height}>
-		<div class="mx-auto flex w-full max-w-5xl place-content-between place-items-center gap-x-4">
-			<button
-				class="text-xl font-medium"
-				on:click={() => {
-					goto('/');
-				}}>arctic</button
-			>
-			<input
-				class="w-full max-w-sm rounded-md bg-gray-100 px-4 py-1.5 text-sm outline-none"
-				placeholder="search"
-				bind:value={search_text}
-				on:keydown={handleInput}
-				bind:this={search_bar}
+<div class="sticky top-0 z-50 border-b bg-white px-4 py-2 sm:px-8 md:px-16 lg:px-24" bind:clientHeight={header_height}>
+	<div class="mx-auto flex w-full max-w-5xl place-content-between place-items-center gap-x-4">
+		<button
+			class="text-xl font-medium"
+			on:click={() => {
+				goto('/');
+			}}>arctic</button
+		>
+		<input
+			class="w-full max-w-sm rounded-md bg-gray-100 px-4 py-1.5 text-sm outline-none"
+			placeholder="search"
+			bind:value={search_text}
+			on:keydown={handleInput}
+			bind:this={search_bar}
+		/>
+	</div>
+</div>
+{#if $selected_post}
+	<div
+		class="fixed z-40 w-full overflow-scroll bg-white px-4 py-3 sm:px-8 md:px-16 lg:px-24"
+		style:height="{inner_height - header_height}px"
+		on:scroll={e => e.stopImmediatePropagation}
+	>
+		<div class="mx-auto w-full max-w-5xl mb-12">
+			<PostPage
+				post={$selected_post}
+				on:close={() => {
+					selected_post.set(null);
+					body_element.style.overflow = ""
+				}}
 			/>
 		</div>
 	</div>
-	{#if $selected_post}
-		<div
-			class="fixed z-40 w-full overflow-scroll bg-white px-4 py-3 sm:px-8 md:px-16 lg:px-24"
-			style:height="{inner_height - header_height}px"
-			on:scroll={e => e.stopImmediatePropagation}
-		>
-			<div class="mx-auto w-full max-w-5xl mb-12">
-				<PostPage
-					post={$selected_post}
-					on:close={() => {
-						selected_post.set(null);
-						body_element.style.overflow = ""
-					}}
-				/>
-			</div>
-		</div>
-	{/if}
-
-	<div class=" px-4 py-3 sm:px-8 md:px-16 lg:px-24">
-		<div class="mx-auto max-w-5xl mb-12">
-			<slot />
-		</div>
+{/if}
+<div class=" px-4 py-3 sm:px-8 md:px-16 lg:px-24">
+	<div class="mx-auto max-w-5xl mb-12">
+		<slot />
 	</div>
 </div>
 
