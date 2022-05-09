@@ -95,38 +95,32 @@
 	{/if}
 </svelte:head>
 
-<div
-	class="h-full overflow-auto px-4 py-3 sm:px-8 md:px-16 lg:px-24"
-	class:overflow-hidden={!!$selected_post}
-	class:overflow-auto={!$selected_post}
->
-	<Header />
-	<div class="mt-12 flex place-content-between">
-		<Filter_Select {filter} on:select={handleFilter} />
-		<Cards bind:type={card} on:select={handleCardTypeChange} />
-	</div>
-	<div class="flex flex-col divide-y">
-		{#each posts as post, i}
-			{#if card === 'compact'}
-				<Compact
-					{post}
-					on:display={() => {
-						updateLatestPostInView(i);
-					}}
-					on:open={openPost}
-					show={['user', 'subreddit']}
-				/>
-			{:else if card === 'large'}
-				<Large
-					{post}
-					on:display={() => {
-						updateLatestPostInView(i);
-					}}
-					on:open={openPost}
-					show={['user', 'subreddit']}
-					id={i}
-				/>
-			{/if}
-		{/each}
-	</div>
+<Header />
+<div class="mt-12 flex place-content-between">
+	<Filter_Select {filter} on:select={handleFilter} />
+	<Cards bind:type={card} on:select={handleCardTypeChange} />
+</div>
+<div class="flex flex-col divide-y">
+	{#each posts as post, i}
+		{#if card === 'compact'}
+			<Compact
+				{post}
+				on:display={() => {
+					updateLatestPostInView(i);
+				}}
+				on:open={openPost}
+				show={['user', 'subreddit']}
+			/>
+		{:else if card === 'large'}
+			<Large
+				{post}
+				on:display={() => {
+					updateLatestPostInView(i);
+				}}
+				on:open={openPost}
+				show={['user', 'subreddit']}
+				id={i}
+			/>
+		{/if}
+	{/each}
 </div>

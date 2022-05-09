@@ -99,11 +99,7 @@
 	{/if}
 </svelte:head>
 
-<div
-	class="h-full overflow-auto px-4 py-3 sm:px-8 md:px-16 lg:px-24"
-	class:overflow-hidden={!!$selected_post}
-	class:overflow-auto={!$selected_post}
->
+
 	<Header {about} />
 	<div class="mt-12 flex place-content-between">
 		<Filter_Select {filter} on:select={handleFilter} />
@@ -135,4 +131,3 @@
 			{/if}
 		{/each}
 	</div>
-</div>
