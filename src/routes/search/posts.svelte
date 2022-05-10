@@ -12,6 +12,7 @@
 	import Cards from '$lib/components/subreddit/Cards.svelte';
 	import Large from '$lib/components/cards/Large.svelte';
 	import Compact from '$lib/components/cards/Compact.svelte';
+	import Loading from "$lib/components/utils/Loading.svelte"
 
 	import type { Listing, Post } from '$lib/types/reddit';
 	import type { Filter } from '$lib/types/filter';
@@ -25,6 +26,7 @@
 	let latest_post_in_view: number = 0;
 	let after_id = initial_listing.data.after;
 	let batch_count = initial_listing.data.dist;
+	let loading = false;
 
 	let card = 'large';
 
@@ -40,11 +42,12 @@
 			if ((id + 1) % batch_count !== 0) return;
 			if (!after_id) return;
 		}
+		loading = true;
 		const initial_sort = filter.sort ? filter.sort.valueOf() : null;
 		const initial_time = filter.time ? filter.time.valueOf() : null;
 		const result = await getSearchListing(query_text, 'link', subreddit, after_id, filter);
-		if (!result.success) return;
-		if (initial_sort !== filter.sort || initial_time !== filter.time) return;
+		if (!result.success) return (loading = false);
+		if (initial_sort !== filter.sort || initial_time !== filter.time) return (loading = false);
 		const listing = result.data;
 		const new_posts = listing.data.children as Post[];
 		posts = [...posts, ...new_posts];
@@ -62,6 +65,7 @@
 	};
 
 	const getNewPosts = async (update_history: boolean) => {
+		loading = true;
 		posts = [];
 		const new_url = $page.url.origin + getSearchPathname(query, 'link', filter);
 		if (update_history) {
@@ -70,13 +74,14 @@
 		const initial_sort = filter.sort.valueOf();
 		const initial_time = filter.time.valueOf();
 		let result = await getSearchListing(query_text, 'link', subreddit, after_id, filter);
-		if (initial_sort !== filter.sort || initial_time !== filter.time) return;
-		if (!result.success) return;
+		if (initial_sort !== filter.sort || initial_time !== filter.time) return (loading = false);
+		if (!result.success) return (loading = false);
 		const listing = result.data;
 		posts = listing.data.children as Post[];
 		latest_post_in_view = 0;
 		after_id = listing.data.after;
 		batch_count = listing.data.dist;
+		loading = false;
 	};
 
 	const openPost = (e: CustomEvent) => {
@@ -115,4 +120,9 @@
 			/>
 		{/if}
 	{/each}
+	{#if loading}
+		<div class="flex w-full place-content-center py-12">
+			<Loading />
+		</div>
+	{/if}
 </div>

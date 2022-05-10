@@ -9,6 +9,7 @@
 	import Header from '$lib/components/user/Header.svelte';
 	import Filter_Select from '$lib/components/subreddit/Filter.svelte';
 	import Comment_Block from '$lib/components/post/Comment.svelte';
+	import Loading from '$lib/components/utils/Loading.svelte';
 
 	import type { User, Listing, Comment } from '$lib/types/reddit';
 	import type { Filter } from '$lib/types/filter';
@@ -24,6 +25,7 @@
 	let latest_post_in_view: number = 0;
 	let after_id = initial_listing.data.after;
 	let batch_count = initial_listing.data.dist;
+	let loading = false;
 	const user = $page.params.user;
 
 	const updateLatestPostInView = (id: number) => {
@@ -38,16 +40,18 @@
 			if ((id + 1) % batch_count !== 0) return;
 			if (!after_id) return;
 		}
+		loading = true;
 		const initial_sort = filter.sort ? filter.sort.valueOf() : null;
 		const initial_time = filter.time ? filter.time.valueOf() : null;
 		const result = await getUserListing(user, 'comments', after_id, filter);
-		if (!result.success) return;
-		if (initial_sort !== filter.sort || initial_time !== filter.time) return;
+		if (!result.success) return (loading = false);
+		if (initial_sort !== filter.sort || initial_time !== filter.time) return (loading = false);
 		const listing = result.data;
 		const new_comments = listing.data.children as Comment[];
 		comments = [...comments, ...new_comments];
 		after_id = listing.data.after;
 		batch_count = new_comments.length;
+		loading = false;
 	};
 
 	const handleFilter = (e: CustomEvent) => {
@@ -56,6 +60,7 @@
 	};
 
 	const getNewComments = async (update_history: boolean) => {
+		loading = true;
 		comments = [];
 		const new_url = $page.url.origin + getUserPathname(user, 'comments', filter);
 		if (update_history) {
@@ -64,13 +69,14 @@
 		const initial_sort = filter.sort.valueOf();
 		const initial_time = filter.time.valueOf();
 		let result = await getUserListing(user, 'comments', null, filter);
-		if (initial_sort !== filter.sort || initial_time !== filter.time) return;
-		if (!result.success) return;
+		if (initial_sort !== filter.sort || initial_time !== filter.time) return (loading = false);
+		if (!result.success) return (loading = false);
 		const listing = result.data as Listing<Comment>;
 		comments = listing.data.children as Comment[];
 		latest_post_in_view = 0;
 		after_id = listing.data.after;
 		batch_count = listing.data.dist;
+		loading = false;
 	};
 
 	onMount(() => {
@@ -121,4 +127,9 @@
 			</div>
 		</div>
 	{/each}
+	{#if loading}
+		<div class="flex w-full place-content-center py-12">
+			<Loading />
+		</div>
+	{/if}
 </div>

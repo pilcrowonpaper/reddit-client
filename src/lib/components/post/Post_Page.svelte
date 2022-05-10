@@ -4,13 +4,15 @@
 	import Sort from '$lib/components/post/Sort.svelte';
 	import Header from '$lib/components/subreddit/Header.svelte';
 	import Back_Arrow from '$lib/components/icons/Back_Arrow.svelte';
+	import Loading from '$lib/components/utils/Loading.svelte';
 
 	import type { About, Post, Comment } from '$lib/types/reddit';
 	import type { Filter } from '$lib/types/filter';
 
 	import { getCommentContents, getCommentsListing } from '$lib/utils/reddit/comments';
 	import { createEventDispatcher } from 'svelte';
-import about_data from '$lib/stores/about';
+	import about_data from '$lib/stores/about';
+
 	const dispatch = createEventDispatcher();
 
 	export let post: Post;
@@ -21,6 +23,7 @@ import about_data from '$lib/stores/about';
 	};
 	export let id: string = null;
 	let next_comments: Comment[] = [];
+	let loading = false;
 
 	const batch_count = 50;
 
@@ -30,13 +33,15 @@ import about_data from '$lib/stores/about';
 	};
 
 	const getNewComments = async (subreddit: string, post_id: string, comment_id?: string) => {
+		loading = true;
 		comments = [];
 		const initial_sort = filter.sort.valueOf();
 		let result = await getCommentsListing(subreddit, post_id, filter, comment_id);
-		if (initial_sort !== filter.sort) return;
-		if (!result.success) return;
+		if (initial_sort !== filter.sort) return (loading = false);
+		if (!result.success) return (loading = false);
 		const comment_listing = result.data.comment;
 		comments = comment_listing.data.children;
+		loading = false;
 	};
 
 	const handleContinueThread = async (e: CustomEvent) => {
@@ -60,6 +65,7 @@ import about_data from '$lib/stores/about';
 	let next_children_start = 0;
 
 	const getNextCommentBatch = async () => {
+		loading = true;
 		const next_children = more_children.slice(
 			next_children_start,
 			next_children_start + batch_count
@@ -69,9 +75,10 @@ import about_data from '$lib/stores/about';
 			post.data.id,
 			next_children
 		);
-		if (!comment_result.success) return;
+		if (!comment_result.success) return (loading = false);
 		next_children_start += comment_result.data.length;
 		next_comments = [...next_comments, ...comment_result.data];
+		loading = false;
 	};
 
 	$: depth_limit = handleCommentDepth(innerWidth);
@@ -98,7 +105,7 @@ import about_data from '$lib/stores/about';
 <svelte:window bind:innerWidth />
 <div class="mt-8 w-full">
 	<div class="h-full w-full">
-		<div class="mb-1 rounded-full hover:bg-gray-100 w-fit">
+		<div class="mb-1 w-fit rounded-full hover:bg-gray-100">
 			<Back_Arrow
 				size={6}
 				on:click={() => {
@@ -134,11 +141,16 @@ import about_data from '$lib/stores/about';
 						op={post.data.author}
 					/>
 				{/each}
-				{#if more_children.length > 0 && more_children.length - next_comments.length > 0}
+				{#if more_children.length > 0 && more_children.length - next_comments.length > 0 && !loading}
 					<button
 						class="cursor-pointer text-sm text-blue-500 hover:underline"
 						on:click={getNextCommentBatch}>show more</button
 					>
+				{/if}
+				{#if loading}
+					<div class="flex w-full place-content-center py-12">
+						<Loading />
+					</div>
 				{/if}
 			</div>
 		</div>
