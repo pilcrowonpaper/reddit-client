@@ -10,7 +10,12 @@ const config = {
 	kit: {
 		adapter: adapter({
 			edge: true
-		})
+		}),
+		vite: {
+            define: {
+                'process.env': process.env,
+            },
+        },
 	}
 };
 

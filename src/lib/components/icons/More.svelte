@@ -1,6 +1,5 @@
 <script lang="ts">
 	export let size: number;
-	let bg_color = 'text-gray-200';
 </script>
 
 <svg style:width="{size / 4}rem" style:height="{size / 4}rem" fill="#000000"

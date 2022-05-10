@@ -15,6 +15,7 @@
 	"devDependencies": {
 		"@sveltejs/adapter-vercel": "next",
 		"@sveltejs/kit": "next",
+		"@types/cookie": "^0.5.1",
 		"@typescript-eslint/eslint-plugin": "^5.10.1",
 		"@typescript-eslint/parser": "^5.10.1",
 		"autoprefixer": "^10.4.4",
@@ -36,6 +37,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"cookie": "^0.5.0",
 		"intersection-observer": "^0.12.0",
 		"ohmyfetch": "^0.4.16"
 	}
