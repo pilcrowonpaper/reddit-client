@@ -92,7 +92,7 @@
 							on:click|stopPropagation={() => {}}>u/{post.data.author}</a
 						>
 					{/if}
-					<p>{formatTime(new Date().getTime() - post.data.created_utc * 1000)} ago</p>
+					<p class="text-gray-400">{formatTime(new Date().getTime() - post.data.created_utc * 1000)} ago</p>
 					{#if post.data.over_18}
 					<p class="text-red-400 text-xs">nsfw</p>
 					{/if}

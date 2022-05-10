@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Horizontal from '$lib/components/voting/post/Horizontal.svelte';
 
-	import { removeEmoji } from '$lib/utils/format';
+	import { formatTime, removeEmoji } from '$lib/utils/format';
 	import { inViewport } from '$lib/utils/actions';
 	import { createEventDispatcher } from 'svelte';
 
@@ -9,7 +9,7 @@
 
 	export let post: Post;
 	export let show: string[];
-	export let show_nsfw = false
+	export let show_nsfw = false;
 
 	const dispatch = createEventDispatcher();
 
@@ -20,7 +20,7 @@
 	};
 </script>
 
-<div class="cursor-pointer py-4 group" use:inViewport on:display on:click={openPost}>
+<div class="group cursor-pointer py-4" use:inViewport on:display on:click={openPost}>
 	<div class="flex gap-x-2">
 		{#if post.data.thumbnail === 'self' || post.data.selftext}
 			<div
@@ -54,7 +54,9 @@
 			/>
 		{/if}
 		<div class="grow">
-			<h2 class="semibold break-long-words text-sm leading-tight md:text-base md:leading-tight group-hover:text-blue-500">
+			<h2
+				class="semibold break-long-words text-sm leading-tight group-hover:text-blue-500 md:text-base md:leading-tight"
+			>
 				{post.data.title}
 				{#if post.data.link_flair_text}
 					<span
@@ -67,7 +69,7 @@
 					</span>
 				{/if}
 			</h2>
-			<div class=" -mt-2 flex w-full flex-wrap place-items-center gap-x-1 whitespace-nowrap">
+			<div class="-mt-2 flex w-full flex-wrap place-items-center gap-x-2 whitespace-nowrap">
 				{#if show.includes('subreddit')}
 					<a
 						class="text-xs hover:underline"
@@ -82,18 +84,9 @@
 						on:click|stopPropagation={() => {}}>u/{post.data.author}</a
 					>
 				{/if}
-				{#if post.data.author_flair_text}
-					<div
-						class="w-fit rounded px-2 pt-0.5 font-medium leading-tight"
-						style:font-size="0.5rem"
-						style:background-color={post.data.author_flair_background_color}
-						class:bg-gray-200={!post.data.author_flair_background_color}
-						class:text-white={post.data.author_flair_text_color === 'light'}
-						class:text-black={post.data.author_flair_text_color === 'dark'}
-					>
-						{removeEmoji(post.data.author_flair_text)}
-					</div>
-				{/if}
+				<p class="text-xs text-gray-400">
+					{formatTime(new Date().getTime() - post.data.created_utc * 1000)} ago
+				</p>
 			</div>
 			<div class="mt-3 flex gap-x-4">
 				<Horizontal {post} />
