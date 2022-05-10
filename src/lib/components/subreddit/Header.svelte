@@ -28,7 +28,7 @@
 			<div
 				class="h-12 w-12 rounded-full bg-blue-500 flex place-items-center place-content-center text-white text-2xl font-semibold"
 			>
-				{subreddit.charAt(0).toLocaleLowerCase() || about.data.display_name.charAt(0).toLocaleLowerCase()}
+				{subreddit ? subreddit.charAt(0).toLocaleLowerCase() : about.data.display_name.charAt(0).toLocaleLowerCase()}
 			</div>
 		{/if}
 		<h1
