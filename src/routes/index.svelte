@@ -16,7 +16,7 @@
 	import type { Filter } from '$lib/types/filter';
 
 	import { getPostListing, getPostPathname } from '$lib/utils/reddit/home';
-	import { page } from '$app/stores';
+	import { page, session } from '$app/stores';
 	import selected_post from '$lib/stores/post';
 	import { onMount } from 'svelte';
 	import about_data from '$lib/stores/about';

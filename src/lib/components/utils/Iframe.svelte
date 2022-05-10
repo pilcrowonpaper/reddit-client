@@ -2,7 +2,6 @@
 	import type { Image_Size } from '$lib/types/format';
 
 	import { calculateImageSize } from '$lib/utils/media';
-import { onMount } from 'svelte';
 
 	export let src: string;
 	export let width: number;
@@ -18,7 +17,6 @@ import { onMount } from 'svelte';
 	$: size = calculateImageSize(width, height, max_width, max_height);
 
 	const handleVideoClick = () => {
-		console.log(1);
 		if (!censor) return;
 		censor = false;
 	};
@@ -26,9 +24,7 @@ import { onMount } from 'svelte';
 	let iframe : HTMLIFrameElement
 
 	$: if (iframe && show) {
-		console.log(0)
 		iframe.contentDocument.body.addEventListener("click", handleVideoClick)
-		console.log(iframe)
 	}
 </script>
 
