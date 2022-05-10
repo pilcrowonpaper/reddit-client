@@ -23,6 +23,7 @@ export const get: RequestHandler = async ({ url }) => {
 	console.log(response)
 	if (!response.ok || response.status !== 200) returnError(500, 'An unkown error occured');
 	const result = (await response.json()) as TokenRetrievalResponse;
+	console.log(result)
 	const access_token_cookie = cookie.serialize('access_token', result.access_token, {
 		httpOnly: true,
 		secure: !dev,
