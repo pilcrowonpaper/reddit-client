@@ -4,7 +4,7 @@ import { client_id, reddit_secret } from '$lib/utils/reddit/auth';
 import { getUser, getUserPrefs } from '$lib/utils/reddit/identity';
 import type { GetSession, Handle } from '@sveltejs/kit';
 import * as cookie from 'cookie';
-import { Buffer } from 'buffer/';
+import { Buffer } from 'buffer/index';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	let { access_token, refresh_token } = cookie.parse(event.request.headers.get('cookie') || '');
