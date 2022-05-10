@@ -4,6 +4,7 @@ import { returnError } from '$lib/utils/endpoints';
 import { client_id, reddit_secret, redirect_uri } from '$lib/utils/reddit/auth';
 import type { RequestHandler } from '@sveltejs/kit';
 import * as cookie from 'cookie';
+import { Buffer } from "buffer"
 
 export const get: RequestHandler = async ({ url }) => {
 	const code = url.searchParams.get('code');
