@@ -5,20 +5,20 @@ import { client_id, reddit_secret, redirect_uri } from '$lib/utils/reddit/auth';
 import type { RequestHandler } from '@sveltejs/kit';
 import * as cookie from 'cookie';
 import { Buffer } from 'buffer/';
-import FormData from 'form-data';
 
 export const get: RequestHandler = async ({ url }) => {
 	const code = url.searchParams.get('code');
 	if (!code) return returnError(400, 'Missing data');
-	const form = new FormData()
-	form.append("grant_type", 'authorization_code')
-	form.append("code", code)
-	form.append("redirect_uri", redirect_uri)
 	const response = await fetch('https://www.reddit.com/api/v1/access_token', {
 		method: 'POST',
-		body: form,
+		body: new URLSearchParams({
+			grant_type: 'authorization_code',
+			code,
+			redirect_uri
+		}),
 		headers: {
-			Authorization: `basic ${Buffer.from(`${client_id}:${reddit_secret}`).toString('base64')}`
+			"Content-Type": "application/x-www-form-urlencoded",
+			Authorization: `Basic ${Buffer.from(`${client_id}:${reddit_secret}`).toString('base64')}`
 		}
 	});
 	if (!response.ok || response.status !== 200) returnError(500, 'An unkown error occured');

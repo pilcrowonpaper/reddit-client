@@ -20,6 +20,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 				refresh_token
 			}),
 			headers: {
+				"Content-Type": "application/x-www-form-urlencoded",
 				Authorization: `Basic ${Buffer.from(`${client_id}:${reddit_secret}`).toString('base64')}`
 			}
 		});
