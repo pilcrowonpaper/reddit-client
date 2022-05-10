@@ -9,6 +9,8 @@
 	const card_values = ['large', 'compact'];
 
 	export let type = card_values[0];
+	export let align = "right"
+	export let size = "base"
 
 	const select_card = (e: CustomEvent) => {
 		if (type === e.detail.value) return;
@@ -19,6 +21,6 @@
 	};
 </script>
 
-<div class="text-sm sm:text-base">
-	<Select options={card_options} values={card_values} on:select={select_card} align="right"/>
+<div class="text-sm">
+	<Select options={card_options} values={card_values} on:select={select_card} {align} {size}/>
 </div>

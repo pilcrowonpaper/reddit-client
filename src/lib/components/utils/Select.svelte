@@ -4,6 +4,7 @@
 	export let id = 0;
 	export let accent: string = 'text-blue-500';
 	export let align = "left"
+	export let size = "base"
 
 	import Expand from '../icons/Expand.svelte';
 
@@ -28,7 +29,8 @@
 	on:outclick={() => {
 		toggle = 0;
 	}}
-	class="text-sm sm:text-base"
+	class:text-sm={size === "sm"}
+	class:text-base={size === "base"}
 >
 	<button
 		on:click={() => {

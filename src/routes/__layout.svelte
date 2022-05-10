@@ -4,6 +4,7 @@
 	import selected_post from '$lib/stores/post';
 	import { onMount } from 'svelte';
 	import { auth_url } from '$lib/utils/reddit/auth';
+	import { clickOutside } from "$lib/utils/actions"
 
 	import type { Post } from '$lib/types/reddit';
 
@@ -16,6 +17,7 @@
 	let search_text: string;
 	let search_bar: HTMLInputElement;
 	let search = false;
+	let profile_toggle = 0
 
 	const handleInput = (e: KeyboardEvent) => {
 		if (e.keyCode !== 13) return;
@@ -64,17 +66,17 @@
 	}
 
 	const openSearch = () => {
-		search = true
+		search = true;
 		body_element.style.overflow = 'hidden';
-	}
+	};
 
 	const closeSearch = () => {
-		search = false
+		search = false;
 		body_element.style.overflow = '';
-	}
+	};
 
 	$: if (search_bar) {
-		search_bar.focus()
+		search_bar.focus();
 	}
 
 	console.log($session);
@@ -104,26 +106,50 @@
 			}}>arctic</button
 		>
 		<div class="flex place-items-center gap-x-4">
-			<button
-				class="cursor-pointer rounded-md p-0.5 hover:bg-gray-200"
-				on:click={openSearch}
-			>
+			<button class="cursor-pointer rounded-md p-0.5 hover:bg-gray-200" on:click={openSearch}>
 				<Search size={6} />
 			</button>
 			{#if $session.exists}
-				{#if $session.arctic.icon_img}
-					<img
-						class="h-8 w-8 rounded-full object-cover"
-						src={$session.arctic.icon_img}
-						alt="user icon"
-					/>
-				{:else}
-					<div
-						class="h-8 w-8 flex-shrink-0 rounded-full bg-blue-500 flex place-items-center place-content-center text-white text-lg font-semibold"
-					>
-						{$session.user.name.charAt(0).toLocaleLowerCase()}
+				<div>
+					<div class="h-8 w-8 cursor-pointer rounded-full" on:click={() => {profile_toggle = 1}}>
+						{#if $session.arctic.icon_img}
+							<img
+								class="h-8 w-8 rounded-full object-cover"
+								src={$session.arctic.icon_img}
+								alt="user icon"
+							/>
+						{:else}
+							<div
+								class="h-8 w-8 flex-shrink-0 rounded-full bg-blue-500 flex place-items-center place-content-center text-white text-lg font-semibold"
+							>
+								{$session.user.name.charAt(0).toLocaleLowerCase()}
+							</div>
+						{/if}
 					</div>
-				{/if}
+					<div class="relative" use:clickOutside on:outclick={() => {profile_toggle = 0}}>
+						<div class="absolute right-0 mt-1 rounded bg-white py-1.5 shadow-md z-50" class:hidden={profile_toggle % 2 === 0}>
+							<p class="whitespace-nowrap px-4 text-sm font-medium">u/{$session.user.name}</p>
+							<ul class="mt-2 text-sm">
+								<li class="w-full cursor-pointer hover:bg-blue-500 hover:text-white">
+									<a href="/u/{$session.user.name}" class="flex w-full py-1 px-4">profile</a>
+								</li>
+								<li class="w-full cursor-pointer hover:bg-blue-500 hover:text-white">
+									<a href="/user/preferences" class="flex w-full whitespace-nowrap py-1 px-4"
+										>arctic preferences</a
+									>
+								</li>
+								<li class="w-full cursor-pointer hover:bg-blue-500 hover:text-white">
+									<button
+										class="h-full w-full py-1 px-4 text-left"
+										on:click={() => {
+											console.log(1);
+										}}>signout</button
+									>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
 			{:else}
 				<a class="cursor-pointer text-sm font-medium hover:text-blue-500" href={auth_url}>login</a>
 			{/if}
@@ -149,7 +175,7 @@
 		</div>
 	</div>
 	<div
-		class="fixed z-30 w-full px-4 py-3 sm:px-8 md:px-16 lg:px-24 bg-black opacity-10"
+		class="fixed z-30 w-full bg-black px-4 py-3 opacity-10 sm:px-8 md:px-16 lg:px-24"
 		style:height="{inner_height - header_height}px"
 	/>
 {/if}
