@@ -20,7 +20,8 @@ export const get: RequestHandler = async ({ url }) => {
 			Authorization: `Basic ${Buffer.from(`${client_id}:${reddit_secret}`).toString('base64')}`
 		}
 	});
-	if (!response.ok) returnError(500, 'An unkown error occured');
+	console.log(response)
+	if (!response.ok || response.status !== 200) returnError(500, 'An unkown error occured');
 	const result = (await response.json()) as TokenRetrievalResponse;
 	const access_token_cookie = cookie.serialize('access_token', result.access_token, {
 		httpOnly: true,
