@@ -9,6 +9,7 @@ import { Buffer } from 'buffer/';
 export const get: RequestHandler = async ({ url }) => {
 	const code = url.searchParams.get('code');
 	if (!code) return returnError(400, 'Missing data');
+	console.log(client_id, reddit_secret, code, redirect_uri)
 	const response = await fetch('https://www.reddit.com/api/v1/access_token', {
 		method: 'POST',
 		body: new URLSearchParams({
