@@ -2,7 +2,9 @@
 
 arctic, a minimalistic, open-source, mobile-friendly Reddit client
 
-arctic-reddit.vercel.app
+[arctic-reddit.vercel.app](arctic-reddit.vercel.app)
+
+__Important Note__: You cannot use www.reddit.com and [arctic-reddit.vercel.app](arctic-reddit.vercel.app) interchangeably.
 
 ## Roadmap
 
