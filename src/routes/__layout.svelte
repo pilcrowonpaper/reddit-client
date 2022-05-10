@@ -3,13 +3,13 @@
 	import { page } from '$app/stores';
 	import selected_post from '$lib/stores/post';
 	import { onMount } from 'svelte';
-	
+
 	import type { Post } from '$lib/types/reddit';
-	
+
 	import PostPage from '$lib/components/post/Post_Page.svelte';
-	
 
 	import '../app.postcss';
+	import about_data from '$lib/stores/about';
 
 	let search_text: string;
 	let search_bar: HTMLInputElement;
@@ -43,6 +43,7 @@
 	$: setNewUrl($selected_post);
 
 	afterNavigate(() => {
+		about_data.set(null);
 		selected_post.set(null);
 		body_element.style.overflow = '';
 	});

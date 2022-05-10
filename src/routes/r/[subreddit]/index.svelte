@@ -19,6 +19,7 @@
 	import { page } from '$app/stores';
 	import selected_post from '$lib/stores/post';
 	import { onMount } from 'svelte';
+	import about_data from '$lib/stores/about';
 
 	let posts = initial_listing.data.children;
 	let latest_post_in_view = 0;
@@ -81,14 +82,13 @@
 	};
 
 	const openPost = (e: CustomEvent) => {
+		about_data.set(about);
 		selected_post.set(e.detail.post as Post);
 	};
 
 	onMount(() => {
 		getNextPostBatch(0);
 	});
-
-	//over18
 </script>
 
 <svelte:head>
@@ -99,35 +99,34 @@
 	{/if}
 </svelte:head>
 
-
-	<Header {about} />
-	<div class="mt-12 flex place-content-between">
-		<Filter_Select {filter} on:select={handleFilter} />
-		<Cards bind:type={card} on:select={handleCardTypeChange} />
-	</div>
-	<div class="flex flex-col divide-y">
-		{#each posts as post, i}
-			{#if card === 'compact'}
-				<Compact
-					{post}
-					on:display={() => {
-						updateLatestPostInView(i);
-					}}
-					on:open={openPost}
-					show={['user']}
-					show_nsfw={about.data.over18}
-				/>
-			{:else if card === 'large'}
-				<Large
-					{post}
-					on:display={() => {
-						updateLatestPostInView(i);
-					}}
-					on:open={openPost}
-					show={['user']}
-					id={i}
-					show_nsfw={about.data.over18}
-				/>
-			{/if}
-		{/each}
-	</div>
+<Header {about} />
+<div class="mt-12 flex place-content-between">
+	<Filter_Select {filter} on:select={handleFilter} />
+	<Cards bind:type={card} on:select={handleCardTypeChange} />
+</div>
+<div class="flex flex-col divide-y">
+	{#each posts as post, i}
+		{#if card === 'compact'}
+			<Compact
+				{post}
+				on:display={() => {
+					updateLatestPostInView(i);
+				}}
+				on:open={openPost}
+				show={['user']}
+				show_nsfw={about.data.over18}
+			/>
+		{:else if card === 'large'}
+			<Large
+				{post}
+				on:display={() => {
+					updateLatestPostInView(i);
+				}}
+				on:open={openPost}
+				show={['user']}
+				id={i}
+				show_nsfw={about.data.over18}
+			/>
+		{/if}
+	{/each}
+</div>

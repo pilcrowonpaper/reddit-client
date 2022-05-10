@@ -18,6 +18,7 @@
 	import { page } from '$app/stores';
 	import selected_post from '$lib/stores/post';
 	import { onMount } from 'svelte';
+	import about_data from '$lib/stores/about';
 
 	let posts = initial_listing.data.children;
 	let latest_post_in_view: number = 0;
@@ -79,6 +80,7 @@
 	};
 
 	const openPost = (e: CustomEvent) => {
+		about_data.set(null);
 		selected_post.set(e.detail.post as Post);
 	};
 

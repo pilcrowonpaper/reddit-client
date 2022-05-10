@@ -10,11 +10,12 @@
 
 	import { getCommentContents, getCommentsListing } from '$lib/utils/reddit/comments';
 	import { createEventDispatcher } from 'svelte';
+import about_data from '$lib/stores/about';
 	const dispatch = createEventDispatcher();
 
 	export let post: Post;
 	export let comments: Comment[] = [];
-	export let about: About = null;
+	export let about: About = $about_data || null;
 	export let filter: Filter = {
 		sort: 'best'
 	};
