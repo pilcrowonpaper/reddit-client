@@ -14,7 +14,7 @@
 	import Compact from '$lib/components/cards/Compact.svelte';
 	import Loading from "$lib/components/utils/Loading.svelte"
 
-	import type { Listing, Post } from '$lib/types/reddit';
+	import type { Listing, Post } from '$lib/types/reddit/index';
 	import type { Filter } from '$lib/types/filter';
 
 	import { page } from '$app/stores';

@@ -13,7 +13,7 @@
 	import Video from '../utils/Video.svelte';
 	import Iframe from '$lib/components/utils/Iframe.svelte';
 	
-	import type { Post } from '$lib/types/reddit';
+	import type { Post } from '$lib/types/reddit/index';
 
 	export let post: Post;
 	export let show: string[];

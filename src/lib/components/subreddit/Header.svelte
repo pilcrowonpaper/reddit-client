@@ -5,7 +5,7 @@
 	export let show = true;
 	export let subreddit = null;
 
-	import type { About } from '$lib/types/reddit';
+	import type { About } from '$lib/types/reddit/index';
 
 	const getAbout = async () => {
 		const response = await fetch(`https://www.reddit.com/r/${subreddit}/about.json?raw_json=1`);

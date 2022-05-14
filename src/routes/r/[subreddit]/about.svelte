@@ -2,7 +2,7 @@
 	export let rules: Subreddit_Rules;
 	export let about: About;
 
-	import type { About, Subreddit_Rules } from '$lib/types/reddit';
+	import type { About, Subreddit_Rules } from '$lib/types/reddit/index';
 
 	import Header from '$lib/components/subreddit/Header.svelte';
 </script>

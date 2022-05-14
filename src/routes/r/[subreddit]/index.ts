@@ -1,4 +1,4 @@
-import type { About, Listing, Post } from '$lib/types/reddit';
+import type { About, Listing, Post } from '$lib/types/reddit/index';
 import { getPostRequestUrl } from '$lib/utils/reddit/posts';
 import type { RequestHandler } from '@sveltejs/kit';
 

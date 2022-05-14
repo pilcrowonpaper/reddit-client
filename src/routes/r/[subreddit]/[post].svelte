@@ -5,7 +5,7 @@
 	import selected_post from '$lib/stores/post';
 
 	import type { Filter } from '$lib/types/filter';
-	import type { About, Listing, Post, Comment } from '$lib/types/reddit';
+	import type { About, Listing, Post, Comment } from '$lib/types/reddit/index';
 
 	export let post_listing: Listing<Post>;
 	export let comment_listing: Listing<Comment>;

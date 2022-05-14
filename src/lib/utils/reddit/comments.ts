@@ -1,5 +1,5 @@
 import type { Promise_Status } from '$lib/types';
-import type { Listing, Post, Comment, Listing_List } from '$lib/types/reddit';
+import type { Listing, Post, Comment, Listing_List } from '$lib/types/reddit/index';
 import type { Filter } from '$lib/types/filter';
 
 export const getCommentsListing = async (

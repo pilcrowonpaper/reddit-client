@@ -13,7 +13,7 @@
 	import Compact from '$lib/components/cards/Compact.svelte';
 	import Loading from '$lib/components/utils/Loading.svelte';
 
-	import type { User, Listing, Post } from '$lib/types/reddit';
+	import type { User, Listing, Post } from '$lib/types/reddit/index';
 	import type { Filter } from '$lib/types/filter';
 
 	import { getUserListing, getUserPathname } from '$lib/utils/reddit/users';

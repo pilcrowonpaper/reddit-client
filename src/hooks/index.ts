@@ -1,5 +1,5 @@
 import { dev } from '$app/env';
-import type { RefreshTokenResponse } from '$lib/types/reddit/auth';
+import type { RefreshTokenResponse } from '$lib/types/reddit/index/auth';
 import { client_id, reddit_secret } from '$lib/utils/reddit/auth';
 import { getUser, getUserPrefs } from '$lib/utils/reddit/identity';
 import type { GetSession, Handle } from '@sveltejs/kit';

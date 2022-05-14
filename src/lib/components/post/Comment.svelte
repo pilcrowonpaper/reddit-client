@@ -5,7 +5,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import { formatTime } from '$lib/utils/format';
 
-	import type { Comment } from '$lib/types/reddit';
+	import type { Comment } from '$lib/types/reddit/index';
 
 	const dispatch = createEventDispatcher();
 

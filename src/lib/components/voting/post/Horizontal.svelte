@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Up_Arrow from '$lib/components/icons/Up_Arrow.svelte';
 	import Down_Arrow from '$lib/components/icons/Down_Arrow.svelte';
-	import type { Post } from '$lib/types/reddit';
+	import type { Post } from '$lib/types/reddit/index';
 	import { formatNumber } from '$lib/utils/format';
 
 	export let post: Post;

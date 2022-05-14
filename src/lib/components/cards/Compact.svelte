@@ -5,7 +5,7 @@
 	import { inViewport } from '$lib/utils/actions';
 	import { createEventDispatcher } from 'svelte';
 
-	import type { Post } from '$lib/types/reddit';
+	import type { Post } from '$lib/types/reddit/index';
 
 	export let post: Post;
 	export let show: string[];

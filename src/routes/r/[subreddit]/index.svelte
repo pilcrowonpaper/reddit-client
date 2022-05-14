@@ -13,7 +13,7 @@
 	import Large from '$lib/components/cards/Large.svelte';
 	import Loading from '$lib/components/utils/Loading.svelte';
 
-	import type { About, Listing, Post } from '$lib/types/reddit';
+	import type { About, Listing, Post } from '$lib/types/reddit/index';
 	import type { Filter } from '$lib/types/filter';
 
 	import { getPostListing, getPostPathname } from '$lib/utils/reddit/posts';

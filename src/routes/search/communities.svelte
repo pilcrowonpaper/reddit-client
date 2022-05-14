@@ -2,7 +2,7 @@
 	export let initial_listing: Listing<About>;
 	export let query_text: string;
 
-	import type { Listing, About } from '$lib/types/reddit';
+	import type { Listing, About } from '$lib/types/reddit/index';
 
 	import { getSearchListing } from '$lib/utils/reddit/search';
 	import { inViewport } from '$lib/utils/actions';

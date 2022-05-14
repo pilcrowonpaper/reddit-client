@@ -6,7 +6,7 @@
 	import { auth_url } from '$lib/utils/reddit/auth';
 	import { clickOutside } from "$lib/utils/actions"
 
-	import type { Post } from '$lib/types/reddit';
+	import type { Post } from '$lib/types/reddit/index';
 
 	import PostPage from '$lib/components/post/Post_Page.svelte';
 

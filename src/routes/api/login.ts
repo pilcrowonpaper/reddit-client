@@ -1,5 +1,5 @@
 import { dev } from '$app/env';
-import type { TokenRetrievalResponse } from '$lib/types/reddit/auth';
+import type { TokenRetrievalResponse } from '$lib/types/reddit/index/auth';
 import { returnError } from '$lib/utils/endpoints';
 import { client_id, reddit_secret, redirect_uri } from '$lib/utils/reddit/auth';
 import type { RequestHandler } from '@sveltejs/kit';

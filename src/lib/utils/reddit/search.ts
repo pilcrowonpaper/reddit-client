@@ -1,6 +1,6 @@
 import type { Promise_Status } from '$lib/types';
 import type { Filter } from '$lib/types/filter';
-import type { Listing, Post } from '$lib/types/reddit';
+import type { Listing, Post } from '$lib/types/reddit/index';
 
 export const getSearchListing = async (
 	query: string,

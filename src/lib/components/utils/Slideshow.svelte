@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Image_Size } from '$lib/types/format';
-	import type { Media_Metadata } from '$lib/types/reddit';
+	import type { Media_Metadata } from '$lib/types/reddit/index';
 	import { calculateImageSize } from '$lib/utils/media';
 
 	export let media_metadata: Record<string, Media_Metadata>;

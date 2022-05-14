@@ -1,6 +1,6 @@
 /// <reference types="@sveltejs/kit" />
 
-import type { User, UserPrefs } from '$lib/types/reddit/identity';
+import type { User, UserPrefs } from '$lib/types/reddit/index/identity';
 
 // See https://kit.svelte.dev/docs/types#the-app-namespace
 // for information about these interfaces

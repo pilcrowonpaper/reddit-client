@@ -11,7 +11,7 @@
 	import Comment_Block from '$lib/components/post/Comment.svelte';
 	import Loading from '$lib/components/utils/Loading.svelte';
 
-	import type { User, Listing, Comment } from '$lib/types/reddit';
+	import type { User, Listing, Comment } from '$lib/types/reddit/index';
 	import type { Filter } from '$lib/types/filter';
 
 	import { getUserListing, getUserPathname } from '$lib/utils/reddit/users';

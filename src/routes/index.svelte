@@ -12,7 +12,7 @@
 	import Header from '$lib/components/home/Header.svelte';
 	import Loading from '$lib/components/utils/Loading.svelte';
 
-	import type { Listing, Post } from '$lib/types/reddit';
+	import type { Listing, Post } from '$lib/types/reddit/index';
 	import type { Filter } from '$lib/types/filter';
 
 	import { getPostListing, getPostPathname } from '$lib/utils/reddit/home';

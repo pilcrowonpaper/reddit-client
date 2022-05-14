@@ -4,7 +4,7 @@
 	export let user: User;
 	export let show = true;
 
-	import type { User } from '$lib/types/reddit';
+	import type { User } from '$lib/types/reddit/index';
 </script>
 
 <div>

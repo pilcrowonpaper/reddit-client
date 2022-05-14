@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Post } from '$lib/types/reddit';
+	import type { Post } from '$lib/types/reddit/index';
 
 	import Horizontal from '$lib/components/voting/post/Horizontal.svelte';
 	import { formatTime, removeEmoji } from '$lib/utils/format';

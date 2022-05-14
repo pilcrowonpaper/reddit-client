@@ -6,7 +6,7 @@
 	import Back_Arrow from '$lib/components/icons/Back_Arrow.svelte';
 	import Loading from '$lib/components/utils/Loading.svelte';
 
-	import type { About, Post, Comment } from '$lib/types/reddit';
+	import type { About, Post, Comment } from '$lib/types/reddit/index';
 	import type { Filter } from '$lib/types/filter';
 
 	import { getCommentContents, getCommentsListing } from '$lib/utils/reddit/comments';
